@@ -39,10 +39,10 @@ app.get("*", function (req, res) {
 });
 
 //port
-const PORT = 8080 || process.env.PORT;
+const port = 8080 || process.env.PORT;
 
 
-app.listen(PORT, () => {
+app.listen(port, () => {
   console.log(
     `Server Running On ${process.env.NODE_ENV} mode on port no ${process.env.PORT}`
       .bgMagenta.white
