@@ -2,6 +2,9 @@ import React from 'react'
 import Developer from "../components/Developer"
 import Footer from './Footer'
 import { Link } from 'react-router-dom';
+import pic from '../assets/pic1.png'
+import food from '../assets/food.jpg'
+import vision from '../assets/vision.png'
 
 const AboutUs = () => {
 
@@ -45,7 +48,7 @@ const AboutUs = () => {
               <div className="col-lg-6 d-none d-lg-block">
                 <img
 
-                  src="https://www.yelowsoft.com/static/727ad1f9ebad7962717cbe8ec97b6d0e/78d47/on-demand-food-delivery-system-main.png"
+                  src={pic}
                   alt=""
                   className="img-fluid"
                 />
@@ -68,7 +71,7 @@ const AboutUs = () => {
               </div>
               <div className="col-lg-5 px-5 mx-auto order-1 order-lg-2">
                 <img
-                  src="https://www.i-lanamtechnologies.com/wp-content/uploads/2020/06/food.jpg"
+                  src={food}
                   alt=""
                   className="img-fluid mb-4 mb-lg-0"
                 />
@@ -77,7 +80,7 @@ const AboutUs = () => {
             <div className="row align-items-center">
               <div className="col-lg-5 px-5 mx-auto" >
                 <img
-                  src="https://www.zoplay.com/blog/wp-content/uploads/2020/07/zoplay_1-01-3.png"
+                  src={vision}
                   alt=""
 
                   className="img-fluid mb-4 mb-lg-0"

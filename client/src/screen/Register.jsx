@@ -24,6 +24,7 @@ const Register = () => {
       const user = { name, email, password, confrimPassword };
       console.log(user);
       dispatch(registerUser(user));
+      alert('User registered sucessfully');
     }
   };
   return (

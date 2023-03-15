@@ -1,8 +1,7 @@
 
 /node_modules
 client/node_modules
-/.pnp
-.pnp.js
+
 
 # testing
 /coverage
@@ -11,7 +10,7 @@ client/node_modules
 /build
 
 # misc
-.DS_Store
+
 .env
 .env.local
 .env.development.local
