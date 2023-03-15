@@ -31,18 +31,17 @@ app.get("/", (req, res) => {
 app.use("/api/users", require("./routes/UserRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/client/build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client/build/index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("<h1>Hello From Node Server vai nodemon</h1>");
-  });
-}
+//static files
+app.use(express.static(path.join(__dirname, "./client/build")));
 
-const port = process.env.PORT || 8080;
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
+//port
+const PORT = 8080 || process.env.PORT;
+
+
 app.listen(port, () => {
   console.log(
     `Server Running On ${process.env.NODE_ENV} mode on port no ${process.env.PORT}`
