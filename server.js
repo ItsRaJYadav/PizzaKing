@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 
 
 
-app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/users", require("./routes/UserRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
 if (process.env.NODE_ENV === "production") {
