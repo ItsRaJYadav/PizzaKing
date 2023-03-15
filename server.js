@@ -42,7 +42,7 @@ app.get("*", function (req, res) {
 const PORT = 8080 || process.env.PORT;
 
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(
     `Server Running On ${process.env.NODE_ENV} mode on port no ${process.env.PORT}`
       .bgMagenta.white
