@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 //route
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 
-app.get("/", (req, res) => {
+app.get("/ab", (req, res) => {
   res.send("<h1>Hello From Node Server vai nodemon</h1>");
 });
 
