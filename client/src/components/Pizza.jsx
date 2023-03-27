@@ -35,7 +35,7 @@ const Pizza = ({ pizza }) => {
     </option>
   ));
 
-  // const price = pizza.prices[0][varient] * quantity;
+   const price = pizza.prices[0][varient] * quantity;
 
   // auto dismissal
   useEffect(() => {
