@@ -105,7 +105,7 @@ function Services () {
                 className="team-img"
                 alt="pic"
               />
-              <h3>Mnaoj</h3>
+              <h3>Manoj</h3>
               <div className="team-info">
                 <p>Marketing Manager</p>
               </div>

@@ -1,10 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, deleteFromCart } from "../action/cartAction";
-// import Address from "../screen/Address";
 import { useNavigate } from 'react-router-dom';
 
-import Success from "../Alerts/sucess";
+
 
 import Checkout from "../components/Checkout";
 import Rupay from "../assets/rupay.svg";
