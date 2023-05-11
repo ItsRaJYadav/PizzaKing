@@ -26,7 +26,7 @@ const Checkout = ({ subTotal }) => {
 
         currency="INR"
       >
-        <Button>Pay Now</Button>
+        <Button>Checkout</Button>
       </StripeCheckout>
     </>
   );

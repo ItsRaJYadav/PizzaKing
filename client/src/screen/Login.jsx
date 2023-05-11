@@ -3,24 +3,31 @@ import './Login.css'
 import { useDispatch } from "react-redux";
 import { loginUser } from "../action/userAction";
 import Button from 'react-bootstrap/Button';
+import { Helmet } from "react-helmet";
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+
 
 import {
-    MDBBtn,
     MDBContainer,
     MDBRow,
     MDBCol,
     MDBCard,
     MDBCardBody,
     MDBInput,
-    MDBCheckbox,
-    MDBIcon
+    MDBCheckbox
+
 }
     from 'mdb-react-ui-kit';
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isChecked, setIsChecked] = useState(false);
+    const handleCheckboxChange = (event) => {
+        setIsChecked(event.target.checked);
+    };
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -29,15 +36,29 @@ const Login = () => {
         }
     }, []);
     const loginHandler = () => {
-        const user = { email, password };
-        dispatch(loginUser(user));
-        alert("You are successfully logged in")
+        if (!isChecked)
+            alert("Please agree to the terms of service.");
+        else {
+            const user = { email, password };
+            dispatch(loginUser(user));
+
+        }
 
     };
 
+    //show hide password dialog
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+
     return (
         <MDBContainer fluid className='p-4 background-radial-gradient overflow-hidden'>
-
+            <Helmet>
+                <title>Login</title>
+            </Helmet>
             <MDBRow>
 
                 <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
@@ -78,42 +99,51 @@ const Login = () => {
                             <label htmlFor="">Email</label>
 
                             <MDBInput wrapperClass='mb-4' id='form3' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
-                            <label htmlFor="">Password</label>
-                            <MDBInput wrapperClass='mb-4' id='form4' type='password' value={password}
-                                onChange={(e) => setPassword(e.target.value)} />
-                            <small className="form-text text-muted mb-5 " style={{ textAlign: 'center' }}>
-                                We'll never share your credential details with anyone else.
-                            </small>
+                            <label htmlFor="password">Password</label>
+      <div className="relative">
+        <MDBInput
+          id="password"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          onClick={toggleShowPassword}
+          className="absolute top-1/2 right-0 transform -translate-y-1/2 mr-3 focus:outline-none"
+        >
+          {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+        </button>
+      </div>
+      <small className="form-text text-muted mb-5 " style={{ textAlign: 'center' }}>
+        We'll never share your credential details with anyone else.
+      </small>
 
                             <div className='d-flex justify-content-center mt-3 mb-2'>
-                                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I agree to the Pizza King Policy' />
+                                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I agree to the Pizza King Policy' checked={isChecked}
+                                    onChange={handleCheckboxChange} />
                             </div>
 
                             {/* <MDBBtn className='w-30 mb-4' size='md' onClick={loginHandler}>Login</MDBBtn> */}
                             <div class="text-center">
-                                <Button variant="primary" style={{ width: '100px' }} onClick={loginHandler}>Login</Button>
+                                <Button variant="primary" style={{ width: '100px' }} onClick={loginHandler} disabled={!isChecked}>Login</Button>
                             </div>
 
 
-                            <div className="text-center">
+                            <div className="text-center mt-2">
 
-                                <p>or sign up with:</p>
+                                <div className="mt-8">
+                                    <p className="text-gray-500 mb-2">Don't have an account?</p>
+                                    <Link
+                                        to="/register"
+                                        className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    >
+                                        Sign up now
+                                    </Link>
+                                </div>
 
-                                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-                                    <MDBIcon fab icon='facebook-f' size="sm" />
-                                </MDBBtn>
 
-                                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-                                    <MDBIcon fab icon='twitter' size="sm" />
-                                </MDBBtn>
 
-                                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-                                    <MDBIcon fab icon='google' size="sm" />
-                                </MDBBtn>
-
-                                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-                                    <MDBIcon fab icon='github' size="sm" />
-                                </MDBBtn>
 
                             </div>
 

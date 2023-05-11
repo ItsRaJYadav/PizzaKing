@@ -28,7 +28,6 @@ export const logoutUser = () => (dispatch) => {
   window.location.href = "/login";
 };
 
-/*
 export const getAllUsers = () => async (dispatch) => {
   dispatch({ type: "GET_USERS_REQUEST" });
   try {
@@ -50,4 +49,3 @@ export const deleteUser = (userid) => async (dispatch) => {
     swal("Errro While Deleteing User");
   }
 };
-*/

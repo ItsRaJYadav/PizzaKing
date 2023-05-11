@@ -1,5 +1,5 @@
 import React, { useRef,useState,useEffect } from 'react';
-
+import {Helmet} from "react-helmet";
 import { Container } from 'react-bootstrap';
 import 'tailwindcss/tailwind.css';
 import emailjs from '@emailjs/browser';
@@ -62,7 +62,9 @@ function ContactUs() {
 
   return (
     <>
-
+      <Helmet>
+        <title>Contact Us</title>
+      </Helmet>
       <Container>
       {isEmailSent && (
         <div style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px', marginTop: '60px' }}>

@@ -1,11 +1,12 @@
 
 import React from 'react'
-import Developer from "../components/Developer"
-import Footer from './Footer'
+import Developer from "../Developer"
+import Footer from '../Footer'
 import { Link } from 'react-router-dom';
-import pic from '../assets/pic1.png'
-import food from '../assets/food.jpg'
-import vision from '../assets/vision.png'
+import pic from '../../assets/pic1.png';
+import food from '../../assets/food.jpg'
+import vision from '../../assets/vision.png'
+import {Helmet} from "react-helmet";
 
 const AboutUs = () => {
 
@@ -13,7 +14,9 @@ const AboutUs = () => {
 
   return (
     <>
-
+<Helmet>
+        <title> About Us </title>
+      </Helmet>
 
       <>
         <div className="conainer">
