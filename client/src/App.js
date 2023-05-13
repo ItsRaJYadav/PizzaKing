@@ -1,12 +1,10 @@
 import { lazy, Suspense } from 'react';
-import NavBar from './components/Header/NavBar';
 import Nav from './components/Header/Header';
 import Chatbot from './Chat/ChatBot';
 import ScrollToTop from '../src/Global/ScrollToTop';
 import LoadingPage from './Alerts/Loading';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminSettings from './Admin/AdminSetting';
 
 const LazyAbout = lazy(() => import('../src/components/About/AboutUs'));
 const LazyContactUs = lazy(() => import('./components/ContactUs/ContactUs'));
@@ -22,6 +20,7 @@ const LazyPrivacyPolicy = lazy(() => import('./screen/Pages/privacy'));
 const LazyStayTunned = lazy(() => import('./screen/Pages/StayTunned'));
 const LazyAdminScreen = lazy(() => import('./Admin/AdminScreen'));
 const AddNewPizza = lazy(() => import('../src/Admin/AddnewPizza'));
+const AdminSettings = lazy(() => import('../src/Admin/AdminScreen'));
 const OrderList = lazy(() => import('../src/Admin/OrderList'));
 const Pizzaslist = lazy(() => import('../src/Admin/PizzaList'));
 const Userlist = lazy(() => import('../src/Admin/User'));

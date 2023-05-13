@@ -314,11 +314,11 @@ const Footer = () => {
     </div>
     <hr className="mt-16 mb-10 border-gray-800" />
     <div className="flex flex-wrap items-center justify-between">
-      <img
+      {/* <img
         className="h-8 auto md:order-1"
         src="https://cdn.rareblocks.xyz/collection/celebration/images/logo-alt.svg"
         alt=""
-      />
+      /> */}
       <ul className="flex items-center space-x-3 md:order-3">
         <li>
           <a
@@ -392,7 +392,7 @@ const Footer = () => {
         </li>
       </ul>
       <p className="w-full mt-8 text-sm text-center text-gray-100 md:mt-0 md:w-auto md:order-2">
-        © Copyright 2021, All Rights Reserved by Postcraft
+        © Copyright 2021, All Rights Reserved by PizzaKing
       </p>
     </div>
   </div>
