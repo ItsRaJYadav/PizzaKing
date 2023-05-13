@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunktemplate=self.webpackChunktemplate||[]).push([[216],{3216:function(e,t,r){r.r(t);r(2791);var n=r(184);t.default=function(){return(0,n.jsx)("div",{children:"UserOrders"})}}}]);
+//# sourceMappingURL=216.5247e480.chunk.js.map

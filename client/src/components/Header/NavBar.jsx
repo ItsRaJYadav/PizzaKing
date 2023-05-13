@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../action/userAction";
 import { FaCartPlus } from 'react-icons/fa';
-import Header from './Header'
 
 
 
@@ -108,7 +107,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Header />
+      
 
     </>
   );

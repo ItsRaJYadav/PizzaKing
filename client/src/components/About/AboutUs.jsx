@@ -1,7 +1,6 @@
 
 import React from 'react'
-import Developer from "../Developer"
-import Footer from '../Footer'
+import Footer from '../Footer/Footer'
 import { Link } from 'react-router-dom';
 import pic from '../../assets/pic1.png';
 import food from '../../assets/food.jpg'
@@ -18,7 +17,7 @@ const AboutUs = () => {
         <title> About Us </title>
       </Helmet>
 
-      <>
+  
         <div className="conainer">
           <div className="container py-5">
             <div className="row h-100 align-items-center py-5">
@@ -116,14 +115,8 @@ const AboutUs = () => {
 
 
 
-
-
-      </>
-
-
-
-      <Developer />
-      <Footer />
+      
+      
     </>
   )
 }

@@ -1,63 +1,7 @@
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { AiFillDelete } from "react-icons/ai";
-// import { Table } from "react-bootstrap";
-// import { deleteUser, getAllUsers } from "../action/userAction";
-// import Loader from "./Loader";
-// const Userlist = () => {
-//   const userState = useSelector((state) => state.getAllUsersReducer);
-//   const { loading, error, users } = userState;
-//   const dispatch = useDispatch();
-//   useEffect(() => {
-//     dispatch(getAllUsers());
-//   }, [dispatch]);
-//   return (
-//     <div>
-     
-//       {loading && <div> <Loader/> </div>}
-//       {error && <div error="Error While Fetching Users" />}
-//       <h1>User List</h1>
-//       <Table striped bordered hover>
-//         <thead>
-//           <tr>
-//             <th>User ID</th>
-//             <th>Name</th>
-//             <th>Admin</th>
-//             <th>Email</th>
-//             <th>Delete</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {users &&
-//             users.map((user) => (
-//               <tr key={user._id}>
-//                 <td>{user._id}</td>
-//                 <td>{user.name}</td>
-//                 <td>{user.isAdmin ? 'Yes' : 'No'}</td>
-
-//                 <td>{user.email}</td>
-//                 <td>
-//                   <AiFillDelete
-//                     style={{ color: "red", cursor: "pointer" }}
-//                     onClick={() => {
-//                       dispatch(deleteUser(user._id));
-//                     }}
-//                   />
-//                 </td>
-//               </tr>
-//             ))}
-//         </tbody>
-//       </Table>
-//     </div>
-//   );
-// };
-
-// export default Userlist;
 
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiFillDelete } from "react-icons/ai";
-import { Table } from "react-bootstrap";
 import { deleteUser, getAllUsers } from "../action/userAction";
 import Loader from "./Loader";
 
@@ -75,33 +19,34 @@ const Userlist = () => {
   }
 
   return (
-    <div>
-      {loading && <div> <Loader/> </div>}
+    <>
+      {loading && <div> <Loader /> </div>}
       {error && <div error="Error While Fetching Users" />}
-      <h1>User List</h1>
-      <Table striped bordered hover>
-        <thead>
+      <div className="bg-white shadow-md rounded-md overflow-hidden">
+      <h1 className="text-2xl font-bold p-4">User List</h1>
+      <table className="table-auto w-full text-center">
+        <thead className="bg-gray-800 text-white">
           <tr>
-            <th>Sr. no.</th>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Admin</th>
-            <th>Email</th>
-            <th>Delete</th>
+            <th className="px-4 py-2">#</th>
+            <th className="px-4 py-2">User ID</th>
+            <th className="px-4 py-2">Name</th>
+            <th className="px-4 py-2">Admin</th>
+            <th className="px-4 py-2">Email</th>
+            <th className="px-4 py-2">Delete</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-gray-700">
           {users &&
             users.map((user, index) => (
-              <tr key={user._id}>
-                <td>{getSerialNumber(index)}</td>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.isAdmin ? 'Yes' : 'No'}</td>
-                <td>{user.email}</td>
-                <td>
+              <tr key={user._id} className={(index % 2 === 0 ? 'bg-gray-200' : '')}>
+                <td className="border px-4 py-2">{getSerialNumber(index)}</td>
+                <td className="border px-4 py-2">{user._id}</td>
+                <td className="border px-4 py-2">{user.name}</td>
+                <td className="border px-4 py-2">{user.isAdmin ? 'Yes' : 'No'}</td>
+                <td className="border px-4 py-2">{user.email}</td>
+                <td className="border px-4 py-2">
                   <AiFillDelete
-                    style={{ color: "red", cursor: "pointer" }}
+                    className="text-red-600 hover:text-red-800 cursor-pointer"
                     onClick={() => {
                       dispatch(deleteUser(user._id));
                     }}
@@ -110,8 +55,11 @@ const Userlist = () => {
               </tr>
             ))}
         </tbody>
-      </Table>
+      </table>
     </div>
+
+
+    </>
   );
 };
 

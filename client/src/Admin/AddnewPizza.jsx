@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
 import { addPizza } from "../action/pizzaAction";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import Error from "../Alerts/Error";
 import Success from "../Alerts/sucess";
+import { HiOutlineSelector } from 'react-icons/hi'
+
 const AddNewPizza = () => {
   const [name, setname] = useState("");
   const [smallPrice, setsmallPrice] = useState();
@@ -39,83 +40,117 @@ const AddNewPizza = () => {
       {loading && <Loader />}
       {error && <Error error="add new pizza error" />}
       {success && <Success success="Pizza Added Successfully" />}
-      <Form onSubmit={submitForm} className="bg-light p-4">
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
+
+      <form onSubmit={submitForm} className="bg-light p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridEmail">
+              Name
+            </label>
+            <input
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridEmail"
               type="text"
               value={name}
               onChange={(e) => setname(e.target.value)}
               placeholder="Enter email"
             />
-          </Form.Group>
-          <Row className="mb-3 mt-3">
-            <Form.Group as={Col} controlId="formGridCity">
-              <Form.Label>Small Price</Form.Label>
-              <Form.Control
-                type="text"
-                value={smallPrice}
-                onChange={(e) => setsmallPrice(e.target.value)}
-                placeholder="Enter Small Price"
-              />
-            </Form.Group>
+          </div>
+          <div>
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridCity">
+              Small Price
+            </label>
+            <input
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridCity"
+              type="text"
+              value={smallPrice}
+              onChange={(e) => setsmallPrice(e.target.value)}
+              placeholder="Enter Small Price"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridState">
+              Medium Price
+            </label>
+            <input
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridState"
+              type="text"
+              value={mediumPrice}
+              onChange={(e) => setmediumPrice(e.target.value)}
+              placeholder="Enter medium price"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridZip">
+              Large Price
+            </label>
+            <input
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridZip"
+              type="text"
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Medium Price</Form.Label>
-              <Form.Control
-                type="text"
-                value={mediumPrice}
-                onChange={(e) => setmediumPrice(e.target.value)}
-                placeholder="Enter medium price"
-              />
-            </Form.Group>
+              onChange={(e) => setlargprice(e.target.value)}
+              placeholder="Enter Large Price"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="category">
+              Category
+            </label>
+            <div className="relative">
+              <select
+                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                id="category"
+                value={category}
+                onChange={(e) => setcategory(e.target.value)}
+              >
+                <option value="veg">Veg</option>
+                <option value="nonveg">Non-Veg</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <HiOutlineSelector />
+              </div>
+            </div>
+          </div>
 
-            <Form.Group as={Col} controlId="formGridZip">
-              <Form.Label>Larg Price</Form.Label>
-              <Form.Control
-                type="text"
-                value={largprice}
-                onChange={(e) => setlargprice(e.target.value)}
-                placeholder="Enter larg price"
-              />
-            </Form.Group>
-          </Row>
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              ttype="text"
+          <div>
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridPassword">
+              Image
+            </label>
+            <input
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridPassword"
+              type="text"
               value={image}
               onChange={(e) => setimage(e.target.value)}
               placeholder="Add Image URL"
             />
-          </Form.Group>
-        </Row>
-
-        <Form.Group className="mb-3" controlId="formGridAddress1">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            value={description}
-            onChange={(e) => setdescription(e.target.value)}
-            placeholder="Enter Description"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formGridAddress2">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            type="text"
-            value={category}
-            onChange={(e) => setcategory(e.target.value)}
-            placeholder="Enter Category"
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridAddress1">
+              Description
+            </label>
+            <textarea
+              className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              id="formGridAddress1"
+              value={description}
+              onChange={(e) => setdescription(e.target.value)}
+              placeholder="Enter Description"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+        >
           Add New
-        </Button>
-      </Form>
+        </button>
+
+      </form>
+
+
     </div>
   );
 };

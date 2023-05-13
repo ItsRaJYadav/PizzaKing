@@ -9,10 +9,10 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 
-// Importing the Bootstrap CSS
-import "../node_modules/react-bootstrap/dist/react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap';
+// // Importing the Bootstrap CSS
+// import "../node_modules/react-bootstrap/dist/react-bootstrap";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/js/bootstrap';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
