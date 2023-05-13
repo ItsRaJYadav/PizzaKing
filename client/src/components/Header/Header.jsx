@@ -37,11 +37,7 @@ const Header = () => {
                     Menu
                   </NavLink>
                 </li>
-                <li>
-                  <Link to='/services' className="hover:text-gray-200" href="#">
-                    Service
-                  </Link>
-                </li>
+               
                 <li>
                   <Link to='/company' className="hover:text-gray-200" href="#">
                     Company

@@ -77,7 +77,7 @@ function App() {
            {/* Company routes: */}
            <Route path='/company/' element={<LazyOrg />} >
             <Route index element={<LazyAbout />} />
-            <Route path='page' element={<Userlist />} />
+            <Route path='service' element={<LazyServices />} />
             <Route path="about" element={<LazyAbout />} exact />
             <Route path="why" element={<WhyChooseUs />} exact />
 

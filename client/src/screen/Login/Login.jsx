@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../action/userAction";
 import { Helmet } from "react-helmet";
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import { FaFacebook } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -30,10 +32,10 @@ const Login = () => {
         const user = { email, password };
         const response = dispatch(loginUser(user));
 
-        if (response.status === "success") {
-            alert("Login successful!");
+        if (response.status === 1) {
+            alert("Login not successful!");
         } else {
-            alert("Login failed. Please try again.");
+            alert("Login successful!");
         }
     };
 
@@ -67,12 +69,9 @@ const Login = () => {
                                 className="inline-flex w-full py-3 px-4 items-center justify-center rounded-full border border-gray-200 hover:border-gray-400 transition duration-100"
                                 href="#"
                             >
-                                <img
-                                    src="saturn-assets/images/sign-up/icon-facebook.svg"
-                                    alt=""
-                                />
+                                <FcGoogle/>
                                 <span className="ml-4 text-sm font-semibold text-gray-500">
-                                    Login with Facebook
+                                    Login with Google
                                 </span>
                             </Link>
                         </div>
@@ -81,12 +80,9 @@ const Login = () => {
                                 className="inline-flex w-full py-3 px-4 items-center justify-center rounded-full border border-gray-200 hover:border-gray-400 transition duration-100"
 
                             >
-                                <img
-                                    src="saturn-assets/images/sign-up/icon-apple.svg"
-                                    alt=""
-                                />
+                                <FaFacebook color="blue"/>
                                 <span className="ml-4 text-sm font-semibold text-gray-500">
-                                    Login with Apple
+                                    Login with FaceBook
                                 </span>
                             </Link>
                         </div>

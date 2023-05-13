@@ -1,50 +1,31 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link, Outlet } from 'react-router-dom';
 
-function Tab({ active, onClick, children }) {
-  const activeClass = active ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800";
-  const history = useNavigate();
-
+function ButtonRow() {
   return (
-    <button
-      className={`flex-1 py-2 px-4 text-lg font-medium ${activeClass}`}
-      onClick={() => {
-        onClick();
-        history.push("/filter");
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function TabGroup({ activeTab, onTabChange, children }) {
-  return (
-    <div className="flex flex-row">
-      {React.Children.map(children, (child, index) => (
-        <Tab
-          active={index === activeTab}
-          onClick={() => onTabChange(index)}
-        >
-          {child.props.label}
-        </Tab>
-      ))}
+    <div className="bg-gray-900 py-4">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 lg:px-0">
+        
+        <div className="flex justify-center md:justify-end">
+          <Link to='/company/about' className="mx-4 text-gray-300 hover:text-white">
+            About
+          </Link>
+          <Link to='/company/why' className="mx-4 text-gray-300 hover:text-white">
+            Why Choose Us
+          </Link>
+          <Link to='/company/service' className="mx-4 text-gray-300 hover:text-white">
+            Contact
+          </Link>
+        </div>
+      </div>
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row">
+        <div className="flex-1 bg-white p-8">
+          <Outlet />
+        </div>
+        
+      </div>
     </div>
   );
 }
 
-function App() {
-  const [activeTab, setActiveTab] = useState(0);
-
-  return (
-    <div className="flex flex-col h-screen">
-      <TabGroup activeTab={activeTab} onTabChange={setActiveTab}>
-        <Link label="Tab 1">Content for tab 1</Link>
-        <Link label="Tab 2">Content for tab 2</Link>
-        <Link label="Tab 3">Content for tab 3</Link>
-      </TabGroup>
-    </div>
-  );
-}
-
-export default App;
+export default ButtonRow;

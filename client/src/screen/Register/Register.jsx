@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { registerUser } from "../../action/userAction";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from 'react-router-dom';
-import { MdOutlineSecurity } from "react-icons/md";
 import { HiCheck } from "react-icons/hi";
 import { FaUserCircle, FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -67,25 +66,25 @@ const Register = () => {
             <div className="absolute inset-0">
               <img
                 className="object-cover w-full h-full"
-                src="https://cdn.rareblocks.xyz/collection/celebration/images/signup/4/girl-working-on-laptop.jpg"
+                src="https://img.freepik.com/free-vector/fast-food-menu-colorful-icons-set_1284-14584.jpg?size=626&ext=jpg&ga=GA1.1.1927059429.1683979638&semt=ais"
                 alt=""
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
             <div className="relative">
               <div className="w-full max-w-xl xl:w-full xl:mx-auto xl:pr-24 xl:max-w-xl">
-                <h3 className="text-4xl font-bold text-white lg:text-center">
-                  Join 35k+ web professionals &amp; <br className="hidden xl:block" />
-                  build your website
+                <h3 className="text-4xl font-bold text-gray lg:text-center">
+                Food delivered fresh, fast, and to your door &amp; <br className="hidden xl:block" />
+                  5000+ Happy Customer
                 </h3>
                 <ul className="grid grid-cols-1 mt-10 sm:grid-cols-2 gap-x-8 gap-y-4">
                   <li className="flex items-center space-x-3">
                     <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                      <MdOutlineSecurity />
+                    <HiCheck />
                     </div>
                     <span className="text-lg font-medium text-white">
                       {" "}
-                      Commercial License{" "}
+                      Food delivery made easy {" "}
                     </span>
                   </li>
                   <li className="flex items-center space-x-3">
@@ -94,7 +93,7 @@ const Register = () => {
                     </div>
                     <span className="text-lg font-medium text-white">
                       {" "}
-                      Unlimited Exports{" "}
+                      From our kitchen to your table{" "}
                     </span>
                   </li>
                   <li className="flex items-center space-x-3">
@@ -103,7 +102,7 @@ const Register = () => {
                     </div>
                     <span className="text-lg font-medium text-white">
                       {" "}
-                      120+ Coded Blocks{" "}
+                      We bring the restaurant to you{" "}
                     </span>
                   </li>
                   <li className="flex items-center space-x-3">
@@ -112,7 +111,7 @@ const Register = () => {
                     </div>
                     <span className="text-lg font-medium text-white">
                       {" "}
-                      Design Files Included{" "}
+                      Good food, great service, delivered{" "}
                     </span>
                   </li>
                 </ul>

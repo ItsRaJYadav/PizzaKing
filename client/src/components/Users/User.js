@@ -16,8 +16,9 @@ function UserAccount() {
     };
 
     const handleLogout = () => {
+       
         dispatch(logoutUser());
-        toggleTab(3);
+        toggleTab(4);
       }
 
     return (
