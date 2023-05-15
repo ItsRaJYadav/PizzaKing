@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPizzas } from '../../action/pizzaAction'
+import { getAllUser } from '../../action/userAction'
 import { BsFillArrowRightCircleFill } from 'react-icons/bs'
 
 const Achievement = () => {
@@ -11,6 +12,9 @@ const Achievement = () => {
     useEffect(() => {
         dispatch(getAllPizzas());
     }, [dispatch]);
+
+
+
     return (
         <>
             <section className="py-20 bg-gray-800">
@@ -27,7 +31,7 @@ const Achievement = () => {
                             <BsFillArrowRightCircleFill color="white " size={20} />
                         </span>
                         <div className="flex items-center">
-                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-blueGray-800 text-sm font-bold text-white">
+                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-gradient-to-br from-yellow-500 via-green-300 to-blue-500 text-sm font-bold">
                                 2
                             </div>
                             <span className="font-bold text-white">Shopping Cart</span>
@@ -36,7 +40,7 @@ const Achievement = () => {
                             <BsFillArrowRightCircleFill color="white " size={20} />
                         </span>
                         <div className="flex items-center">
-                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-blueGray-800 text-sm font-bold text-white">
+                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-gradient-to-br from-yellow-500 via-green-300 to-blue-500 text-sm font-bold">
                                 3
                             </div>
                             <span className="font-bold text-white">Payment &amp; Delivery Options</span>
@@ -45,7 +49,7 @@ const Achievement = () => {
                             <BsFillArrowRightCircleFill color="white " size={20} />
                         </span>
                         <div className="flex items-center">
-                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-blueGray-800 text-sm font-bold text-white">
+                            <div className="inline-flex w-7 h-7 mr-4 justify-center items-center rounded-full bg-gradient-to-br from-yellow-500 via-green-300 to-blue-500 text-sm font-bold">
                                 4
                             </div>
                             <span className="font-bold text-white">Order Placed</span>
@@ -97,7 +101,7 @@ const Achievement = () => {
                             <h3 className="font-bold text-7xl">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-blue-600">
                                     {" "}
-                                    37+{" "}
+                                    30+{" "}
                                 </span>
                             </h3>
                             <p className="mt-4 text-xl font-medium text-gray-900">Team members</p>

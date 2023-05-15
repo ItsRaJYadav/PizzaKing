@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, deleteFromCart } from "../../action/cartAction";
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +10,11 @@ import CartEmpty from './CartEmpty';
 import { Helmet } from "react-helmet";
 import { FaHourglassHalf } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const CartScreen = () => {
+  const { user, isAuthenticated } = useAuth0();
+
   const cartState = useSelector((state) => state.cartReducer);
   const cartItems = cartState.cartItems;
   const dispatch = useDispatch();
@@ -39,7 +41,7 @@ const CartScreen = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimeLeft(prevTime => prevTime - 1);
-    }, 1000);
+    }, 300);
     return () => clearTimeout(timer);
   }, [timeLeft]);
 
@@ -49,10 +51,10 @@ const CartScreen = () => {
 
   return (
     <>
-    <Helmet>
-      <title>Cart Items</title>
-    </Helmet>
-      {currentUser == null ? (
+      <Helmet>
+        <title>Cart Items</title>
+      </Helmet>
+      {!currentUser && !isAuthenticated ? (
         <div>
           <LoginReminder />
         </div>
@@ -65,7 +67,15 @@ const CartScreen = () => {
           ) : (
             <>
               <div className=" bg-gray-100 ">
-                <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+                <h1 className=" text-center text-2xl font-bold mb-3">
+                  {
+                    isAuthenticated ? <>Welcome {user.name}</> :
+                      <>Welcome {currentUser.name}</>
+                  }
+                </h1>
+                <h1 className="mb-10 text-center text-2xl font-bold ">Cart Items</h1>
+
+
 
                 <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
                   <div className="rounded-lg md:w-2/3">
@@ -155,7 +165,7 @@ const CartScreen = () => {
 
                   </div>
                   {/* Sub total */}
-                  <div className="mt-6  rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+                  <div className="mt-6  rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
                     <div className="mb-2 flex justify-between">
                       <p className="text-gray-700">Subtotal</p>
                       <p className="text-gray-700">{subTotal}</p>
@@ -190,35 +200,37 @@ const CartScreen = () => {
                         alt="Mastercard" />
 
                     </div>
+                    <div className="bg-white shadow-md rounded-md mb-4 p-4">
+                      <p className="font-medium mb-2 flex items-center mt-8">
+                        <FaHourglassHalf className="mr-2 animate-spin-slow" />
+                        Delivery After 30 min:
+                      </p>
+                      <br />
+                      <CSSTransition
+                        in={timeLeft > 0}
+                        timeout={200}
+                        classNames="fade"
+                        unmountOnExit
+                      >
+                        <p className="mb-0">
+                          Hurry Up : {minutes} min {seconds} sec
+                        </p>
+                      </CSSTransition>
+                      <CSSTransition
+                        in={timeLeft <= 0}
+                        timeout={200}
+                        classNames="fade"
+                        unmountOnExit
+                      >
+                        <p className="text-red-600 mb-0">Time is up!</p>
+                      </CSSTransition>
+                    </div>
 
                   </div>
 
+
                 </div>
-                <div className="bg-white shadow-md rounded-md mb-4 p-4">
-                  <p className="font-medium mb-2 flex items-center">
-                    <FaHourglassHalf className="mr-2 animate-spin-slow" />
-                    After 30 min:
-                  </p>
-                  <br />
-                  <CSSTransition
-                    in={timeLeft > 0}
-                    timeout={200}
-                    classNames="fade"
-                    unmountOnExit
-                  >
-                    <p className="mb-0">
-                      After {minutes} min {seconds} sec
-                    </p>
-                  </CSSTransition>
-                  <CSSTransition
-                    in={timeLeft <= 0}
-                    timeout={200}
-                    classNames="fade"
-                    unmountOnExit
-                  >
-                    <p className="text-red-600 mb-0">Time is up!</p>
-                  </CSSTransition>
-                </div>
+
 
               </div>
 

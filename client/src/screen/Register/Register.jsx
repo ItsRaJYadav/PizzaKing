@@ -1,19 +1,20 @@
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../action/userAction";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from 'react-router-dom';
 import { HiCheck } from "react-icons/hi";
-import { FaUserCircle, FaFacebook } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { RiLockPasswordFill } from "react-icons/ri";
-import {  MdVisibility, MdVisibilityOff, MdAlternateEmail } from 'react-icons/md';
-import {Helmet} from "react-helmet";
+import { MdVisibility, MdVisibilityOff, MdAlternateEmail } from 'react-icons/md';
+import { Helmet } from "react-helmet";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 const Register = () => {
   const registerState = useSelector((state) => state.registerUserReducer);
+  const { loginWithRedirect } = useAuth0();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -57,7 +58,7 @@ const Register = () => {
 
   return (
     <>
-<Helmet>
+      <Helmet>
         <title>Registration</title>
       </Helmet>
       <section className="bg-white min-h-screen">
@@ -74,13 +75,13 @@ const Register = () => {
             <div className="relative">
               <div className="w-full max-w-xl xl:w-full xl:mx-auto xl:pr-24 xl:max-w-xl">
                 <h3 className="text-4xl font-bold text-gray lg:text-center">
-                Food delivered fresh, fast, and to your door &amp; <br className="hidden xl:block" />
+                  Food delivered fresh, fast, and to your door &amp; <br className="hidden xl:block" />
                   5000+ Happy Customer
                 </h3>
                 <ul className="grid grid-cols-1 mt-10 sm:grid-cols-2 gap-x-8 gap-y-4">
                   <li className="flex items-center space-x-3">
                     <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                    <HiCheck />
+                      <HiCheck />
                     </div>
                     <span className="text-lg font-medium text-white">
                       {" "}
@@ -258,8 +259,10 @@ const Register = () => {
                   </div>
                 </div>
               </form>
+              <hr />
               <div className="mt-3 space-y-3">
                 <button
+                  onClick={() => loginWithRedirect()}
                   type="button"
                   className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
                 >
@@ -268,15 +271,7 @@ const Register = () => {
                   </div>
                   Sign up with Google
                 </button>
-                <button
-                  type="button"
-                  className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
-                >
-                  <div className="absolute inset-y-0 left-0 p-4">
-                    <FaFacebook />
-                  </div>
-                  Sign up with Facebook
-                </button>
+
               </div>
               <p className="mt-5 text-sm text-gray-600">
                 This site is protected by reCAPTCHA and the Google{" "}

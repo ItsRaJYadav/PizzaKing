@@ -6,10 +6,12 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../action/userAction";
 import { Helmet } from "react-helmet";
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import { FaFacebook } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
+import { SiAuth0 } from 'react-icons/si';
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 const Login = () => {
+    const {  loginWithRedirect } = useAuth0();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isChecked, setIsChecked] = useState(false);
@@ -63,30 +65,16 @@ const Login = () => {
                         Greetings on your return! We kindly request you to enter your
                         details.
                     </p>
-                    <div className="flex flex-wrap mb-6 items-center -mx-2">
-                        <div className="w-full md:w-1/2 px-2 mb-3 md:mb-0">
-                            <Link
-                                className="inline-flex w-full py-3 px-4 items-center justify-center rounded-full border border-gray-200 hover:border-gray-400 transition duration-100"
-                                href="#"
-                            >
-                                <FcGoogle/>
-                                <span className="ml-4 text-sm font-semibold text-gray-500">
-                                    Login with Google
-                                </span>
-                            </Link>
-                        </div>
-                        <div className="w-full md:w-1/2 px-2">
-                            <Link
-                                className="inline-flex w-full py-3 px-4 items-center justify-center rounded-full border border-gray-200 hover:border-gray-400 transition duration-100"
-
-                            >
-                                <FaFacebook color="blue"/>
-                                <span className="ml-4 text-sm font-semibold text-gray-500">
-                                    Login with FaceBook
-                                </span>
-                            </Link>
-                        </div>
+                    <div className="w-full md:w-1/2 px-2 mb-3 md:mb-0 flex items-center justify-end ml-24">
+                        <button
+                        onClick={() => loginWithRedirect()}
+                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-auto">
+                            <SiAuth0 className="mr-2" />
+                            <span className="text-sm font-semibold text-gray-100">Login with Auth</span>
+                        </button>
                     </div>
+
+
                     <div className="flex mb-6 items-center">
                         <div className="w-full h-px bg-gray-300" />
                         <span className="mx-4 text-sm font-semibold text-gray-500">

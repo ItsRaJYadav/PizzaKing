@@ -1,63 +1,55 @@
-
-
-import React, { useState } from "react";
-import { Form, Col, Row, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { filterPizza } from "../../action/pizzaAction";
-import { motion } from "framer-motion";
+
 const Filters = () => {
   const [searchkey, setsearchkey] = useState("");
   const [category, setcategory] = useState("all");
   const dispatch = useDispatch();
+  const filteredData = useSelector((state) => state.filteredData);
 
-  const handleSearch = () => {
-    dispatch(filterPizza(searchkey, category));
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSearch();
+  useEffect(() => {
+    if (searchkey.length >= 3) {
+      dispatch(filterPizza(searchkey, category));
     }
-  };
-
-  const handleCategoryChange = (event) => {
-    setcategory(event.target.value);
-  };
+  }, [searchkey, category, dispatch]);
 
   return (
     <>
-    
-    <motion.div
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="p-4 bg-gray-50 mt-4 rounded-lg shadow-lg"
-    >
-      <h3 className="text-2xl font-medium mb-4">Filter Pizzas</h3>
+      <div className="p-4 bg-info mt-4">
+        <form className="flex items-center">
+          <input
+            className="w-64 px-4 py-2 mr-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            type="text"
+            value={searchkey}
+            onChange={(e) => setsearchkey(e.target.value)}
+            placeholder="Search pizza"
+          />
 
-      <div>
-  <Row className="mb-4">
-    <Col xs={8} className="mb-2 mb-md-0">
-      <Form.Control
-        value={searchkey}
-        onChange={(e) => setsearchkey(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Search for food items"
-        className="border-0 bg-gray-50 focus:ring-0 focus:border-primary-400 rounded-md shadow-sm"
-      />
-    </Col>
-    <Col xs={4}>
-      <Button
-        onClick={handleSearch}
-        className="w-100 bg-success-400 text-white px-4 py-2 rounded-md hover:bg-primary-500 focus:ring-0 focus:border-success-500 transition-colors duration-300"
-      >
-        Search
-      </Button>
-    </Col>
-  </Row>
-</div>
+          <select
+            className="px-4 py-2 mr-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={category}
+            onChange={(e) => setcategory(e.target.value)}
+          >
+            <option>All</option>
+            <option>veg</option>
+            <option>nonveg</option>
+          </select>
 
+          <button
+            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onClick={() => {
+              dispatch(filterPizza(searchkey, category));
+            }}
+          >
+            Search
+          </button>
+        </form>
 
+        {filteredData && filteredData.length === 0 && searchkey.length >= 3 && (
+          <p>No data found.</p>
+        )}
+      </div>
       <div className="min-h-30vh bg-gray-100 flex items-center justify-center ">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -67,11 +59,11 @@ const Filters = () => {
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             <div
-               variant={category === "pizza" ? "primary" : "outline-primary"}
-               onClick={() => {
-                 setcategory("pizza");
-                 dispatch(filterPizza(searchkey, "pizza"));
-               }}
+              variant={category === "pizza" ? "primary" : "outline-primary"}
+              onClick={() => {
+                setcategory("pizza");
+                dispatch(filterPizza(searchkey, "pizza"));
+              }}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out cursor-pointer "
             >
               <div className="p-4">
@@ -158,8 +150,6 @@ const Filters = () => {
           </div>
         </div>
       </div>
-
-    </motion.div>
     </>
   );
 };

@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FaUserCircle, FaShoppingCart } from 'react-icons/fa'
+import { FaUserCircle } from 'react-icons/fa'
 import { BsFillCartFill } from 'react-icons/bs'
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Hidden } from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 const Header = () => {
-  const dispatch = useDispatch();
+  const { user, isAuthenticated} = useAuth0();
+
+  
   const cartState = useSelector((state) => state.cartReducer);
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
@@ -37,7 +41,7 @@ const Header = () => {
                     Menu
                   </NavLink>
                 </li>
-               
+
                 <li>
                   <Link to='/company' className="hover:text-gray-200" href="#">
                     Company
@@ -57,7 +61,7 @@ const Header = () => {
               <div className="hidden xl:flex  space-x-5 items-center">
 
                 {
-                  !currentUser ? (
+                  (!currentUser && !isAuthenticated) ? (
                     <>
                       <Link to='/login'
                         className="block px-4 py-2 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl"
@@ -135,7 +139,7 @@ const Header = () => {
               </div>
             </div>
             {/* Responsive navbar */}
-            <a className="xl:hidden flex mr-6 items-center" href="#">
+            <Link className="xl:hidden flex mr-6 items-center" to='/cart' >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 hover:text-gray-200"
@@ -154,7 +158,7 @@ const Header = () => {
                 <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500">{cartState.cartItems.length}</span>
               </span>
-            </a>
+            </Link>
             <Hidden mdUp>
 
               <button
@@ -199,7 +203,7 @@ const Header = () => {
 
       </div>
 
-      
+
     </>
 
   )

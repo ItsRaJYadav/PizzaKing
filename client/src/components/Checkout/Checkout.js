@@ -14,18 +14,17 @@ const Checkout = ({ subTotal }) => {
   };
   return (
     <>
-      
+
       <StripeCheckout
         amount={subTotal * 100}
         shippingAddress
         token={tokenHandler}
-        // 
-        stripeKey="pk_test_51MkPEuSAPIulqdeH4sjz2kKu3rDwBLE37thHSSJZRUOwq71sgSkgbsmgFxIcmEigq1TaSxs2aUxwIAJjWKBPtLVJ00tLKBlf1M"
-
+        stripeKey={process.env.STRIPE_KEY}
         currency="INR"
       >
         <Button>Checkout</Button>
       </StripeCheckout>
+
     </>
   );
 };

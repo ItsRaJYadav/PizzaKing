@@ -73,14 +73,22 @@ const Pizzaslist = () => {
                     </td>
                     <td className="py-3 px-6 text-center">
                       <span
-                        className={`py-1 px-3 rounded-full text-xs ${pizza.category === "vegetarian"
+                        className={`py-1 px-3 rounded-full text-xs ${
+                          pizza.category === "vegetarian"
                             ? "bg-vegetarian"
                             : pizza.category === "pizza"
                               ? "bg-meat"
                               : pizza.category === "burger"
                                 ? "bg-seafood"
-                                : pizza.category === "drink"
+                                : pizza.category === "drinks"
                                   ? "bg-special"
+                                  :
+                                  pizza.category === "fries"
+                                  ? "bg-fries":
+                                  pizza.category === "mix"
+                                  ? "bg-mix":
+                                  pizza.category === "thali"
+                                  ? "bg-thali"
                                   : ""
                           }`}
                       >

@@ -14,7 +14,7 @@ function ButtonRow() {
             Why Choose Us
           </Link>
           <Link to='/company/service' className="mx-4 text-gray-300 hover:text-white">
-            Contact
+            Avaliable Cities
           </Link>
         </div>
       </div>

@@ -5,23 +5,27 @@ import App from './App';
 import { Provider } from 'react-redux';
 import store from './store';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Auth0Provider } from "@auth0/auth0-react";
 
 
 
 
-// // Importing the Bootstrap CSS
-// import "../node_modules/react-bootstrap/dist/react-bootstrap";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap/dist/js/bootstrap';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider  store={store}>
-    <App />
-  </Provider>
+  <Auth0Provider
+    domain="dev-qwam0pm8hqpp05ts.us.auth0.com"
+    clientId="hrRwF1FT2dF072FhPLJ9ZLhhlY6dz7Dt"
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+  >
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Auth0Provider>,
+  document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 

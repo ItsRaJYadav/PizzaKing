@@ -6,7 +6,7 @@ const LoginReminder = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Please log in to access your cart
+            Please log in to access your Account
           </h2>
         </div>
         <div className="flex justify-center">

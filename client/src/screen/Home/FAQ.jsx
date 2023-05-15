@@ -1,6 +1,5 @@
 import React from 'react'
-import Testimonial from './Testimonial'
-import { Link } from 'react-router-dom'
+
 
 const FAQ = () => {
   return (
@@ -23,7 +22,7 @@ const FAQ = () => {
                 FREQUENTLY ASK QUESTION
               </span>
               <h1 className="font-heading text-5xl xs:text-6xl md:text-7xl font-bold text-gray-900">
-                <span>You ask? We</span>
+                <span>You ask? We </span>
                 <span className="font-serif italic">answer</span>
               </h1>
             </div>
@@ -34,7 +33,7 @@ const FAQ = () => {
                     What is PizzaKing ?
                   </h3>
                   <p className="text-lg text-gray-500">
-                  Pizza King web app is an online platform for ordering pizzas. It offers a range of pizzas, sides, drinks, and desserts with an easy-to-use ordering system and delivery options.
+                    Pizza King web app is an online platform for ordering pizzas. It offers a range of pizzas, sides, drinks, and desserts with an easy-to-use ordering system and delivery options.
                   </p>
                 </div>
                 <div className="pt-1">
@@ -57,11 +56,11 @@ const FAQ = () => {
               <button className="flex mb-8 pb-8 group w-full items-start justify-between border-b border-gray-100 text-left">
                 <div className="max-w-xl pr-5">
                   <h3 className="text-xl font-semibold text-black group-hover:text-orange-900">
-                  Can I order from 2 or more restaurants at the same time?
+                    Can I order from 2 or more restaurants at the same time?
                   </h3>
                   <p className="hidden group-hover:block mt-3 text-lg text-gray-500">
-                  Yes, of course!
-However each restaurant order will be treated as a different order. So the delivery charges may be applicable for each order.
+                    Yes, of course!
+                    However each restaurant order will be treated as a different order. So the delivery charges may be applicable for each order.
                   </p>
                 </div>
                 <div className="pt-1">
@@ -98,10 +97,10 @@ However each restaurant order will be treated as a different order. So the deliv
               <button className="flex mb-8 pb-8 group w-full items-start justify-between border-b border-gray-100 text-left">
                 <div className="max-w-xl pr-5">
                   <h3 className="text-xl font-semibold text-black group-hover:text-orange-900">
-                  How do I place an order?
+                    How do I place an order?
                   </h3>
                   <p className="hidden group-hover:block mt-3 text-lg text-gray-500">
-                  You can place an order on the PizzaKing website by selecting the items you want to order and entering your delivery address. Once you have entered your payment details, your order will be confirmed and delivered to you.
+                    You can place an order on the PizzaKing website by selecting the items you want to order and entering your delivery address. Once you have entered your payment details, your order will be confirmed and delivered to you.
                   </p>
                 </div>
                 <div className="pt-1">
@@ -138,10 +137,10 @@ However each restaurant order will be treated as a different order. So the deliv
               <button className="flex mb-8 pb-8 group w-full items-start justify-between border-b border-gray-100 text-left">
                 <div className="max-w-xl pr-5">
                   <h3 className="text-xl font-semibold text-black group-hover:text-orange-900">
-                  What are the delivery hours?
+                    What are the delivery hours?
                   </h3>
                   <p className="hidden group-hover:block mt-3 text-lg text-gray-500">
-                  PizzaKing offers delivery service from 11:00 AM to 11:00 PM, seven days a week.
+                    PizzaKing offers delivery service from 11:00 AM to 11:00 PM, seven days a week.
                   </p>
                 </div>
                 <div className="pt-1">
@@ -178,10 +177,10 @@ However each restaurant order will be treated as a different order. So the deliv
               <button className="flex mb-8 pb-8 group w-full items-start justify-between border-b border-gray-100 text-left">
                 <div className="max-w-xl pr-5">
                   <h3 className="text-xl font-semibold text-black group-hover:text-orange-900">
-                  How long does it take for an order to be delivered?
+                    How long does it take for an order to be delivered?
                   </h3>
                   <p className="hidden group-hover:block mt-3 text-lg text-gray-500">
-                  The delivery time depends on your location and the items you ordered. Typically, it takes around 30-45 minutes for your order to be delivered.
+                    The delivery time depends on your location and the items you ordered. Typically, it takes around 30-45 minutes for your order to be delivered.
                   </p>
                 </div>
                 <div className="pt-1">
@@ -218,10 +217,10 @@ However each restaurant order will be treated as a different order. So the deliv
               <button className="flex group w-full items-start justify-between text-left">
                 <div className="max-w-xl pr-5">
                   <h3 className="text-xl font-semibold text-black group-hover:text-orange-900">
-                  Is there a minimum order value for delivery?
+                    Is there a minimum order value for delivery?
                   </h3>
                   <p className="hidden group-hover:block mt-3 text-lg text-gray-500">
-                  Yes, there is a minimum order value for delivery, which varies depending on your location. Please check the website for more information.
+                    Yes, there is a minimum order value for delivery, which varies depending on your location. Please check the website for more information.
                   </p>
                 </div>
                 <div className="pt-1">
