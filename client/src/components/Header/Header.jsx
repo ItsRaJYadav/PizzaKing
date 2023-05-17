@@ -36,19 +36,19 @@ const Header = () => {
                   <NavLink
                     to="/pizzas"
                     className="hover:text-gray-200"
-                    href="#"
+                    
                   >
                     Menu
                   </NavLink>
                 </li>
 
                 <li>
-                  <Link to="/company" className="hover:text-gray-200" href="#">
+                  <Link to="/company" className="hover:text-gray-200" >
                     Company
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact" className="hover:text-gray-200" href="#">
+                  <Link to="/contact" className="hover:text-gray-200" >
                     Contact Us
                   </Link>
                 </li>
@@ -71,14 +71,14 @@ const Header = () => {
                     <Link
                       to="/login"
                       className="block px-4 py-2 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl"
-                      href="#"
+                      
                     >
                       Sign In
                     </Link>
                     <Link
                       to="/register"
                       className="block px-4 py-2 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl"
-                      href="#"
+                      
                     >
                       Sign Up
                     </Link>
@@ -169,7 +169,7 @@ const Header = () => {
                 )}
               </button>
             </Hidden>
-            {/* <a className="navbar-burger self-center mr-12 xl:hidden" href="#">
+            {/* <a className="navbar-burger self-center mr-12 xl:hidden" >
               <CgMenuRound size={30} />
             </a> */}
           </nav>
@@ -177,19 +177,21 @@ const Header = () => {
             <div className="sm:hidden " id="mobile-menu">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <Link
-                  to="/"
+                  to="/pizzas"
                   className="text-gray-700 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={toggleMenu}
                 >
-                  Home
+                  Menu
                 </Link>
                 <Link
                   to="/about"
                   className="text-gray-700 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  onClick={toggleMenu}
                 >
                   About
                 </Link>
                 <div className="ml-2 lg:ml-4 relative inline-block">
-                  <Link className="" to="/user">
+                  <Link className="" to="/user" onClick={toggleMenu}>
                     <FaUserCircle size={30} />
                   </Link>
                 </div>

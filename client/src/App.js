@@ -32,7 +32,6 @@ const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
 const LazyUser = lazy(() => import('./components/Users/User'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
-const Lazymodal = lazy(() => import('./components/FoodMenu/Modaal'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 
@@ -62,7 +61,7 @@ function App() {
           <Route path="/services" element={<LazyServices />} exact />
           <Route path="*" element={<LazyErr />} exact />
           <Route path="/why_choose_us" element={<WhyChooseUs />} exact />
-          <Route path="/modal" element={<Lazymodal />} exact />
+          
 
 
 
