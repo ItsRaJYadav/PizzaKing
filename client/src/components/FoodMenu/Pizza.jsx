@@ -286,11 +286,20 @@ const Pizza = ({ pizza }) => {
                     <Typography variant="body1">
                       <details className="border border-gray-300 rounded-md overflow-hidden">
                         <summary className="bg-gray-200 px-4 py-2 cursor-pointer flex items-center transition-colors duration-300 hover:bg-gray-300">
-                          Return Policy
+                          Refund Policy
                         </summary>
                         <div className="px-4 py-2">
-                          <p>{pizza.description}</p>
+                          <p className="ml-4">
+                            PizzaKing will credit a refund to your account within 3-4 business days. You will get a refund if –
+                            <ul className="list-decimal ml-8">
+                              <li> The restaurant has not confirmed your order; it can be cancelled.</li>
+                              <li> Damaged/tampered packaging at the time of delivery.</li>
+                              <li> Pizzaking cancelled the order itself.</li>
+                              <li> You cancelled due to unavailability of items in your order.</li>
+                            </ul>
+                          </p>
                         </div>
+
                       </details>
                     </Typography>
                   </div>
