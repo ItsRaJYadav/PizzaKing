@@ -1,9 +1,11 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+
 import StripeCheckout from "react-stripe-checkout";
 import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../../action/orderAction";
-
+import Loader from "../../Alerts/Loader";
+import Error from "../../Alerts/Error";
+import Success from "../../Alerts/sucess";
 const Checkout = ({ subTotal }) => {
   const orderState = useSelector((state) => state.placeOrderReducer);
   const { loading, error, success } = orderState;
@@ -14,17 +16,18 @@ const Checkout = ({ subTotal }) => {
   };
   return (
     <>
-
+      {loading && <Loader />}
+      {error && <Error error="something went wrong" />}
+      {success && <Success success="order placed success" />}
       <StripeCheckout
         amount={subTotal * 100}
         shippingAddress
         token={tokenHandler}
-        stripeKey={process.env.STRIPE_KEY}
+        stripeKey="pk_test_51N8TA3SAMu6RByx0vNX847fSB9Q9NQMwEY8fcVGnmvQwSg8XQbfr5xiMp5HBXOp7JpDIhN62FVmcEWkIS0dcTTcH00IX9aKiUD"
         currency="INR"
       >
-        <Button>Checkout</Button>
+        <button>Pay Now</button>
       </StripeCheckout>
-
     </>
   );
 };

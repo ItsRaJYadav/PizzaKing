@@ -1,17 +1,24 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPizzas } from '../../action/pizzaAction'
-import { getAllUser } from '../../action/userAction'
+import { getAllUsers } from '../../action/userAction'
 import { BsFillArrowRightCircleFill } from 'react-icons/bs'
+import Loader from "../../Alerts/Loader";
 
 const Achievement = () => {
     const dispatch = useDispatch();
     const pizzastate = useSelector((state) => state.getAllPizzaReducer);
     const { pizzas } = pizzastate;
 
+    const userState = useSelector((state) => state.getAllUsersReducer);
+    const { loading, error, users } = userState;
+
     useEffect(() => {
         dispatch(getAllPizzas());
+        dispatch(getAllUsers());
     }, [dispatch]);
+
+    const totalUsers = users ? users.length : 0;
 
 
 
@@ -73,6 +80,8 @@ const Achievement = () => {
                     <div className="grid grid-cols-1 gap-8 mt-10 text-center lg:mt-24 sm:gap-x-8 md:grid-cols-3">
                         <div>
                             <h3 className="font-bold text-7xl">
+                                {loading && <div> <Loader /> </div>}
+                                {error && <div error="Error While Fetching Total Listed Items" />}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-blue-600">
                                     {" "}
                                     {pizzas.length}+{" "}
@@ -87,6 +96,8 @@ const Achievement = () => {
                         </div>
                         <div>
                             <h3 className="font-bold text-7xl">
+                                {loading && <div> <Loader /> </div>}
+                                {error && <div error="Error While Fetching orders" />}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-blue-600">
                                     {" "}
                                     4821+{" "}
@@ -97,11 +108,14 @@ const Achievement = () => {
                             </p>
                             <p className="text-base mt-0.5 text-gray-500">In last 1 years</p>
                         </div>
+
                         <div>
                             <h3 className="font-bold text-7xl">
+                                {loading && <div> <Loader /> </div>}
+                                {error && <div error="Error While Fetching Users" />}
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-blue-600">
                                     {" "}
-                                    30+{" "}
+                                    {totalUsers}+{" "}
                                 </span>
                             </h3>
                             <p className="mt-4 text-xl font-medium text-gray-900">Team members</p>

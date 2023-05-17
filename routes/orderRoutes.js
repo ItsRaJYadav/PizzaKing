@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const stripe = require("stripe")(
- "sk_test_51MkPEuSAPIulqdeHKa3IpCjVwLrtVjq5rDcQ237N90zuny4EdNxeFyFPdNJ0hbM1eOZkZnYZRivBFOehyZd7vtiw00KsdR52ZT"
+  "sk_test_51N8TA3SAMu6RByx08D0yz8ikEYJLtv7eOv5i7DtAyrcW69s5tueSYMkEel0eGlGBUM6BONb2KJmG4REQle90uVlT00ui1kFgyr"
 );
 const Order = require("../models/orderModel");
 
@@ -16,7 +16,7 @@ router.post("/placeorder", async (req, res) => {
     const payment = await stripe.charges.create(
       {
         amount: subTotal * 100,
-        currency: "INR ",
+        currency: "inr",
         customer: customer.id,
         receipt_email: token.email,
       },
@@ -52,4 +52,43 @@ router.post("/placeorder", async (req, res) => {
   }
 });
 
+router.post("/getuserorder", async (req, res) => {
+  const { userid } = req.body;
+  try {
+    const orders = await Order.find({ userid }).sort({ _id: "-1" });
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(400).json({
+      message: "Something Went Wront",
+      error: error.stack,
+    });
+  }
+});
+
+router.get("/alluserorder", async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(400).json({
+      message: "Something Went Wront",
+      error: error.stack,
+    });
+  }
+});
+
+router.post("/deliverorder", async (req, res) => {
+  const orderid = req.body.orderid;
+  try {
+    const order = await Order.findOne({ _id: orderid });
+    order.isDeliverd = true;
+    await order.save();
+    res.status(200).send("Order deliverd success");
+  } catch (error) {
+    res.status(400).json({
+      message: "Something Went Wront",
+      error: error.stack,
+    });
+  }
+});
 module.exports = router;

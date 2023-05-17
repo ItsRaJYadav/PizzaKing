@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { addPizza } from "../action/pizzaAction";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
@@ -9,7 +9,7 @@ import { HiOutlineSelector } from 'react-icons/hi'
 const AddNewPizza = () => {
   const [name, setname] = useState("");
   const [smallPrice, setsmallPrice] = useState();
-  const [largprice, setlargprice] = useState();
+  const [largeprice, setlargprice] = useState();
   const [mediumPrice, setmediumPrice] = useState();
   const [image, setimage] = useState("");
   const [description, setdescription] = useState("");
@@ -17,9 +17,12 @@ const AddNewPizza = () => {
 
   const addPizzaState = useSelector((state) => state.addPizzaReducer);
   const { loading, error, success } = addPizzaState;
+  const [succes, setSuccess] = useState(false);
+  const [loadings, setLoading] = useState(false);
+  const [errors, setError] = useState(false);
+  
 
   const dispatch = useDispatch();
-
   const submitForm = (e) => {
     e.preventDefault();
     const pizza = {
@@ -30,16 +33,43 @@ const AddNewPizza = () => {
       prices: {
         small: smallPrice,
         medium: mediumPrice,
-        larg: largprice,
+        large: largeprice,
       },
     };
-    dispatch(addPizza(pizza));
+  
+  setLoading(true);
+    dispatch(addPizza(pizza))
+      .then(() => {
+        setLoading(false);
+        setSuccess(true);
+        resetForm();
+        setTimeout(() => {
+          setSuccess(false);
+        }, 2000); // Timeout duration in milliseconds (e.g., 3000ms = 3 seconds)
+      })
+      .catch(() => {
+        setLoading(false);
+        setError(true);
+      });
   };
+
+  const resetForm = () => {
+    setname("");
+    setimage("");
+    setdescription("");
+    setcategory("");
+    setsmallPrice("");
+    setmediumPrice("");
+    setlargprice("");
+  };
+  
+
+  
   return (
     <div>
-      {loading && <Loader />}
-      {error && <Error error="add new pizza error" />}
-      {success && <Success success="Pizza Added Successfully" />}
+      {loadings &&  <Loader />}
+      {errors && error&& <Error error="add new pizza error" />}
+      {succes && success && <Success success="Pizza Added Successfully" />}
 
       <form onSubmit={submitForm} className="bg-light p-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -47,7 +77,8 @@ const AddNewPizza = () => {
             <label className="block mb-2 font-bold text-gray-700" htmlFor="formGridEmail">
               Name
             </label>
-            <input
+            <input 
+              required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridEmail"
               type="text"
@@ -61,6 +92,7 @@ const AddNewPizza = () => {
               Small Price
             </label>
             <input
+              required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridCity"
               type="text"
@@ -74,6 +106,7 @@ const AddNewPizza = () => {
               Medium Price
             </label>
             <input
+              required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridState"
               type="text"
@@ -87,10 +120,11 @@ const AddNewPizza = () => {
               Large Price
             </label>
             <input
+              required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridZip"
               type="text"
-
+              value={largeprice}
               onChange={(e) => setlargprice(e.target.value)}
               placeholder="Enter Large Price"
             />
@@ -106,8 +140,13 @@ const AddNewPizza = () => {
                 value={category}
                 onChange={(e) => setcategory(e.target.value)}
               >
-                <option value="veg">Veg</option>
-                <option value="nonveg">Non-Veg</option>
+                <option value="burger">burger</option>
+                <option value="fries">fries</option>
+                <option value="mix">mix</option>
+                <option value="drink">drinks</option>
+                <option value="pizza">pizza</option>
+                <option value="thali">thali</option>
+               
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <HiOutlineSelector />
@@ -120,6 +159,7 @@ const AddNewPizza = () => {
               Image
             </label>
             <input
+              required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridPassword"
               type="text"
@@ -133,6 +173,7 @@ const AddNewPizza = () => {
               Description
             </label>
             <textarea
+            required
               className="w-full px-4 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               id="formGridAddress1"
               value={description}

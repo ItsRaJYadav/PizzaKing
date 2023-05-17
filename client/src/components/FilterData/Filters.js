@@ -17,9 +17,9 @@ const Filters = () => {
   return (
     <>
       <div className="p-4 bg-info mt-4">
-        <form className="flex items-center">
+        <form className="flex flex-col md:flex-row items-center">
           <input
-            className="w-64 px-4 py-2 mr-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full md:w-64 px-4 py-2 mb-2 md:mb-0 mr-0 md:mr-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             type="text"
             value={searchkey}
             onChange={(e) => setsearchkey(e.target.value)}
@@ -27,17 +27,17 @@ const Filters = () => {
           />
 
           <select
-            className="px-4 py-2 mr-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full md:w-auto px-4 py-2 mb-2 md:mb-0 md:ml-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={category}
             onChange={(e) => setcategory(e.target.value)}
           >
             <option>All</option>
-            <option>veg</option>
-            <option>nonveg</option>
+            <option>Veg</option>
+            <option>Nonveg</option>
           </select>
 
           <button
-            className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full md:w-auto mt-2 md:mt-0 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             onClick={() => {
               dispatch(filterPizza(searchkey, category));
             }}
@@ -50,6 +50,7 @@ const Filters = () => {
           <p>No data found.</p>
         )}
       </div>
+
       <div className="min-h-30vh bg-gray-100 flex items-center justify-center ">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">

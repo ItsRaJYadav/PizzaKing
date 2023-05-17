@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FaCartPlus } from "react-icons/fa";
-import { Card, Button, Modal } from "react-bootstrap";
 import { addToCart } from "../../action/cartAction";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
 import { motion } from "framer-motion";
-import Alert from 'react-bootstrap/Alert';
 import { FaCheckCircle } from 'react-icons/fa';
-import { FaPlus } from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
+import { Typography, Button, Slider } from "@mui/material";
+import { ArrowBack, FavoriteBorder, Favorite } from "@mui/icons-material";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
+import { FaStar, FaRupeeSign } from "react-icons/fa";
+import { MdOutlineFastfood } from "react-icons/md";
+import { IoIosArrowDropright, IoFastFoodOutline } from "react-icons/io";
+import AddToCartAlert from '../../Alerts/ProductAddAlert'
 
 const Pizza = ({ pizza }) => {
   const [varient, setVarient] = useState("small");
@@ -22,8 +27,11 @@ const Pizza = ({ pizza }) => {
     setShowAlert(true); // Show the alert
 
   };
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
-  
+
 
   const varientOptions = pizza.varients.map((varient) => (
     <option key={varient}>{varient}</option>
@@ -48,18 +56,31 @@ const Pizza = ({ pizza }) => {
     return () => clearTimeout(timeout);
   }, [showAlert])
 
+  // const toggleFavorite = () => {
+  //   // Update the favorite status of the product
+  //   product.isFavorite = !product.isFavorite;
+  //   // TODO: Add logic to handle saving the favorite status
+  // };
+  const getRandomRating = () => {
+    const ratingOptions = [3, 3.5, 4, 4.5];
+    const randomIndex = Math.floor(Math.random() * ratingOptions.length);
+    return ratingOptions[randomIndex];
+  };
+
+  // ...
 
 
-  //
+  const randomRating = getRandomRating();
+
 
 
   return (
     <>
       {showAlert && (
-        <Alert variant="success" onClose={() => setShowAlert(false)} dismissible className="d-flex align-items-center">
-          <FaCheckCircle size={20} className="me-2 d-inline-block" />
-          <span className="d-inline-block">Pizza added to cart.</span>
-        </Alert>
+        <AddToCartAlert
+          message="Pizza added to cart."
+          onClose={handleCloseAlert}
+        />
       )}
       <div className="relative bg-white rounded-lg shadow-lg overflow-hidden my-3 border border-gray-300">
 
@@ -81,9 +102,7 @@ const Pizza = ({ pizza }) => {
         </motion.div>
         <div className="py-4 px-6">
           <h2 className="text-lg font-semibold text-gray-800 text-center">{pizza.name}</h2>
-          {/* <p className="mt-1 text-sm text-gray-600">
-          Product Name
-          </p> */}
+
           <hr />
           <div className="mt-4">
             <label htmlFor="size" className="block text-gray-700 font-bold">
@@ -129,35 +148,164 @@ const Pizza = ({ pizza }) => {
 
 
 
-     {/* //Modal */}
-     <div>
-     
-
-      <div
-        className={`fixed z-10 inset-0 overflow-y-auto ${
-          showModal ? "block" : "hidden"
-        }`}
-      >
+      {/* //Modal */}
+      <div className={`fixed z-10 inset-0 overflow-y-auto ${showModal ? 'block' : 'hidden'}`}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-          <div className="bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all my-4 max-w-lg mx-auto">
+          <div className="bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all my-4 w-full max-w-screen-lg mx-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">Modal Title</h3>
+              <ul className="flex">
+                <li className="flex items-center mr-4">
+                  <MdOutlineFastfood className="mr-2" />
+                  <span>Product</span>
+                </li>
+                <li className="flex items-center mr-4">
+                  <IoIosArrowDropright className="mr-2" />
+                  <span>{pizza.category}</span>
+                </li>
+                <li className="flex items-center">
+                  <IoIosArrowDropright className="mr-2" />
+                  <span>{pizza.name}</span>
+                </li>
+              </ul>
+              {showAlert && (
+        <AddToCartAlert
+          message="Pizza added to cart."
+          onClose={handleCloseAlert}
+        />
+      )}
               <button
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
                 aria-label="Close"
               >
-                <ImCross/>
+                <ImCross />
               </button>
             </div>
+            {/* modal body */}
+            <div className="container mx-auto py-8">
+              <div className="flex items-center justify-between mb-4">
+                <Button onClick={() => setShowModal(false)} variant="contained" startIcon={<ArrowBack />} className="mr-4">
+                  Back
+                </Button>
+                <Typography variant="h5" component="h1" className="text-center">
+                  {pizza.name}
+                </Typography>
+                <Button variant="outlined" startIcon={<FavoriteBorder />} className="mr-4">
+                  Favorite
+                </Button>
+              </div>
+              <div className="flex flex-wrap">
+                <div className="w-full md:w-2/5 mb-6 md:mb-0">
+                  <Carousel showThumbs={false} showStatus={false} infiniteLoop>
+                    <div>
+                      <img src={pizza.image} alt="Pizza" />
+                    </div>
+                    <div>
+                      <img src={pizza.image} alt="Pizza" />
+                    </div>
+                  </Carousel>
+                </div>
+                <div className="w-full md:w-3/5 md:pl-6">
+                  <div className="mb-4">
+                    <label htmlFor="size" className="block text-gray-700 font-bold">
+                      Size
+                    </label>
+                    <select
+                      id="size"
+                      name="size"
+                      value={varient}
+                      onChange={(e) => setVarient(e.target.value)}
+                      className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:outline-none"
+                    >
+                      {varientOptions}
+                    </select>
 
-           <p>{pizza.name}</p>
+                    <div className="mt-4">
+                      <label htmlFor="quantity" className="block text-gray-700 font-bold">
+                        Quantity
+                      </label>
+                      <select
+                        id="quantity"
+                        name="quantity"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:outline-none"
+                      >
+                        {quantityOptions}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center mt-4">
+                    <Typography variant="h6">Rating:</Typography>
+                    <div className="ml-2 flex items-center">
+                      {[...Array(5)].map((_, index) => (
+                        <FaStar
+                          key={index}
+                          className={index < Math.floor(randomRating) ? "text-yellow-500" : "text-gray-300"}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center mt-4">
+                    <h6 className="mr-2">Price:</h6>
+                    <div className="flex items-center">
+                      <FaRupeeSign className="text-lg" />
+                      <span className="text-lg ml-1">
+                        {pizza.prices[0][varient] * quantity}
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={addToCartHandler}
+                    variant="contained"
+                    color="primary"
+                    className="mt-4 w-full"
+                  >
+                    Add to Cart
+                  </Button>
+                  <div className="mt-3.5">
+
+
+
+                    <Typography variant="body1">
+                      <details className="border border-gray-300 rounded-md overflow-hidden">
+                        <summary className="bg-gray-200 px-4 py-2 cursor-pointer flex items-center transition-colors duration-300 hover:bg-gray-300">
+                          Product Description
+                        </summary>
+                        <div className="px-4 py-2">
+                          <p>{pizza.description}</p>
+                        </div>
+                      </details>
+                    </Typography>
+                  </div>
+                  <div className="mt-3.5">
+                    <Typography variant="body1">
+                      <details className="border border-gray-300 rounded-md overflow-hidden">
+                        <summary className="bg-gray-200 px-4 py-2 cursor-pointer flex items-center transition-colors duration-300 hover:bg-gray-300">
+                          Return Policy
+                        </summary>
+                        <div className="px-4 py-2">
+                          <p>{pizza.description}</p>
+                        </div>
+                      </details>
+                    </Typography>
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
+
       </div>
-    </div>
+
+
     </>
   );
 };

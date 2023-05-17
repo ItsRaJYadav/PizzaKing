@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 import { FaHourglassHalf } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
 import { useAuth0 } from "@auth0/auth0-react";
+import Loader from "../../Alerts/Loader";
 
 const CartScreen = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -19,7 +20,7 @@ const CartScreen = () => {
   const cartItems = cartState.cartItems;
   const dispatch = useDispatch();
   const userState = useSelector((state) => state.loginUserReducer);
-  const { currentUser } = userState;
+  const { loading, currentUser, error } = userState;
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
 
@@ -67,7 +68,10 @@ const CartScreen = () => {
           ) : (
             <>
               <div className=" bg-gray-100 ">
+                {loading && <div> <Loader /> </div>}
+                {error && <div error="Error While Fetching Users" />}
                 <h1 className=" text-center text-2xl font-bold mb-3">
+
                   {
                     isAuthenticated ? <>Welcome {user.name}</> :
                       <>Welcome {currentUser.name}</>

@@ -1,7 +1,11 @@
 import React from "react";
-import { Alert } from "react-bootstrap";
+
 const Error = ({ error }) => {
-  return <Alert variant="danger">{error}</Alert>;
+  return (
+    <div className="bg-red-100 border border-red-500 text-red-700 px-4 py-3 rounded relative">
+      <span className="block sm:inline">{error}</span>
+    </div>
+  );
 };
 
 export default Error;

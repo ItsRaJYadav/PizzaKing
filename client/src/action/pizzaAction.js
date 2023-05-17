@@ -66,7 +66,8 @@ export const filterPizza = (searchkey, category) => async (dispatch) => {
       filterdPizza = res.data.filter(
         (pizza) => pizza.category.toLowerCase() === category
       );
-    }
+    };
+   
     dispatch({ type: "GET_PIZZAS_SUCCESS", payload: filterdPizza });
   } catch (error) {
     dispatch({ type: "GET_PIZZAS_FAIL", payload: error });

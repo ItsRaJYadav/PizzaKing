@@ -1,6 +1,6 @@
 import React from "react";
 import Footer from '../../components/Footer/Footer'
-import Hero from "../../components/Hero/Hero";
+import Hero from "../Home/Hero";
 import Achievement from "./Achievement";
 import FAQ from "./FAQ";
 import Playstore from "./Playstore";
@@ -12,7 +12,7 @@ const Home = () => {
       <Achievement />
       <Playstore/>
       <FAQ />
-      
+     
       <Footer/>
     </>
   );

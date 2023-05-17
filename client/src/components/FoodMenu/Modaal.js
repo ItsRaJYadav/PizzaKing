@@ -8,7 +8,7 @@ export default function Index() {
     return (
         <div className="bg-gray-800">
             <div className="2xl:container 2xl:mx-auto md:py-12 lg:px-20 md:px-6 py-9 px-4">
-                <div id="viewerButton" className="hidden w-full flex justify-center">
+                <div id="viewerButton" className="w-full flex justify-center">
                     <button onclick="openView()" className="bg-white text-indigo-600 shadow-md rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 py-5 px-10 font-semibold">
                         Open Quick View
                     </button>

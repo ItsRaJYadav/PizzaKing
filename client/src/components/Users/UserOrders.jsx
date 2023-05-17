@@ -1,50 +1,61 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import { format } from 'date-fns';
-// import { orders } from './data'; // sample data for demonstration purposes
+import React, { useEffect } from "react";
+import { getUserOrders } from "../../action/orderAction";
+import { useDispatch, useSelector } from "react-redux";
 
+import Loader from "../../Alerts/Loader";
+import Error from "../../Alerts/Error";
 
-// function Order({ order }) {
-//   return (
-//     <div className="border-b py-4">
-//       <div className="flex justify-between mb-2">
-//         <div className="text-gray-700 font-medium">Order #{order.id}</div>
-//         <div className="text-gray-500">{format(order.date, 'MM/dd/yyyy')}</div>
-//       </div>
-//       <div className="text-sm text-gray-500 mb-2">{order.items.length} items</div>
-//       <div className="text-sm text-gray-500">{order.total}</div>
-//       <div className="text-sm text-gray-500">{order.status}</div>
-//       <Link to={`/orders/${order.id}`} className="text-sm text-blue-500 hover:underline">
-//         View Details
-//       </Link>
-//     </div>
-//   );
-// }
-
-// export default function Orders() {
-//   return (
-//     <div className="container mx-auto mt-8 px-4">
-//       <h1 className="text-3xl font-bold mb-4">My Orders</h1>
-//       {orders.length > 0 ? (
-//         <div className="divide-y">
-//           {orders.map(order => (
-//             <Order key={order.id} order={order} />
-//           ))}
-//         </div>
-//       ) : (
-//         <p>You have no orders.</p>
-//       )}
-//     </div>
-//   );
-// }
-
-
-import React from 'react'
-
-const UserOrders = () => {
+const OrderScreen = () => {
+  const orderState = useSelector((state) => state.getUserOrdersReducer);
+  const { loading, error, orders } = orderState;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserOrders());
+  }, [dispatch]);
   return (
-    <div>UserOrders</div>
-  )
-}
+    <>
+    <div className="bg-gray-100 min-h-screen">
+      <h1 className="text-center text-3xl font-bold mb-8">Your Orders</h1>
 
-export default UserOrders
+      {loading && <Loader />}
+      {error && <Error error="Something went wrong." />}
+
+      {orders &&
+        orders.map((order) => (
+          <div
+            key={order._id}
+            className="container border p-4 bg-white shadow mb-8"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <h4 className="font-semibold">Items:</h4>
+                {order.orderItems.map((item) => (
+                  <p key={item.name} className="mb-1">
+                    {item.name} [{item.variant}] * {item.quantity} = {item.price}
+                  </p>
+                ))}
+              </div>
+
+              <div>
+                <h4 className="font-semibold">Address:</h4>
+                <p className="mb-1">Street: {order.shippingAddress.street}</p>
+                <p className="mb-1">City: {order.shippingAddress.city}</p>
+                <p className="mb-1">PinCode: {order.shippingAddress.pinCode}</p>
+                <p>Country: {order.shippingAddress.country}</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold">Order Info:</h4>
+                <p className="mb-1">Order Amount: {order.orderAmount}</p>
+                <p className="mb-1">Transaction ID: {order.transactionId}</p>
+                <p>Order ID: {order._id}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+    </>
+      
+  );
+};
+export default OrderScreen;

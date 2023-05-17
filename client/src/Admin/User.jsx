@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiFillDelete } from "react-icons/ai";
 import { deleteUser, getAllUsers } from "../action/userAction";
 import Loader from "./Loader";
+import Auth0Users from './Auth0Users'
 
 const Userlist = () => {
   const userState = useSelector((state) => state.getAllUsersReducer);
@@ -17,7 +18,7 @@ const Userlist = () => {
   const getSerialNumber = (index) => {
     return (index + 1).toString();
   }
-
+  const totalUsers = users ? users.length : 0;
   return (
     <>
       {loading && <div> <Loader /> </div>}
@@ -56,6 +57,8 @@ const Userlist = () => {
             ))}
         </tbody>
       </table>
+      <div className="mb-4">Total Users: {totalUsers}</div>
+      <Auth0Users/>
     </div>
 
 
