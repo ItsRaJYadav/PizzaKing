@@ -78,7 +78,7 @@ const Pizza = ({ pizza }) => {
     <>
       {showAlert && (
         <AddToCartAlert
-          message="Pizza added to cart."
+          message="Food Item added to cart."
           onClose={handleCloseAlert}
         />
       )}
@@ -92,10 +92,11 @@ const Pizza = ({ pizza }) => {
           <img
             src={pizza.image}
             alt="Product"
-            className="w-full"
+            className="w-full h-64 object-cover mx-auto"
             onClick={() => setShowModal(true)}
             style={{ cursor: "pointer" }}
           />
+
           <div className="absolute bottom-0 right-0 mr-2 mb-2 bg-yellow-500 text-black px-2 py-1 rounded-md text-sm font-bold">
             <FontAwesomeIcon icon={faRupeeSign} /> {" "} {pizza.prices[0][varient] * quantity}
           </div>
@@ -170,11 +171,11 @@ const Pizza = ({ pizza }) => {
                 </li>
               </ul>
               {showAlert && (
-        <AddToCartAlert
-          message="Pizza added to cart."
-          onClose={handleCloseAlert}
-        />
-      )}
+                <AddToCartAlert
+                  message="Pizza added to cart."
+                  onClose={handleCloseAlert}
+                />
+              )}
               <button
                 onClick={() => setShowModal(false)}
                 className="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"

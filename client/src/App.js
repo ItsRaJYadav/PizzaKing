@@ -1,11 +1,10 @@
-import { lazy, Suspense } from 'react';
+import React, { Suspense, lazy, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from './components/Header/Header';
 import Chatbot from './Chat/ChatBot';
 import ScrollToTop from '../src/Global/ScrollToTop';
 import LoadingPage from './Alerts/Loading';
 
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const LazyAbout = lazy(() => import('../src/components/About/AboutUs'));
 const LazyContactUs = lazy(() => import('./components/ContactUs/ContactUs'));
@@ -16,7 +15,6 @@ const LazyLogin = lazy(() => import('./screen/Login/Login'));
 const LazyOrderScreen = lazy(() => import('./screen/Order/orderScreen'));
 const LazyErr = lazy(() => import('./screen/Pages/Error.js'));
 const LazyOffers = lazy(() => import('./screen/Food_Menu/AllMenu'));
-const LazyFilter = lazy(() => import('../src/components/FilterData/Filters'));
 const LazyPrivacyPolicy = lazy(() => import('./screen/Pages/privacy'));
 const LazyStayTunned = lazy(() => import('./screen/Pages/StayTunned'));
 const LazyAdminScreen = lazy(() => import('./Admin/AdminScreen'));
@@ -32,23 +30,52 @@ const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
 const LazyUser = lazy(() => import('./components/Users/User'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
+const LazyorderSuccess = lazy(() => import('./components/Users/OrderSuccess'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 
 
+function LazyLoadComponent({ children }) {
+  const componentRef = useRef(null);
+
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+          (entries) => {
+              entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                      observer.unobserve(entry.target);
+                      // Load the component here (entry.target)
+                      // You can do any additional processing or state updates if needed
+                  }
+              });
+          },
+          { threshold: 0.1 } // Adjust the threshold as per your needs
+      );
+
+      if (componentRef.current) {
+          observer.observe(componentRef.current);
+      }
+
+      return () => {
+          if (componentRef.current) {
+              observer.unobserve(componentRef.current);
+          }
+      };
+  }, []);
+
+  return <div ref={componentRef}>{children}</div>;
+}
+
 function App() {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <BrowserRouter>
-        {/* <NavBar /> */}
-        <Nav />
-
-        <Chatbot />
-        <ScrollToTop />
+    <> 
+    <BrowserRouter>
+      <Nav />
+      <Chatbot />
+      <ScrollToTop />
+      <Suspense fallback={<LoadingPage />}>
         <Routes>
           <Route path="/about" element={<LazyAbout />} exact />
-          
-          <Route path="/filter" element={<LazyFilter />} exact />
           <Route path="/pizzas" element={<LazyOffers />} exact />
           <Route path="/" element={<LazyHome />} />
           <Route path="/contact" element={<LazyContactUs />} exact />
@@ -61,7 +88,7 @@ function App() {
           <Route path="/services" element={<LazyServices />} exact />
           <Route path="*" element={<LazyErr />} exact />
           <Route path="/why_choose_us" element={<WhyChooseUs />} exact />
-          
+
 
 
 
@@ -71,12 +98,13 @@ function App() {
             <Route path="userinfo" element={<LazyUserinfo />} exact />
             <Route path="user_setting" element={<LazyUserSettings />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
+            <Route path="orderSuccess" element={<LazyorderSuccess />} exact />
 
           </Route>
 
 
-           {/* Company routes: */}
-           <Route path='/company/' element={<LazyOrg />} >
+          {/* Company routes: */}
+          <Route path='/company/' element={<LazyOrg />} >
             <Route index element={<LazyAbout />} />
             <Route path='service' element={<LazyServices />} />
             <Route path="about" element={<LazyAbout />} exact />
@@ -88,11 +116,9 @@ function App() {
           {/* admin routes */}
           <Route path='/admin/' element={<LazyAdminScreen />} >
             <Route index element={<AdminPage />} />
-
             <Route path='page' element={<Userlist />} />
             <Route path='users' element={<Userlist />} />
             <Route path="editpizza/:pizzaId" component={EditPizza} exact />
-
             <Route path='pizzalist' element={<Pizzaslist />} />
             <Route path='addnewpizza' element={<AddNewPizza />} />
             <Route path='orderlist' element={<OrderList />} />
@@ -102,8 +128,10 @@ function App() {
 
 
         </Routes>
-      </BrowserRouter>
-    </Suspense>
+    
+    </Suspense >
+    </BrowserRouter>
+    </>
   );
 }
 export default App;

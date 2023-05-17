@@ -202,7 +202,7 @@ const Footer = () => {
         <li>
           <a
             href='https://twitter.com/rajydv07_'
-            title=""
+            aria-label='twitter'
             className="flex items-center justify-center text-white transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
           >
             <AiFillTwitterCircle  size={50}/>
@@ -211,7 +211,7 @@ const Footer = () => {
         <li>
           <a
             href='https://www.facebook.com/IamRAJAO9'
-            title=""
+            aria-label='facebook profile'
             className="flex items-center justify-center text-white transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
           >
             <BsFacebook size={30}/>
@@ -220,7 +220,7 @@ const Footer = () => {
         <li>
           <a
             href='https://www.linkedin.com/in/rajydv07/'
-            title=""
+            aria-label='linkedin'
             className="flex items-center justify-center text-white transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
           >
             <BsLinkedin size={30}/>
@@ -229,7 +229,7 @@ const Footer = () => {
         <li>
           <a
             href='abc'
-            title=""
+            aria-label='linkedin'
             className="flex items-center justify-center text-white transition-all duration-200 bg-transparent border border-gray-700 rounded-full w-7 h-7 focus:bg-blue-600 hover:bg-blue-600 hover:border-blue-600 focus:border-blue-600"
           >
             <BsLinkedin size={30}/>

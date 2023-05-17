@@ -161,6 +161,7 @@ const Header = () => {
                 aria-controls="mobile-menu"
                 aria-expanded="false"
                 onClick={toggleMenu}
+                alt='humburger menu toggle'
               >
                 {isMenuOpen ? (
                   <FaTimes className="block h-6 w-6" />

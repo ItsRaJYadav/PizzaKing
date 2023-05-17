@@ -12,10 +12,11 @@ import { FaHourglassHalf } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
 import { useAuth0 } from "@auth0/auth0-react";
 import Loader from "../../Alerts/Loader";
+import AddToWishList from "../../Alerts/ProductAddAlert"
 
 const CartScreen = () => {
   const { user, isAuthenticated } = useAuth0();
-
+  const [showAlert, setShowAlert] = useState(false);
   const cartState = useSelector((state) => state.cartReducer);
   const cartItems = cartState.cartItems;
   const dispatch = useDispatch();
@@ -23,12 +24,14 @@ const CartScreen = () => {
   const { loading, currentUser, error } = userState;
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
 
   const handleClick = () => {
-    alert('item added successfully to database Wishlist');
+    setShowAlert(true);
   };
-
 
   const navigate = useNavigate();
 
@@ -127,6 +130,12 @@ const CartScreen = () => {
                                 >
                                   <i className="fas fa-heart"></i>
                                 </button>
+                                {showAlert && (
+                                  <AddToWishList
+                                    message="Item added to Wishlist Successfully."
+                                    onClose={handleCloseAlert}
+                                  />
+                                )}
                               </div>
                             </div>
                             {/* Data */}

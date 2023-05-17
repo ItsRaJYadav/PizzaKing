@@ -14,11 +14,11 @@ const Playstore = () => {
 
                                 <div className="flex flex-row items-center mt-8 space-x-4 lg:mt-12">
                                     <Link to='/stayTunned' title="" className="flex" role="button">
-                                        <img className="w-auto h-14" src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/btn-app-store.svg" alt="" />
+                                        <img className="w-auto h-14" src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/btn-app-store.svg" alt="play store" />
                                     </Link>
 
                                     <Link to='/stayTunned' title="" className="flex" role="button">
-                                        <img className="w-auto h-14" src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/btn-play-store.svg" alt="" />
+                                        <img className="w-auto h-14" src="https://cdn.rareblocks.xyz/collection/celebration/images/cta/8/btn-play-store.svg" alt="app store" />
                                     </Link >
                                 </div>
                             </div>
