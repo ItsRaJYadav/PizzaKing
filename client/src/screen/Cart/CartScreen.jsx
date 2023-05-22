@@ -199,7 +199,7 @@ const CartScreen = () => {
                       </div>
                     </div>
                     <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-                      <Checkout />
+                    <Checkout subTotal={subTotal} />
                     </button>
                     <hr className="mt-3 mb-1" />
                     <div className="card-body mr-2 flex items-center">

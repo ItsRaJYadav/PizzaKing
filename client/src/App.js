@@ -20,6 +20,7 @@ const LazyStayTunned = lazy(() => import('./screen/Pages/StayTunned'));
 const LazyAdminScreen = lazy(() => import('./Admin/AdminScreen'));
 const AddNewPizza = lazy(() => import('../src/Admin/AddnewPizza'));
 const AdminSettings = lazy(() => import('../src/Admin/AdminSetting'));
+const orderDetails = lazy(() => import('../src/Admin/OrderDetails'));
 const OrderList = lazy(() => import('../src/Admin/OrderList'));
 const Pizzaslist = lazy(() => import('../src/Admin/PizzaList'));
 const Userlist = lazy(() => import('../src/Admin/User'));
@@ -30,41 +31,12 @@ const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
 const LazyUser = lazy(() => import('./components/Users/User'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
-const LazyorderSuccess = lazy(() => import('./components/Users/OrderSuccess'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
+const CheckoutSuccess= lazy(() => import('../src/components/Checkout/CheckoutSuccess'));
 
 
-function LazyLoadComponent({ children }) {
-  const componentRef = useRef(null);
 
-  useEffect(() => {
-      const observer = new IntersectionObserver(
-          (entries) => {
-              entries.forEach((entry) => {
-                  if (entry.isIntersecting) {
-                      observer.unobserve(entry.target);
-                      // Load the component here (entry.target)
-                      // You can do any additional processing or state updates if needed
-                  }
-              });
-          },
-          { threshold: 0.1 } // Adjust the threshold as per your needs
-      );
-
-      if (componentRef.current) {
-          observer.observe(componentRef.current);
-      }
-
-      return () => {
-          if (componentRef.current) {
-              observer.unobserve(componentRef.current);
-          }
-      };
-  }, []);
-
-  return <div ref={componentRef}>{children}</div>;
-}
 
 function App() {
   return (
@@ -88,6 +60,7 @@ function App() {
           <Route path="/services" element={<LazyServices />} exact />
           <Route path="*" element={<LazyErr />} exact />
           <Route path="/why_choose_us" element={<WhyChooseUs />} exact />
+          <Route path="/success" element={<CheckoutSuccess />} exact />
 
 
 
@@ -98,7 +71,7 @@ function App() {
             <Route path="userinfo" element={<LazyUserinfo />} exact />
             <Route path="user_setting" element={<LazyUserSettings />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
-            <Route path="orderSuccess" element={<LazyorderSuccess />} exact />
+           
 
           </Route>
 
@@ -114,7 +87,7 @@ function App() {
 
 
           {/* admin routes */}
-          <Route path='/admin/' element={<LazyAdminScreen />} >
+          {/* <Route path='/admin/' element={<LazyAdminScreen />} >
             <Route index element={<AdminPage />} />
             <Route path='page' element={<Userlist />} />
             <Route path='users' element={<Userlist />} />
@@ -122,8 +95,20 @@ function App() {
             <Route path='pizzalist' element={<Pizzaslist />} />
             <Route path='addnewpizza' element={<AddNewPizza />} />
             <Route path='orderlist' element={<OrderList />} />
+            <Route path="/admin/orderlist/:orderId" component={orderDetails} />
             <Route path='settings' element={<AdminSettings />} />
-          </Route>
+          </Route> */}
+           <Route path="/admin" element={<LazyAdminScreen />}>
+          <Route index element={<AdminPage />} />
+          <Route path="page" element={<Userlist />} />
+          <Route path="users" element={<Userlist />} />
+          <Route path="editpizza/:pizzaId" element={<EditPizza />} />
+          <Route path="pizzalist" element={<Pizzaslist />} />
+          <Route path="addnewpizza" element={<AddNewPizza />} />
+          <Route path="orderlist" element={<OrderList />} />
+          <Route path="orderlist/:orderId" element={<orderDetails />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
 
 
 

@@ -8,7 +8,7 @@ import { Helmet } from "react-helmet";
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { SiAuth0 } from 'react-icons/si';
 import { useAuth0 } from "@auth0/auth0-react";
-
+import Swal from "sweetalert2";
 
 const Login = () => {
     const {  loginWithRedirect } = useAuth0();
@@ -25,19 +25,32 @@ const Login = () => {
             window.location.href = "/";
         }
     }, []);
-    const loginHandler = async () => {
-        if (!isChecked) {
-            alert("Please check the agreement box!");
-            return;
-        }
+    
+    
+    const loginHandler = async (event) => {
+        event.preventDefault(); // Prevent form submission
 
+        if (!isChecked) {
+            Swal.fire({
+              icon: "error",
+              title: "Please check the agreement box!",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            return;
+          }
         const user = { email, password };
         const response = dispatch(loginUser(user));
 
         if (response.status === 1) {
             alert("Login not successful!");
         } else {
-            alert("Login successful!");
+            Swal.fire({
+                icon: "success",
+                title: "Login successful!",
+                showConfirmButton: false,
+                timer: 2000,
+              });
         }
     };
 
@@ -82,7 +95,7 @@ const Login = () => {
                         </span>
                         <div className="w-full h-px bg-gray-300" />
                     </div>
-                    <form >
+                    <form onSubmit={loginHandler} >
                         <div className="mb-6">
                             <label
                                 className="block mb-1.5 text-sm text-gray-900 font-semibold"
@@ -143,7 +156,7 @@ const Login = () => {
                         </div>
                         <button
                             className="relative group block w-full mb-6 py-3 px-5 text-center text-sm font-semibold text-orange-50 bg-orange-900 rounded-full overflow-hidden"
-                            onClick={loginHandler}
+                            type="submit"
                         >
                             Login
                         </button>

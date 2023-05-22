@@ -19,7 +19,7 @@ const orderSchema = mongoose.Schema(
     },
     orderAmount: {
       type: String,
-        required: true,
+      //   required: true,
     },
     isDeliverd: {
       type: Boolean,
@@ -27,7 +27,7 @@ const orderSchema = mongoose.Schema(
     },
     transectionId: {
       type: String,
-        required: true,
+      //   required: true,
     },
   },
   { timestamps: true }

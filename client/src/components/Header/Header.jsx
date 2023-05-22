@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { FaUserCircle } from "react-icons/fa";
 import { BsFillCartFill } from "react-icons/bs";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { Hidden } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Header = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const {  isAuthenticated } = useAuth0();
 
   const cartState = useSelector((state) => state.cartReducer);
   const userState = useSelector((state) => state.loginUserReducer);

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import pic from '../../assets/profile.jpg'
+import pic from '../../assets/default-user-image.jpg'
 import { useAuth0 } from "@auth0/auth0-react";
 
 function UserTable() {

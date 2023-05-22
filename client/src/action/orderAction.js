@@ -5,27 +5,19 @@ export const placeOrder = (token, subTotal) => async (dispatch, getState) => {
   const currentUser = getState().loginUserReducer.currentUser;
   const cartItems = getState().cartReducer.cartItems;
   try {
-    const response = await axios.post("/api/orders/placeorder", {
+    await axios.post("/api/orders/placeorder", {
       token,
       subTotal,
       currentUser,
       cartItems,
     });
-    if (response.status === 200) {
-      dispatch({ type: "PLACE_ORDER_SUCCESS" });
-    } else {
-      dispatch({ type: "PLACE_ORDER_FAIL" });
-    }
+    dispatch({ type: "PLACE_ORDER_SUCCESS" });
+    // console.log(res);
   } catch (error) {
     dispatch({ type: "PLACE_ORDER_FAIL" });
     console.log(error);
   }
 };
-
-
-
-
-
 
 export const getUserOrders = () => async (dispatch, getState) => {
   const currentUser = getState().loginUserReducer.currentUser;
@@ -36,7 +28,7 @@ export const getUserOrders = () => async (dispatch, getState) => {
     const response = await axios.post("/api/orders/getuserorder", {
       userid: currentUser.email,
     });
-    console.log(response);
+    // console.log(response);
     dispatch({ type: "USER_ORDER_SUCCESS", payload: response.data });
   } catch (error) {
     dispatch({ type: "USER_ORDER_FAIL", payload: error });
@@ -62,7 +54,7 @@ export const deliverOrder = (orderid) => async (dispatch, getState) => {
   });
   try {
     await axios.post("/api/orders/deliverorder", { orderid });
-    alert("Deliverd Success");
+    // alert("Deliverd Success");
     const orders = await axios.get("/api/orders/alluserorder");
     dispatch({ type: "GET_ALL_ORDER_SUCCESS", payload: orders.data });
     window.location.href = "/admin/orderlist";
@@ -70,4 +62,3 @@ export const deliverOrder = (orderid) => async (dispatch, getState) => {
     dispatch({ type: "GET_ALL_ORDER_FAIL", payload: error });
   }
 };
-

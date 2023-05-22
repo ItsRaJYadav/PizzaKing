@@ -6,46 +6,42 @@ const connectDB = require("./config/config");
 require("colors");
 const morgan = require("morgan");
 
-//config dotenv
+// Config dotenv
 dotenv.config();
 
-//connection mongodb
+// Connection to MongoDB
 connectDB();
 
 const app = express();
 
-//middlewares
+// Middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 
-
-//route
+// Routes
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
-
-app.get("/ab", (req, res) => {
-  res.send("<h1>Hello From Node Server vai nodemon</h1>");
-});
-
-
-
 app.use("/api/users", require("./routes/UserRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
-//static files
-app.use(express.static(path.join(__dirname, "./client/build")));
+// Serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("<h1>Hello From Node Server via nodemon</h1>");
+  });
+}
 
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+// Port
+const port = process.env.PORT || 8080;
 
-//port
-const port = 8080 || process.env.PORT;
-
-
-
+// Start the server
 app.listen(port, () => {
   console.log(
-    `Server Running On ${process.env.NODE_ENV} mode on port no ${process.env.PORT}`
-      .bgMagenta.white
+    `Server running in ${process.env.NODE_ENV} mode on port ${port}`.bgMagenta
+      .white
   );
 });
