@@ -185,22 +185,25 @@ const CartScreen = () => {
                     </div>
                     <div className="flex justify-between">
                       <p className="text-gray-700">Shipping</p>
-                      {
-                        totalItems >= 5 || subTotal >= 499 ? <p className="text-gray-700">0</p> : <p className="text-gray-700">50</p>
-                      }
-
+                      {totalItems >= 5 || subTotal >= 499 ? (
+                        <p className="text-gray-700">0</p>
+                      ) : (
+                        <p className="text-gray-700">50</p>
+                      )}
                     </div>
                     <hr className="my-4" />
                     <div className="flex justify-between">
-                      <p className="text-lg font-bold">Total</p>
-                      <div className="">
-                        <p className="mb-1 text-lg font-bold">{subTotal}+ shipping </p>
-                        <p className="text-sm text-gray-700">including VAT</p>
+                      <p className="text-lg font-bold">Total </p>
+                      <div>
+                        <p className="mb-1 text-lg font-bold">Rs. {subTotal + (totalItems >= 5 || subTotal >= 499 ? 0 : 50)}.0</p>
                       </div>
                     </div>
-                    <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-                    <Checkout subTotal={subTotal} />
+                    <hr />
+                    <button className="mt-6 w-full rounded-md  py-1.5 font-medium text-blue-50 hover:bg-voilet">
+                      <Checkout subTotal= {subTotal + (totalItems >= 5 || subTotal >= 499 ? 0 : 50)} />
                     </button>
+
+
                     <hr className="mt-3 mb-1" />
                     <div className="card-body mr-2 flex items-center">
                       <p className="font-bold">We accept</p>

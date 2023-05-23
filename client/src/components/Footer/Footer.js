@@ -2,10 +2,17 @@
 
 import {BsLinkedin,BsFacebook} from 'react-icons/bs'
 import {AiFillTwitterCircle} from 'react-icons/ai'
+import { FaPizzaSlice } from "react-icons/fa";
 
 import React from 'react'
 import { Link } from 'react-router-dom'
 const Footer = () => {
+  const logoStyle = {
+    color: "#FF6F00",
+    fontSize: "4rem",
+    marginRight: "0.5rem",
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.4)",
+  };
   return (
     <>
     <section className="py-10 bg-gray-900 sm:pt-16 lg:pt-24">
@@ -198,6 +205,13 @@ const Footer = () => {
         src="https://cdn.rareblocks.xyz/collection/celebration/images/logo-alt.svg"
         alt=""
       /> */}
+     <Link to='/' className=" text-white p-4 flex items-center">
+      <FaPizzaSlice style={logoStyle} />
+      <span style={{ color: "#4A148C", fontSize: "2rem" }}>Pizza</span>
+      <span style={{ color: "#0288D1", fontSize: "2rem" }}>King</span>
+      <span style={{ color: "#00C853", fontSize: "2rem" }}>.in</span>
+    </Link>
+      
       <ul className="flex items-center space-x-3 md:order-3">
         <li>
           <a
@@ -238,7 +252,7 @@ const Footer = () => {
         </li>
       </ul>
       <p className="w-full mt-8 text-sm text-center text-gray-100 md:mt-0 md:w-auto md:order-2">
-        © Copyright 2021, All Rights Reserved by PizzaKing
+        © Copyright 2023, All Rights Reserved by PizzaKing.in
       </p>
     </div>
   </div>

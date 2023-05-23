@@ -1,7 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
-
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const connectDB = require("./config/config");
 require("colors");
 const morgan = require("morgan");
@@ -14,10 +15,12 @@ connectDB();
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Middlewares
 app.use(express.json());
 app.use(morgan("dev"));
-
+app.use(cors());
 // Routes
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 app.use("/api/users", require("./routes/UserRoutes"));
@@ -36,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Port
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 // Start the server
 app.listen(port, () => {
