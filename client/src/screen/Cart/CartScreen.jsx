@@ -51,34 +51,66 @@ const CartScreen = () => {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
-  const checkoutpage = () => {
-    fetch("http://localhost:8080/api/orders/placeorder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      mode: "cors",
-      body: JSON.stringify({
-        items: cartItems.map((item) => ({
-          id: item.id,
-          quantity: item.quantity,
-          price: item.price /(item.quantity),
-          name: item.name
+  // const checkoutpage = () => {
+  //   fetch("http://localhost:8080/api/orders/placeorder", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     mode: "cors",
+  //     body: JSON.stringify({
+  //       items: cartItems.map((item) => ({
+  //         id: item.id,
+  //         quantity: item.quantity,
+  //         price: item.price /(item.quantity),
+  //         name: item.name
           
-        }))
-      })
+  //       }))
+  //     })
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) return res.json();
+  //       return res.json().then((json) => Promise.reject(json));
+  //     })
+  //     .then(({ url }) => {
+  //       window.location = url;
+  //     })
+  //     .catch((e) => {
+  //       console.log(e.error);
+  //     });
+  // };
+
+
+  const checkoutpage = () => {
+  const apiUrl = process.env.NODE_ENV  === 'production' ? 'https://example.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
+
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      items: cartItems.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        price: item.price / item.quantity,
+        name: item.name
+      }))
     })
-      .then((res) => {
-        if (res.ok) return res.json();
-        return res.json().then((json) => Promise.reject(json));
-      })
-      .then(({ url }) => {
-        window.location = url;
-      })
-      .catch((e) => {
-        console.log(e.error);
-      });
-  };
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+      return res.json().then((json) => Promise.reject(json));
+    })
+    .then(({ url }) => {
+      window.location = url;
+    })
+    .catch((e) => {
+      console.log(e.error);
+    });
+};
+
   
 
 

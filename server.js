@@ -23,9 +23,10 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(
   cors({
-      origin:"http://localhost:3000",
+    origin: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000'
   })
-)
+);
+
 
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
@@ -53,8 +54,9 @@ app.post("/api/orders/placeorder", async (req, res)=>{
                   quantity: item.quantity
               }
           }),
-          success_url: 'http://localhost:3000/success',
-          cancel_url: 'http://localhost:3000/cancel'
+          // success_url: 'http://localhost:3000/success',
+          success_url : process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
+          cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
       })
 
       res.json({url: session.url})
