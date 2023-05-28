@@ -2,6 +2,8 @@
 import {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { FiSettings, FiUsers } from 'react-icons/fi';
+import { FaShoppingCart } from 'react-icons/fa';
+import { SiProducthunt } from 'react-icons/si';
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPizzas } from '../action/pizzaAction'
 import { getAllUsers } from '../action/userAction'
@@ -42,7 +44,9 @@ useEffect(() => {
                 <h3 className="mb-2 text-lg font-bold text-gray-800">Users</h3>
                 <p className="text-gray-600">Total Users:{users.length} </p>
               </div>
-              <FiUsers className="w-8 h-8 text-gray-800" />
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-500 text-white rounded-full">
+            <FiUsers className="text-2xl" />
+          </div>
             </Link>
           </div>
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
@@ -51,16 +55,20 @@ useEffect(() => {
                 <h3 className="mb-2 text-lg font-bold text-gray-800">Products</h3>
                 <p className="text-gray-600">Total Products: {pizzas.length}</p>
               </div>
-              <FiUsers className="w-8 h-8 text-gray-800" />
+              <div className="flex items-center justify-center w-16 h-16 bg-purple-500 text-white rounded-full">
+            <SiProducthunt className="text-2xl" />
+          </div>
             </Link>
           </div>
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/orderlist" className="flex items-center justify-between">
               <div>
                 <h3 className="mb-2 text-lg font-bold text-gray-800">Orders</h3>
-                <p className="text-gray-600">Total Orders: 5</p>
+                <p className="text-gray-600">Total Orders: 7</p>
               </div>
-              <FiUsers className="w-8 h-8 text-gray-800" />
+              <div className="flex items-center justify-center w-16 h-16 bg-green-500 text-white rounded-full">
+            <FaShoppingCart className="text-2xl" />
+          </div>
             </Link>
           </div>
         </div>

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 
 import { Link, Outlet } from 'react-router-dom';
-import { FiUsers, FiSettings } from 'react-icons/fi';
+import { FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaPizzaSlice, FaThList } from 'react-icons/fa';
 import { BsDatabaseAdd } from 'react-icons/bs';
 import pic from '../assets/profile.jpg'
+import { useAuth0 } from '@auth0/auth0-react'
+import { logoutUser } from "../action/userAction";
+
+
 const AdminSidebar = () => {
+
+  const dispatch = useDispatch();
   const [activeLink, setActiveLink] = useState('users');
 
   const handleLinkClick = (link) => {
@@ -21,6 +27,8 @@ const AdminSidebar = () => {
       window.location.href = "/";
     }
   }, [currentUser]);
+
+
 
   return (
     <div className="flex h-screen ">
@@ -100,6 +108,19 @@ const AdminSidebar = () => {
                   <FiSettings className="mr-2" />
                   <span>Settings</span>
                 </Link>
+              </li>
+              <li>
+                <button
+
+                  onClick={() => {
+                    dispatch(logoutUser());
+                  }}
+                  className={`flex items-center justify-center py-3 px-6 rounded-lg text-gray-700 hover:bg-gray-300 ${activeLink === 'logout' ? 'bg-gray-300 text-gray-800 font-semibold' : ''
+                    }`}
+                >
+                  <FiLogOut className='ml-9' />
+                  <span>LogOut</span>
+                </button>
               </li>
 
             </ul>

@@ -9,7 +9,6 @@ function UserAccount() {
     const { isAuthenticated } = useAuth0();
 
     const dispatch = useDispatch();
-    const cartState = useSelector((state) => state.cartReducer);
     const userState = useSelector((state) => state.loginUserReducer);
     const { currentUser } = userState;
     const [activeTab, setActiveTab] = useState(1);

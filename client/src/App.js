@@ -10,6 +10,7 @@ import CheckoutCancel from "./components/Checkout/CheckoutCancel";
 const LazyAbout = lazy(() => import('../src/components/About/AboutUs'));
 const LazyContactUs = lazy(() => import('./components/ContactUs/ContactUs'));
 const LazyHome = lazy(() => import('../src/screen/Home/Home'));
+const LazyAdminHome = lazy(() => import('../src/screen/Home/AdminHome.jsx'));
 const LazyCartScreen = lazy(() => import('./screen/Cart/CartScreen'));
 const LazyRegister = lazy(() => import('./screen/Register/Register'));
 const LazyLogin = lazy(() => import('./screen/Login/Login'));
@@ -110,6 +111,7 @@ function App() {
           <Route path="orderlist" element={<OrderList />} />
           <Route path="orderlist/:orderId" element={<orderDetails />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="adminview" element={<LazyAdminHome />} />
         </Route>
 
 
