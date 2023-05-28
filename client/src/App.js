@@ -72,7 +72,7 @@ function App() {
           <Route path='/user/' element={<LazyUser />} >
             <Route index element={<LazyUserinfo />} />
             <Route path="userinfo" element={<LazyUserinfo />} exact />
-            <Route path="user_setting" element={<LazyUserSettings />} exact />
+            <Route path="address" element={<LazyUserSettings />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
            
 

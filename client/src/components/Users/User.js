@@ -53,14 +53,14 @@ function UserAccount() {
                 >
                     Orders
                 </Link>
-                <Link to="/user/user_setting"
+                <Link to="/user/address"
                     className={`${activeTab === 3
                         ? "bg-blue-500 text-white"
                         : "bg-gray-300 text-gray-600"
                         } py-2 px-4 border-r`}
                     onClick={() => toggleTab(3)}
                 >
-                    Settings
+                    Address
                 </Link>
                 <Link
                     className={`${activeTab === 4
