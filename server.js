@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/config");
 require("colors");
 const morgan = require("morgan");
-const Order = require("../server/models/orderModel");
+const Order = require("./models/orderModel");
 // Config dotenv
 dotenv.config();
 
