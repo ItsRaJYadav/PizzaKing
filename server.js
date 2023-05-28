@@ -36,35 +36,73 @@ app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 app.use("/api/users", require("./routes/UserRoutes"));
 // app.use("/api/orders", require("./routes/orderRoutes"));
 
-app.post("/api/orders/placeorder", async (req, res)=>{
-  try{
-      const session = await stripe.checkout.sessions.create({
-          payment_method_types:["card"],
-          mode:"payment",
-          line_items: req.body.items.map(item => {
-              return{
-                  price_data:{
-                      currency:"inr",
-                      product_data:{
-                          name: item.name
-                      },
-                      unit_amount: (item.price)*100,
+// app.post("/api/orders/placeorder", async (req, res)=>{
+//   try{
+//       const session = await stripe.checkout.sessions.create({
+//           payment_method_types:["card"],
+//           mode:"payment",
+//           line_items: req.body.items.map(item => {
+//               return{
+//                   price_data:{
+//                       currency:"inr",
+//                       product_data:{
+//                           name: item.name
+//                       },
+//                       unit_amount: (item.price)*100,
 
-                  },
-                  quantity: item.quantity
-              }
-          }),
-          // success_url: 'http://localhost:3000/success',
-          success_url : process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
-          cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
-      })
+//                   },
+//                   quantity: item.quantity
+//               }
+//           }),
+//           // success_url: 'http://localhost:3000/success',
+//           success_url : process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
+//           cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
+//       })
 
-      res.json({url: session.url})
+//       res.json({url: session.url})
 
-  }catch(e){
-   res.status(500).json({error:e.message})
+//   }catch(e){
+//    res.status(500).json({error:e.message})
+//   }
+// })
+
+app.post("/api/orders/placeorder", async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: req.body.items.map((item) => {
+        return {
+          price_data: {
+            currency: "inr",
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: item.price * 100,
+          },
+          quantity: item.quantity,
+        };
+      }),
+      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/success' : 'http://localhost:3000/success',
+      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/cancel' : 'http://localhost:3000/cancel',
+      shipping_address_collection: {
+        allowed_countries: ['IN'], // Set the allowed countries for shipping address
+      },
+      shipping_address: {
+        line1: req.body.address, // Replace 'address' with the actual field name for address
+      },
+      metadata: {
+        customer_name: req.body.name, // Replace 'name' with the actual field name for customer name
+        customer_phone: req.body.phone, // Replace 'phone' with the actual field name for customer phone
+      },
+    });
+
+    res.json({ url: session.url });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
-})
+});
+
 
 
 app.post("/api/orders/getuserorder", async (req, res) => {

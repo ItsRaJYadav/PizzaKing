@@ -49,7 +49,7 @@ function App() {
       <Suspense fallback={<LoadingPage />}>
         <Routes>
           <Route path="/about" element={<LazyAbout />} exact />
-          <Route path="/pizzas" element={<LazyOffers />} exact />
+          <Route path="/menu" element={<LazyOffers />} exact />
           <Route path="/" element={<LazyHome />} />
           <Route path="/contact" element={<LazyContactUs />} exact />
           <Route path="/cart" element={<LazyCartScreen />} exact />

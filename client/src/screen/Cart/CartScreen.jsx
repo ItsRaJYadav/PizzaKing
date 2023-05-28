@@ -11,8 +11,13 @@ import { CSSTransition } from 'react-transition-group';
 import { useAuth0 } from "@auth0/auth0-react";
 import Loader from "../../Alerts/Loader";
 import AddToWishList from "../../Alerts/ProductAddAlert"
+import { loadStripe } from '@stripe/stripe-js';
+import { Link } from "react-router-dom";
 
 const CartScreen = () => {
+
+
+
   const { user, isAuthenticated } = useAuth0();
   const [showAlert, setShowAlert] = useState(false);
   const cartState = useSelector((state) => state.cartReducer);
@@ -22,8 +27,8 @@ const CartScreen = () => {
   const { loading, currentUser, error } = userState;
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
-  
-  
+
+
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
@@ -33,9 +38,9 @@ const CartScreen = () => {
     setShowAlert(true);
   };
 
- 
 
- 
+
+
   // Calculate the expected delivery time (30 minutes from now)
   const [timeLeft, setTimeLeft] = useState(1800); // 1800 seconds = 30 minutes
 
@@ -51,67 +56,41 @@ const CartScreen = () => {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
-  // const checkoutpage = () => {
-  //   fetch("http://localhost:8080/api/orders/placeorder", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     mode: "cors",
-  //     body: JSON.stringify({
-  //       items: cartItems.map((item) => ({
-  //         id: item.id,
-  //         quantity: item.quantity,
-  //         price: item.price /(item.quantity),
-  //         name: item.name
-          
-  //       }))
-  //     })
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) return res.json();
-  //       return res.json().then((json) => Promise.reject(json));
-  //     })
-  //     .then(({ url }) => {
-  //       window.location = url;
-  //     })
-  //     .catch((e) => {
-  //       console.log(e.error);
-  //     });
-  // };
+
 
 
   const checkoutpage = () => {
-  const apiUrl = process.env.NODE_ENV  === 'production' ? 'https://pizzaking.onrender.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
 
-  fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    mode: 'cors',
-    body: JSON.stringify({
-      items: cartItems.map((item) => ({
-        id: item.id,
-        quantity: item.quantity,
-        price: item.price / item.quantity,
-        name: item.name
-      }))
-    })
-  })
-    .then((res) => {
-      if (res.ok) return res.json();
-      return res.json().then((json) => Promise.reject(json));
-    })
-    .then(({ url }) => {
-      window.location = url;
-    })
-    .catch((e) => {
-      console.log(e.error);
-    });
-};
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://example.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
 
-  
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      body: JSON.stringify({
+        items: cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price / item.quantity,
+          name: item.name
+        }))
+      })
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+        return res.json().then((json) => Promise.reject(json));
+      })
+      .then(({ url }) => {
+        window.location = url;
+      })
+      .catch((e) => {
+        console.log(e.error);
+      });
+  };
+
+
 
 
   return (
@@ -140,8 +119,12 @@ const CartScreen = () => {
                     isAuthenticated ? <>Welcome {user.name}</> :
                       <>Welcome {currentUser.name}</>
                   }
+                   
                 </h1>
-                <h1 className="mb-10 text-center text-2xl font-bold ">Cart Items</h1>
+                
+                <h1 className="mb-10 text-center text-2xl font-bold ">Cart Items  <Link to="/menu" className="ml-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full mx-auto">
+                  Go Back to Shopping
+                </Link> </h1>
 
 
 
@@ -177,11 +160,20 @@ const CartScreen = () => {
                                   data-mdb-toggle="tooltip"
                                   title="Remove item"
                                   onClick={() => {
+                                    handleClick();
                                     dispatch(deleteFromCart(item));
+                                    
                                   }}
+                                  
                                 >
                                   <i className="fas fa-trash"></i>
                                 </button>
+                                {showAlert && (
+                                  <AddToWishList
+                                    message="Item deleted from cart Successfully."
+                                    onClose={handleCloseAlert}
+                                  />
+                                )}
                                 <button
                                   type="button"
                                   className="bg-pink-500 text-white rounded-full p-1 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
@@ -267,6 +259,7 @@ const CartScreen = () => {
 
                     <hr className="mt-3 mb-1" />
                     <div className="card-body mr-2 flex items-center">
+                      
                       <p className="font-bold">We accept</p>
 
                       <img className="inline-block mx-2" width="45px" src={Rupay} alt="Rupay" />
@@ -302,7 +295,7 @@ const CartScreen = () => {
                         <p className="text-red-600 mb-0">Time is up!</p>
                       </CSSTransition>
                     </div>
-
+                   
                   </div>
 
 

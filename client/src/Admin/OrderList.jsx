@@ -53,7 +53,7 @@ const OrderList = () => {
               orders.map((order) => (
                 <tr key={order._id} className="border-b border-gray-200 hover:bg-gray-100">
                   <td className="py-4 px-6">
-                  <Link to={`/admin/orderlist/${order._id}`}>{order._id}</Link>
+                    <Link to={`/admin/orderlist/${order._id}`}>{order._id}</Link>
                   </td>
                   <td className="py-4 px-6">{order.email}</td>
                   <td className="py-4 px-6">{order.name}</td>
@@ -72,12 +72,20 @@ const OrderList = () => {
                     )}
                   </td>
                   <td className="py-4 px-6">
-                    <ul>
-                      {order.orderItems.map((item) => (
-                        <li key={item._id}>{item.name}</li>
-                      ))}
-                    </ul>
-                  </td>
+  <ol className="list-decimal list-inside">
+    {order.orderItems.map((item, index) => (
+      <li key={item._id} className="mb-2 flex items-center">
+        <span className="font-bold">{index + 1}.</span> {/* Serial number */}
+        <span className="ml-2 font-bold">{item.name}</span> - 
+        <span className={`ml-2 mr-1 bg-${item.quantity > 2 ? 'green' : 'yellow'}-200 px-2 rounded`}>
+          {item.quantity}
+        </span> {item.varient}
+      </li>
+    ))}
+  </ol>
+</td>
+
+
                 </tr>
               ))}
           </tbody>

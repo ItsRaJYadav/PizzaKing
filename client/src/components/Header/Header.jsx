@@ -34,7 +34,7 @@ const Header = () => {
               <ul className="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
                 <li>
                   <NavLink
-                    to="/pizzas"
+                    to="/menu"
                     className="hover:text-gray-200"
                     
                   >
@@ -178,7 +178,7 @@ const Header = () => {
             <div className="sm:hidden " id="mobile-menu">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <Link
-                  to="/pizzas"
+                  to="/menu"
                   className="text-gray-700 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                   onClick={toggleMenu}
                 >
