@@ -31,19 +31,7 @@ const Hero = () => {
               <div className="rounded-md shadow mr-5">
 
               </div>
-              {!isAuthenticated && currentUser == null ? (
-                <>
-                  <div className="rounded-md shadow mr-5">
-                    <Link
-                      to='/login'
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 md:py-4 md:text-lg md:px-10"
-                    >
-                      <FiShoppingCart className="ml-2" />
-                      Sign In
-                    </Link>
-
-                  </div>
-                  <div className="rounded-md shadow mr-5">
+              <div className="rounded-md shadow mr-5">
                     <Link
                       to='/menu'
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
@@ -52,18 +40,6 @@ const Hero = () => {
                       Order Now
                     </Link>
                   </div>
-                </>
-              ) : (
-                <div className="rounded-md shadow mr-5">
-                  <Link
-                    to='/menu'
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 mt-1"
-                  >
-                    <FiShoppingCart className="mr-2" />
-                    Order Now
-                  </Link>
-                </div>
-              )}
             </div>
             <div className="flex flex-col justify-center items-center mt-10">
               <h1 className="text-5xl font-bold mb-4">Delicious Food Delivered Fast</h1>

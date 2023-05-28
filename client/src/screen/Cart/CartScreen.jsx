@@ -61,7 +61,7 @@ const CartScreen = () => {
 
   const checkoutpage = () => {
 
-    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://example.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
 
     fetch(apiUrl, {
       method: 'POST',
