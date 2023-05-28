@@ -4,6 +4,7 @@ import Nav from './components/Header/Header';
 import Chatbot from './Chat/ChatBot';
 import ScrollToTop from '../src/Global/ScrollToTop';
 import LoadingPage from './Alerts/Loading';
+import CheckoutCancel from "./components/Checkout/CheckoutCancel";
 
 
 const LazyAbout = lazy(() => import('../src/components/About/AboutUs'));
@@ -61,6 +62,7 @@ function App() {
           <Route path="*" element={<LazyErr />} exact />
           <Route path="/why_choose_us" element={<WhyChooseUs />} exact />
           <Route path="/success" element={<CheckoutSuccess />} exact />
+          <Route path="/cancel" element={<CheckoutCancel />} exact />
 
 
 

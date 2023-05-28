@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart, deleteFromCart } from "../../action/cartAction";
-import { useNavigate } from 'react-router-dom';
-import Checkout from "../../components/Checkout/Checkout";
 import Rupay from "../../assets/rupay.svg";
 import bhim from "../../assets/bhim.png";
 import LoginReminder from "../Login/LoginAlerts";
@@ -24,6 +22,8 @@ const CartScreen = () => {
   const { loading, currentUser, error } = userState;
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
+  
+  
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
@@ -33,11 +33,9 @@ const CartScreen = () => {
     setShowAlert(true);
   };
 
-  const navigate = useNavigate();
+ 
 
-  const handleBackToShopping = () => {
-    navigate('/');
-  };
+ 
   // Calculate the expected delivery time (30 minutes from now)
   const [timeLeft, setTimeLeft] = useState(1800); // 1800 seconds = 30 minutes
 
@@ -52,6 +50,37 @@ const CartScreen = () => {
   // Calculate minutes and seconds remaining
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
+
+  const checkoutpage = () => {
+    fetch("http://localhost:8080/api/orders/placeorder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      mode: "cors",
+      body: JSON.stringify({
+        items: cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price /(item.quantity),
+          name: item.name
+          
+        }))
+      })
+    })
+      .then((res) => {
+        if (res.ok) return res.json();
+        return res.json().then((json) => Promise.reject(json));
+      })
+      .then(({ url }) => {
+        window.location = url;
+      })
+      .catch((e) => {
+        console.log(e.error);
+      });
+  };
+  
+
 
   return (
     <>
@@ -199,8 +228,8 @@ const CartScreen = () => {
                       </div>
                     </div>
                     <hr />
-                    <button className="mt-6 w-full rounded-md  py-1.5 font-medium text-blue-50 hover:bg-voilet">
-                      <Checkout subTotal= {subTotal + (totalItems >= 5 || subTotal >= 499 ? 0 : 50)} />
+                    <button onClick={checkoutpage} className="mt-6 w-full rounded-md  py-1.5 font-medium text-blue-50 hover:bg-green bg-lime-500">
+                      pay
                     </button>
 
 
