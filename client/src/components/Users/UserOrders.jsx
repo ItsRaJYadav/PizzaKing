@@ -100,7 +100,7 @@ const OrdersUnavailablePage = () => {
         </p>
         <div className="bg-yellow-100 text-yellow-700 py-2 px-4 rounded-full mb-8">
           <p className="font-semibold">
-            But don't worry! We've received your order and will deliver it as soon as possible.
+            But don't worry! We've received your order and will deliver it as soon as possible if you placed.
           </p>
         </div>
         <div className="text-gray-600 text-center mb-4">
@@ -108,9 +108,9 @@ const OrdersUnavailablePage = () => {
           <p>For updates on your orders and further assistance, please reach out to:</p>
           <p className="text-blue-500">support@pizzaking.com</p>
         </div>
-        <AnimatedText className="text-gray-500 mb-2">
+        <div className="text-gray-500 mb-2">
           Thank you for your understanding. <FaHeart className="text-red-500 inline-block ml-1 animate-pulse" />
-        </AnimatedText>
+        </div>
       </div>
     </AnimatedContainer>
   );

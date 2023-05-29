@@ -30,7 +30,7 @@ const Pizzaslist = () => {
             <thead>
               <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left">#</th>
-                <th className="py-3 px-6 text-left">Pizza Name</th>
+                <th className="py-3 px-6 text-left">Food Name</th>
                 <th className="py-3 px-6 text-center">Prices</th>
                 <th className="py-3 px-6 text-center">Category</th>
                 <th className="py-3 px-6 text-center">Action</th>
@@ -38,7 +38,7 @@ const Pizzaslist = () => {
             </thead>
             <tbody className="text-gray-600 text-sm font-light">
               {pizzas &&
-                pizzas.map((pizza, index) => (
+                pizzas.map((FoodItems, index) => (
                   <tr
                     key={index}
                     className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
@@ -48,8 +48,8 @@ const Pizzaslist = () => {
                         <div className="mr-2">
                           <img
                             className="w-6 h-6 rounded-full"
-                            src={pizza.image}
-                            alt={pizza.name}
+                            src={FoodItems.image}
+                            alt={FoodItems.name}
                           />
                         </div>
                         <span>{index + 1}</span>
@@ -57,48 +57,48 @@ const Pizzaslist = () => {
                     </td>
                     <td className="py-3 px-6 text-left">
                       <div className="flex items-center">
-                        <span>{pizza.name}</span>
+                        <span>{FoodItems.name}</span>
                       </div>
                     </td>
                     <td className="py-3 px-6 text-center">
                       <div className="flex items-center justify-center">
                         <span className="mx-2">
-                          Small: {pizza.prices[0]["small"]}
+                          Small: {FoodItems.prices[0]["small"]}
                         </span>
                         <span className="mx-2">
-                          Medium: {pizza.prices[0]["medium"]}
+                          Medium: {FoodItems.prices[0]["medium"]}
                         </span>
-                        <span className="mx-2">Large: {pizza.prices[0]["large"]}</span>
+                        <span className="mx-2">Large: {FoodItems.prices[0]["large"]}</span>
                       </div>
                     </td>
                     <td className="py-3 px-6 text-center">
                       <span
                         className={`py-1 px-3 rounded-full text-xs ${
-                          pizza.category === "vegetarian"
+                          FoodItems.category === "vegetarian"
                             ? "bg-vegetarian"
-                            : pizza.category === "pizza"
+                            : FoodItems.category === "FoodItems"
                               ? "bg-meat"
-                              : pizza.category === "burger"
+                              : FoodItems.category === "burger"
                                 ? "bg-seafood"
-                                : pizza.category === "drinks"
+                                : FoodItems.category === "drinks"
                                   ? "bg-special"
                                   :
-                                  pizza.category === "fries"
+                                  FoodItems.category === "fries"
                                   ? "bg-fries":
-                                  pizza.category === "mix"
+                                  FoodItems.category === "mix"
                                   ? "bg-mix":
-                                  pizza.category === "thali"
+                                  FoodItems.category === "thali"
                                   ? "bg-thali"
                                   : ""
                           }`}
                       >
-                        {pizza.category}
+                        {FoodItems.category}
                       </span>
 
                     </td>
                     <td className="py-3 px-6 text-center">
                       <div className="flex item-center justify-center">
-                        <Link to={`/admin/editpizza/${pizza._id}`}>
+                        <Link to={`/admin/editpizza/${FoodItems._id}`}>
                           <button className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Edit
                           </button>
@@ -106,7 +106,7 @@ const Pizzaslist = () => {
                         <button
                           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                           onClick={() => {
-                            dispatch(deletePizza(pizza._id));
+                            dispatch(deletePizza(FoodItems._id));
                           }}
                         >
                           Delete

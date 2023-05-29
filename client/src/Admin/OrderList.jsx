@@ -72,18 +72,18 @@ const OrderList = () => {
                     )}
                   </td>
                   <td className="py-4 px-6">
-  <ol className="list-decimal list-inside">
-    {order.orderItems.map((item, index) => (
-      <li key={item._id} className="mb-2 flex items-center">
-        <span className="font-bold">{index + 1}.</span> {/* Serial number */}
-        <span className="ml-2 font-bold">{item.name}</span> - 
-        <span className={`ml-2 mr-1 bg-${item.quantity > 2 ? 'green' : 'yellow'}-200 px-2 rounded`}>
-          {item.quantity}
-        </span> {item.varient}
-      </li>
-    ))}
-  </ol>
-</td>
+                    <ol className="list-decimal list-inside">
+                      {order.orderItems.map((item, index) => (
+                        <li key={item._id} className="mb-2 flex items-center">
+                          <span className="font-bold">{index + 1}.</span> {/* Serial number */}
+                          <span className="ml-2 font-bold">{item.name}</span> -
+                          <span className={`ml-2 mr-1 bg-${item.quantity > 2 ? 'green' : 'yellow'}-200 px-2 rounded`}>
+                            {item.quantity}
+                          </span> {item.varient}
+                        </li>
+                      ))}
+                    </ol>
+                  </td>
 
 
                 </tr>

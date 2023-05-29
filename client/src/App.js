@@ -90,17 +90,7 @@ function App() {
 
 
           {/* admin routes */}
-          {/* <Route path='/admin/' element={<LazyAdminScreen />} >
-            <Route index element={<AdminPage />} />
-            <Route path='page' element={<Userlist />} />
-            <Route path='users' element={<Userlist />} />
-            <Route path="editpizza/:pizzaId" component={EditPizza} exact />
-            <Route path='pizzalist' element={<Pizzaslist />} />
-            <Route path='addnewpizza' element={<AddNewPizza />} />
-            <Route path='orderlist' element={<OrderList />} />
-            <Route path="/admin/orderlist/:orderId" component={orderDetails} />
-            <Route path='settings' element={<AdminSettings />} />
-          </Route> */}
+          
            <Route path="/admin" element={<LazyAdminScreen />}>
           <Route index element={<AdminPage />} />
           <Route path="page" element={<Userlist />} />

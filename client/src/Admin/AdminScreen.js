@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet,useNavigate } from 'react-router-dom';
 import { FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaPizzaSlice, FaThList } from 'react-icons/fa';
 import { BsDatabaseAdd } from 'react-icons/bs';
 import pic from '../assets/profile.jpg'
-import { useAuth0 } from '@auth0/auth0-react'
 import { logoutUser } from "../action/userAction";
 
 
 const AdminSidebar = () => {
 
   const dispatch = useDispatch();
+  const history = useNavigate();
   const [activeLink, setActiveLink] = useState('users');
 
   const handleLinkClick = (link) => {
@@ -23,10 +23,14 @@ const AdminSidebar = () => {
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
   useEffect(() => {
-    if (localStorage.getItem("currentUser") === null || !currentUser.isAdmin) {
-      window.location.href = "/";
+    if (localStorage.getItem('currentUser') === null || !currentUser.isAdmin) {
+      history('/');
     }
-  }, [currentUser]);
+  }, [currentUser, history]);
+
+  if (!currentUser || !currentUser.isAdmin) {
+    return null;
+  }
 
 
 
@@ -39,13 +43,13 @@ const AdminSidebar = () => {
       <div className="bg-gray-200 w-64 px-4 py-8">
         <div className="flex flex-col justify-between h-full">
           {/* Logo */}
-          <Link to="/admin" className="flex items-center justify-center mb-8">
+          <a href='/admin' className="flex items-center justify-center mb-8">
 
             <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full w-full">
               <span className="text-lg font-bold text-gray-100">Admin Dashboard </span>
             </button>
 
-          </Link>
+          </a>
           <img src={pic} alt="Logo" className="" />
           <hr />
           {/* Navigation */}
