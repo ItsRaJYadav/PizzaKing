@@ -12,7 +12,8 @@ import { Helmet } from "react-helmet";
 import { useAuth0 } from "@auth0/auth0-react";
 import Error from "../../Alerts/Error";
 import Loader from "../../Alerts/Loading";
-import Success from "../../Alerts/sucess";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const registerState = useSelector((state) => state.registerUserReducer);
@@ -45,7 +46,7 @@ const Register = () => {
     setIsChecked(event.target.checked);
   };
 
-  const PasswordIcon = showPassword ? MdVisibilityOff : MdVisibility;
+  
 
   const history = useNavigate();
 
@@ -54,14 +55,15 @@ const Register = () => {
   };
 
   const registerHandler = (event) => {
-    event.preventDefault(); // Prevent form submission
-
+    event.preventDefault(); 
     if (!isChecked) {
-      showAlert("Please agree to the terms of service.");
+      toast.warn('Please agree to the terms of service.');
     }
-    
+    else if (password!==confirmPassword) {
+      toast.warn("Password does not match");
+    }
     else if (users.find((user) => user.email === email)) {
-      showAlert("Email already exists. Please use a different email.");
+      toast.warn("Email already exists. Please use a different email.");
     } else {
       const user = { name, email, password, confirmPassword };
 
@@ -69,7 +71,7 @@ const Register = () => {
         dispatch(registerUser(user));
       } catch (error) {
         console.log(error);
-        showAlert("An error occurred. Please try again.");
+        toast.error("An error occurred. Please try again.");
       }
     }
   };
@@ -84,6 +86,7 @@ const Register = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      toast.success('Registration Success you will be redirected to login page');
       setTimeout(() => {
         history("/login");
       }, 3000); // Redirect to login page after 3 seconds
@@ -112,7 +115,7 @@ const Register = () => {
   };
 
   const analyzePasswordStrength = (password) => {
-   
+
     const hasCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasDigit = /[0-9]/.test(password);
@@ -132,7 +135,6 @@ const Register = () => {
         <title>Registration</title>
       </Helmet>
       {loading && <Loader />}
-      {success && !error && <Success success="User Registered Successfully" />}
       {error && !success && <Error error={error} />}
       <section className="bg-white min-h-screen">
         <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -234,62 +236,61 @@ const Register = () => {
               </div>
 
               <div className="mb-4">
-        <div className="relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <div className="absolute top-2 right-2">
-            {showPassword ? (
-              <MdVisibilityOff
-                className="text-gray-500 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            ) : (
-              <MdVisibility
-                className="text-gray-500 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            )}
-          </div>
-        </div>
-        {password && (
-          <div className="text-sm mt-1">
-            <span
-              className={`mr-1 font-semibold ${
-                passwordStrength === "strong"
-                  ? "text-green-500"
-                  : passwordStrength === "medium"
-                  ? "text-yellow-500"
-                  : "text-red-500"
-              }`}
-            >
-              Password strength: {passwordStrength}
-            </span>
-          </div>
-        )}
-      </div>
-      <div className="mb-4">
-        <div className="relative">
-          <input
-            type="password"
-            className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-          <div className="absolute top-2 right-2">
-            <RiLockPasswordFill className="text-gray-500" />
-          </div>
-        </div>
-        {confirmPassword && !isPasswordMatch && (
-          <p className="text-red-500 text-xs mt-1">Passwords do not match.</p>
-        )}
-      </div>
-              
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+                  <div className="absolute top-2 right-2">
+                    {showPassword ? (
+                      <MdVisibilityOff
+                        className="text-gray-500 cursor-pointer"
+                        onClick={toggleShowPassword}
+                      />
+                    ) : (
+                      <MdVisibility
+                        className="text-gray-500 cursor-pointer"
+                        onClick={toggleShowPassword}
+                      />
+                    )}
+                  </div>
+                </div>
+                {password && (
+                  <div className="text-sm mt-1">
+                    <span
+                      className={`mr-1 font-semibold ${passwordStrength === "strong"
+                          ? "text-green-500"
+                          : passwordStrength === "medium"
+                            ? "text-yellow-500"
+                            : "text-red-500"
+                        }`}
+                    >
+                      Password strength: {passwordStrength}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="password"
+                    className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                  />
+                  <div className="absolute top-2 right-2">
+                    <RiLockPasswordFill className="text-gray-500" />
+                  </div>
+                </div>
+                {confirmPassword && !isPasswordMatch && (
+                  <p className="text-red-500 text-xs mt-1">Passwords do not match.</p>
+                )}
+              </div>
+
               <div className="mb-6 flex items-center">
                 <input
                   type="checkbox"
@@ -310,8 +311,8 @@ const Register = () => {
                 </span>
               </div>
               <div className="mb-6">
-                <button 
-                   disabled={!isPasswordMatch} 
+                <button
+                  
                   type="submit"
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none"
                 >
@@ -323,6 +324,8 @@ const Register = () => {
           </div>
         </div>
       </section>
+      <ToastContainer position="top-center"
+        autoClose={2000} />
     </>
   );
 };

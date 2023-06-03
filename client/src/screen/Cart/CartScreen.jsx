@@ -10,16 +10,17 @@ import { FaHourglassHalf } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
 import { useAuth0 } from "@auth0/auth0-react";
 import Loader from "../../Alerts/Loader";
-import AddToWishList from "../../Alerts/ProductAddAlert"
-import { loadStripe } from '@stripe/stripe-js';
 import { Link } from "react-router-dom";
+import { FiLoader } from "react-icons/fi";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CartScreen = () => {
 
 
 
   const { user, isAuthenticated } = useAuth0();
-  const [showAlert, setShowAlert] = useState(false);
   const cartState = useSelector((state) => state.cartReducer);
   const cartItems = cartState.cartItems;
   const dispatch = useDispatch();
@@ -27,19 +28,22 @@ const CartScreen = () => {
   const { loading, currentUser, error } = userState;
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
-
-  const handleCloseAlert = () => {
-    setShowAlert(false);
+  const handleCloseDeleteAlert = () => {
+    setShowDeleteAlert(false);
   };
 
-
-  const handleClick = () => {
-    setShowAlert(true);
+  const handleDeleteFromCart = (item) => {
+    setShowDeleteAlert(true);
+    dispatch(deleteFromCart(item));
+    toast.error('Item deleted from cart successfully.');
   };
 
-
-
+  const handleAddToWishlist = (item) => {
+    // dispatch(addToWishlist(item));
+    toast.success('Food Item added to Wishlist Successfully.');
+  };
 
   // Calculate the expected delivery time (30 minutes from now)
   const [timeLeft, setTimeLeft] = useState(1800); // 1800 seconds = 30 minutes
@@ -90,8 +94,12 @@ const CartScreen = () => {
       });
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+  const handleJoin = () => {
+    setIsLoading(true);
+    checkoutpage();
 
-
+  };
 
   return (
     <>
@@ -119,9 +127,9 @@ const CartScreen = () => {
                     isAuthenticated ? <>Welcome {user.name}</> :
                       <>Welcome {currentUser.name}</>
                   }
-                   
+
                 </h1>
-                
+
                 <h1 className="mb-10 text-center text-2xl font-bold ">Cart Items  <Link to="/menu" className="ml-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 rounded-full mx-auto">
                   Go Back to Shopping
                 </Link> </h1>
@@ -154,41 +162,29 @@ const CartScreen = () => {
                               <p className="text-sm text-gray-500">Color: blue</p>
                               <p className="text-sm text-gray-500">Size: {item.varient}</p>
                               <div className="mt-2 flex items-center space-x-2">
-                                <button
-                                  type="button"
-                                  className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
-                                  data-mdb-toggle="tooltip"
-                                  title="Remove item"
-                                  onClick={() => {
-                                    handleClick();
-                                    dispatch(deleteFromCart(item));
-                                    
-                                  }}
-                                  
-                                >
-                                  <i className="fas fa-trash"></i>
-                                </button>
-                                {showAlert && (
-                                  <AddToWishList
-                                    message="Item deleted from cart Successfully."
-                                    onClose={handleCloseAlert}
-                                  />
-                                )}
-                                <button
-                                  type="button"
-                                  className="bg-pink-500 text-white rounded-full p-1 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
-                                  data-mdb-toggle="tooltip"
-                                  title="Move to the wish list"
-                                  onClick={handleClick}
-                                >
-                                  <i className="fas fa-heart"></i>
-                                </button>
-                                {showAlert && (
-                                  <AddToWishList
-                                    message="Item added to Wishlist Successfully."
-                                    onClose={handleCloseAlert}
-                                  />
-                                )}
+
+                                <div className="mt-2 flex items-center space-x-2">
+                                  <button
+                                    type="button"
+                                    className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
+                                    data-mdb-toggle="tooltip"
+                                    title="Remove item"
+                                    onClick={() => handleDeleteFromCart(item)}
+                                  >
+                                    <i className="fas fa-trash"></i>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    className="bg-pink-500 text-white rounded-full p-1 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
+                                    data-mdb-toggle="tooltip"
+                                    title="Move to the wish list"
+                                    onClick={() => handleAddToWishlist(item)}
+                                  >
+                                    <i className="fas fa-heart"></i>
+                                  </button>
+
+                                </div>
                               </div>
                             </div>
                             {/* Data */}
@@ -252,14 +248,26 @@ const CartScreen = () => {
                       </div>
                     </div>
                     <hr />
-                    <button onClick={checkoutpage} className="mt-6 w-full rounded-md  py-1.5 font-medium text-blue-50 hover:bg-green bg-lime-500">
-                      pay
-                    </button>
+
+
+                    {isLoading ? (
+                      <div className="flex items-center mb-6">
+                        <FiLoader className="animate-spin text-2xl mr-2" />
+                        <span className="text-gray-800">Loading...</span>
+                      </div>
+                    ) : (
+                      <button
+                        className="mt-6 w-full rounded-md py-2 font-medium text-white bg-blue-500 hover:bg-blue-600"
+                        onClick={handleJoin}
+                      >
+                        Pay Now
+                      </button>
+                    )}
 
 
                     <hr className="mt-3 mb-1" />
                     <div className="card-body mr-2 flex items-center">
-                      
+
                       <p className="font-bold">We accept</p>
 
                       <img className="inline-block mx-2" width="45px" src={Rupay} alt="Rupay" />
@@ -295,7 +303,7 @@ const CartScreen = () => {
                         <p className="text-red-600 mb-0">Time is up!</p>
                       </CSSTransition>
                     </div>
-                   
+
                   </div>
 
 
@@ -308,6 +316,7 @@ const CartScreen = () => {
           )}
         </div>
       )}
+      <ToastContainer />
     </>
 
   )

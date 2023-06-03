@@ -5,7 +5,6 @@ import { addToCart } from "../../action/cartAction";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
 import { motion } from "framer-motion";
-import { FaCheckCircle } from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
 import { Typography, Button, Slider } from "@mui/material";
 import { ArrowBack, FavoriteBorder, Favorite } from "@mui/icons-material";
@@ -15,7 +14,8 @@ import { FaStar, FaRupeeSign } from "react-icons/fa";
 import { MdOutlineFastfood } from "react-icons/md";
 import { IoIosArrowDropright, IoFastFoodOutline } from "react-icons/io";
 import AddToCartAlert from '../../Alerts/ProductAddAlert'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Pizza = ({ pizza }) => {
   const [varient, setVarient] = useState("small");
   const [quantity, setQuantity] = useState(1);
@@ -24,8 +24,7 @@ const Pizza = ({ pizza }) => {
   const [showModal, setShowModal] = useState(false);
   const addToCartHandler = () => {
     dispatch(addToCart(pizza, quantity, varient));
-    setShowAlert(true); // Show the alert
-
+    toast.success("Added to cart")
   };
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -76,12 +75,7 @@ const Pizza = ({ pizza }) => {
 
   return (
     <>
-      {showAlert && (
-        <AddToCartAlert
-          message="Food Item added to cart."
-          onClose={handleCloseAlert}
-        />
-      )}
+
       <div className="relative bg-white rounded-lg shadow-lg overflow-hidden my-3 border border-gray-300">
 
 
@@ -315,7 +309,18 @@ const Pizza = ({ pizza }) => {
 
       </div>
 
-
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 };
