@@ -58,7 +58,9 @@ const Register = () => {
 
     if (!isChecked) {
       showAlert("Please agree to the terms of service.");
-    }else if (users.find((user) => user.email === email)) {
+    }
+    
+    else if (users.find((user) => user.email === email)) {
       showAlert("Email already exists. Please use a different email.");
     } else {
       const user = { name, email, password, confirmPassword };
@@ -307,7 +309,8 @@ const Register = () => {
                 </span>
               </div>
               <div className="mb-6">
-                <button
+                <button 
+                   disabled={!isPasswordMatch} 
                   type="submit"
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none"
                 >
