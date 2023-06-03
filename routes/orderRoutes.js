@@ -3,7 +3,7 @@ const router = express.Router();
 const cors = require("cors");
 router.use(
   cors({
-      origin:"http://localhost:3000",
+      origin:`{process.env.CLIENT_URL}`,
   })
 )
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)

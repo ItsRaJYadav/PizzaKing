@@ -95,6 +95,7 @@ const Register = () => {
   const handleJoin = () => {
     setIsLoading(true);
     // Perform join logic i will do it later when
+    loginWithRedirect()
 
   };
 

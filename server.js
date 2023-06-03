@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000'
+    origin: (process.env.CLIENT_URL)
   })
 );
 
@@ -83,8 +83,8 @@ app.post("/api/orders/placeorder", async (req, res) => {
           quantity: item.quantity,
         };
       }),
-      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/success' : 'http://localhost:3000/success',
-      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/cancel' : 'http://localhost:3000/cancel',
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: `${process.env.CLIENT_URL}/cancel`,
       shipping_address_collection: {
         allowed_countries: ['IN'], // Set the allowed countries for shipping address
       },
