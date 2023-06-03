@@ -83,8 +83,8 @@ app.post("/api/orders/placeorder", async (req, res) => {
           quantity: item.quantity,
         };
       }),
-      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app' : 'http://localhost:3000/success',
-      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app' : 'http://localhost:3000/cancel',
+      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app/success' : 'http://localhost:3000/success',
+      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app/cancel' : 'http://localhost:3000/cancel',
       shipping_address_collection: {
         allowed_countries: ['IN'], // Set the allowed countries for shipping address
       },
