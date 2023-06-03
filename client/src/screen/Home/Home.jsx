@@ -6,12 +6,11 @@ import FAQ from "./FAQ";
 import Playstore from "./Playstore";
 import WelcomePopUp from './PopUp'
 import { useSelector } from "react-redux";
-import { useAuth0 } from "@auth0/auth0-react";
 import AdminHome from "./AdminHome";
 
 
 const Home = () => {
-  const { isAuthenticated } = useAuth0();
+  
 
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;

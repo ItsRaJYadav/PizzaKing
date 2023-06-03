@@ -1,12 +1,27 @@
 import axios from "axios";
 import swal from "sweetalert";
+// export const registerUser = (user) => async (dispatch) => {
+//   dispatch({ type: "USER_REGISTER_REQUEST" });
+//   try {
+//     await axios.post("/api/users/register", user);
+//     dispatch({ type: "USER_REGISTER_SUCCESS" });
+//   } catch (error) {
+//     dispatch({ type: "USER_REGISTER_FAIL", payload: error });
+//   }
+// };
+
 export const registerUser = (user) => async (dispatch) => {
   dispatch({ type: "USER_REGISTER_REQUEST" });
+
   try {
     await axios.post("/api/users/register", user);
     dispatch({ type: "USER_REGISTER_SUCCESS" });
   } catch (error) {
-    dispatch({ type: "USER_REGISTER_FAIL", payload: error });
+    if (error.response && error.response.data) {
+      dispatch({ type: "USER_REGISTER_FAIL", payload: error.response.data });
+    } else {
+      dispatch({ type: "USER_REGISTER_FAIL", payload: "An error occurred. Please try again." });
+    }
   }
 };
 

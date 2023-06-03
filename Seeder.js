@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 require("colors");
 const connectDb = require("./config/config");
 const Pizza = require("./models/pizzaModel");
-const Pizzas = require("./data/PizzaData");
 
 //config dot env and mongodb conn file
 dotenv.config();

@@ -1,64 +1,156 @@
-import React from "react";
-import { FaUser, FaShoppingCart, FaClipboardList } from "react-icons/fa";
-import { useTransition, animated } from "react-spring";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaPlus, FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
 
-const AdminPage = () => {
-  const gridItems = [
-    {
-      id: 1,
-      icon: FaUser,
-      title: "Users",
-      description: "View and manage user accounts",
-    },
-    {
-      id: 2,
-      icon: FaShoppingCart,
-      title: "Orders",
-      description: "Track and process customer orders",
-    },
-    {
-      id: 3,
-      icon: FaClipboardList,
-      title: "Reports",
-      description: "Generate and analyze business reports",
-    },
-  ];
-
-  const transitions = useTransition(gridItems, (item) => item.id, {
-    from: { opacity: 0, transform: "translateY(20px)" },
-    enter: { opacity: 1, transform: "translateY(0px)" },
-    config: { duration: 500 },
-  });
-
+const AdminHomePage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="max-w-3xl px-6 py-8 bg-white rounded-lg shadow">
-        <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-        <p className="text-gray-600">
-          Welcome to the admin dashboard. Here you can manage user accounts, track orders, and generate business reports.
-        </p>
-        <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {transitions.map(({ item, key, props }) => (
-            <animated.div key={key} style={props}>
-              <div className="p-8 bg-white rounded-lg shadow">
-                <div className="flex items-center justify-center w-16 h-16 bg-blue-500 text-white rounded-full">
-                  <item.icon className="text-3xl" />
-                </div>
-                <h2 className="mt-6 text-2xl font-bold">{item.title}</h2>
-                <p className="mt-2 text-gray-600">{item.description}</p>
-              </div>
-            </animated.div>
-          ))}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '2rem',
+        background: '#f9f9f9',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        borderRadius: '8px',
+      }}
+    >
+      <h1
+        style={{
+          fontSize: '3rem',
+          color: '#333',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+        }}
+      >
+        Welcome to the Admin Home Page
+      </h1>
+      <p
+        style={{
+          fontSize: '1.5rem',
+          color: '#777',
+          marginBottom: '1.5rem',
+          animation: 'fadeIn 1s ease-in',
+        }}
+      >
+        Here you can access various admin functionalities.
+      </p>
+      <Link to='admin' style={{ display: 'flex', marginBottom: '2rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginRight: '2rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: '#4CAF50',
+              marginBottom: '1rem',
+            }}
+          >
+            <FaPlus style={{ fontSize: '2rem', color: '#fff' }} />
+          </div>
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Create</p>
         </div>
-        <p className="mt-8 text-gray-600">
-          Take advantage of the powerful features available in the admin dashboard to streamline your workflow and enhance your business operations.
-        </p>
-        <p className="text-gray-600 mt-2">
-          If you need any assistance or have questions, our support team is here to help you.
-        </p>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginRight: '2rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: '#1E90FF',
+              marginBottom: '1rem',
+            }}
+          >
+            <FaEye style={{ fontSize: '2rem', color: '#fff' }} />
+          </div>
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Read</p>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginRight: '2rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: '#FFD700',
+              marginBottom: '1rem',
+            }}
+          >
+            <FaPencilAlt style={{ fontSize: '2rem', color: '#fff' }} />
+          </div>
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Update</p>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: '#FF0000',
+              marginBottom: '1rem',
+            }}
+          >
+            <FaTrash style={{ fontSize: '2rem', color: '#fff' }} />
+          </div>
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Delete</p>
+        </div>
+      </Link>
+
+      <div >
+        <img
+          src="https://i.pinimg.com/originals/b6/6e/8f/b66e8ffa547746f4085ecc197cd588b9.gif"
+          alt="Admin"
+          style={{
+            width: '300px',
+            height: 'auto',
+            marginTop: '1rem',
+          }}
+        />
       </div>
     </div>
   );
 };
 
-export default AdminPage;
+export default AdminHomePage;

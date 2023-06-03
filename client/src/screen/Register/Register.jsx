@@ -1,58 +1,125 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../../action/userAction";
-import { useSelector } from "react-redux";
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser, getAllUsers } from "../../action/userAction";
+import { useNavigate, Link } from "react-router-dom";
 import { HiCheck } from "react-icons/hi";
-import { FaUserCircle } from "react-icons/fa";
+import { FiLoader } from "react-icons/fi";
+import { FaUserCircle, FaUserAlt } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { MdVisibility, MdVisibilityOff, MdAlternateEmail } from 'react-icons/md';
+import { MdVisibility, MdVisibilityOff, MdAlternateEmail } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import Error from "../../Alerts/Error";
+import Loader from "../../Alerts/Loading";
+import Success from "../../Alerts/sucess";
 
 const Register = () => {
   const registerState = useSelector((state) => state.registerUserReducer);
+  const { error, success, loading } = registerState;
   const { loginWithRedirect } = useAuth0();
+
+  const userState = useSelector((state) => state.getAllUsersReducer);
+  const { users } = userState;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
+
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const [confrimPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [isPasswordMatch, setIsPasswordMatch] = useState(false);
+
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
   };
+
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
-  const PasswordIcon = showPassword ? MdVisibilityOff : MdVisibility;
 
-  const dispatch = useDispatch();
+  const PasswordIcon = showPassword ? MdVisibilityOff : MdVisibility;
 
   const history = useNavigate();
 
-  const registerHandler = () => {
-    if (!isChecked) {
-      alert("Please agree to the terms of service.");
-    } else if (password !== confrimPassword) {
-      alert("Passwords do not match.");
-    } else {
-      const user = { name, email, password, confrimPassword };
+  const showAlert = (message) => {
+    alert(message);
+  };
 
-      dispatch(registerUser(user))
-        .then(() => {
-          console.log('User registered successfully.');
-          if (registerState.success) {
-            history.push('/login');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const registerHandler = (event) => {
+    event.preventDefault(); // Prevent form submission
+
+    if (!isChecked) {
+      showAlert("Please agree to the terms of service.");
+    }else if (users.find((user) => user.email === email)) {
+      showAlert("Email already exists. Please use a different email.");
+    } else {
+      const user = { name, email, password, confirmPassword };
+
+      try {
+        dispatch(registerUser(user));
+      } catch (error) {
+        console.log(error);
+        showAlert("An error occurred. Please try again.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (success) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setTimeout(() => {
+        history("/login");
+      }, 3000); // Redirect to login page after 3 seconds
+    }
+  }, [success, history]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleJoin = () => {
+    setIsLoading(true);
+    // Perform join logic i will do it later when
+
+  };
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    const strength = analyzePasswordStrength(newPassword);
+    setPasswordStrength(strength);
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    setIsPasswordMatch(event.target.value === password);
+  };
+
+  const analyzePasswordStrength = (password) => {
+   
+    const hasCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasDigit = /[0-9]/.test(password);
+
+    if (hasCharacter && hasLetter && hasDigit) {
+      return "strong";
+    } else if (password.length >= 8) {
+      return "medium";
+    } else {
+      return "weak";
     }
   };
 
@@ -61,243 +128,201 @@ const Register = () => {
       <Helmet>
         <title>Registration</title>
       </Helmet>
+      {loading && <Loader />}
+      {success && !error && <Success success="User Registered Successfully" />}
+      {error && !success && <Error error={error} />}
       <section className="bg-white min-h-screen">
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="relative px-4 pt-60 pb-10 bg-gray-50 sm:px-6 lg:px-8 lg:pb-24 md:justify-center">
-            <div className="absolute inset-0">
-              <img
-                className="object-cover w-full h-full"
-                src="https://img.freepik.com/free-vector/fast-food-menu-colorful-icons-set_1284-14584.jpg?size=626&ext=jpg&ga=GA1.1.1927059429.1683979638&semt=ais"
-                alt=""
-              />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
-            <div className="relative">
-              <div className="w-full max-w-xl xl:w-full xl:mx-auto xl:pr-24 xl:max-w-xl">
-                <h3 className="text-4xl font-bold text-gray lg:text-center">
-                  Food delivered fresh, fast, and to your door &amp; <br className="hidden xl:block" />
-                  5000+ Happy Customer
-                </h3>
-                <ul className="grid grid-cols-1 mt-10 sm:grid-cols-2 gap-x-8 gap-y-4">
-                  <li className="flex items-center space-x-3">
-                    <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                      <HiCheck />
-                    </div>
-                    <span className="text-lg font-medium text-white">
-                      {" "}
-                      Food delivery made easy {" "}
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                      <HiCheck />
-                    </div>
-                    <span className="text-lg font-medium text-white">
-                      {" "}
-                      From our kitchen to your table{" "}
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                      <HiCheck />
-                    </div>
-                    <span className="text-lg font-medium text-white">
-                      {" "}
-                      We bring the restaurant to you{" "}
-                    </span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 bg-blue-500 rounded-full">
-                      <HiCheck />
-                    </div>
-                    <span className="text-lg font-medium text-white">
-                      {" "}
-                      Good food, great service, delivered{" "}
-                    </span>
-                  </li>
-                </ul>
+          <div className="bg-blue-600 lg:block col-span-1 text-white py-12 px-12 flex flex-col justify-center items-center">
+            <h1 className="text-5xl mb-4">Join Us</h1>
+            <p className="text-2xl mb-8">Food delivered to your door &
+              5000+ Happy Customer</p>
+            <ul className="mb-6">
+              <li className="flex items-center mb-3">
+                <HiCheck className="text-2xl mr-2" />
+                Food delivery made easy
+              </li>
+              <li className="flex items-center mb-3">
+                <HiCheck className="text-2xl mr-2" />
+                From our kitchen to your table
+              </li>
+              <li className="flex items-center mb-3">
+                <HiCheck className="text-2xl mr-2" />
+                Good food, great service, delivered
+              </li>
+              <li className="flex items-center mb-3">
+                <HiCheck className="text-2xl mr-2" />
+                We bring the restaurant to you
+              </li>
+            </ul>
+            {isLoading ? (
+              <div className="flex items-center mb-6">
+                <FiLoader className="animate-spin text-2xl mr-2" />
+                Joining...
+              </div>
+            ) : (
+              <button
+                className="bg-white text-blue-600 px-4 py-2 rounded-md mb-6"
+                onClick={handleJoin}
+              >
+                Join Now
+              </button>
+            )}
+            <p>
+              Already have an account?{' '}
+              <Link to="/login" className="underline">
+                Login here.
+              </Link>
+            </p>
+
+          </div>
+          <div className="col-span-1 bg-white p-10 lg:p-20">
+            <div className="text-center mb-10">
+              <FaUserCircle className="text-6xl mx-auto mb-4" />
+              <h1 className="text-4xl mb-4">Create an Account</h1>
+              <div className="text-center">
+                <span className="mr-2">Or sign up with</span>
+                <button
+                  className="text-white bg-red-600 py-2 px-4 rounded-md focus:outline-none hover:bg-red-700"
+                  onClick={() => loginWithRedirect()}
+                >
+                  <FcGoogle className="inline-block" /> Google
+                </button>
               </div>
             </div>
-          </div>
-
-          <div className="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
-            <div className="xl:w-full xl:max-w-sm 2xl:max-w-md xl:mx-auto">
-              <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">
-                Sign up to Celebration
-              </h2>
-              <p className="mt-2 text-base text-gray-600">
-                Already have an account?{" "}
-                <Link
-                  to='/login'
-                  title=""
-                  className="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline"
-                >
-                  <button type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Login
-                  </button>
-                </Link>
-              </p>
-
-              <form className="mt-8">
-                <div className="space-y-5">
-                  <div>
-                    <label htmlFor="" className="text-base font-medium text-gray-900">
-                      {" "}
-                      Enter Your Full Name{" "}
-                    </label>
-                    <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <FaUserCircle />
-                      </div>
-                      <input
-                        placeholder="Enter your Full Name"
-                        type="text"
-                        id="form3Example1c"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-
-                        className="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="" className="text-base font-medium text-gray-900">
-                      {" "}
-                      Email address{" "}
-                    </label>
-                    <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <MdAlternateEmail />
-                      </div>
-                      <input
-                        required
-                        placeholder="example@example.com"
-                        type="email"
-                        id="form3Example33"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-
-                        className="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="" className="text-base font-medium text-gray-900">
-                      {" "}
-                      Password{" "}
-                    </label>
-
-                    <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <RiLockPasswordFill />
-                      </div>
-                      <input
-                        required
-                        type={showPassword ? 'text' : 'password'}
-                        id="form3Example3"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                      <div
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                        onClick={toggleShowPassword}
-                      >
-                        <PasswordIcon />
-                      </div>
-                    </div>
-
-
-                    <div className="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <RiLockPasswordFill />
-                      </div>
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        id="form3Example"
-                        required
-                        value={confrimPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
-                      />
-                      <div
-                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                        onClick={toggleShowPassword}
-                      >
-                        <PasswordIcon />
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="form-check d-flex justify-content-center mb-5">
-                    <input
-                      className="form-check-input me-2"
-                      type="checkbox"
-                      defaultValue=""
-                      id="form2Example3cg"
-                      checked={isChecked}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label className="form-check-label" htmlFor="form2Example3g">
-                      I agree all statements in{" "}
-                      <a href="#!" className="text-body">
-                        <u>Terms of service</u>
-                      </a>
-                    </label>
-                  </div>
-                  <div>
-                    <button
-
-                      onClick={registerHandler}
-
-                      className="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-gradient-to-r from-fuchsia-600 to-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
-                    >
-                      Sign up
-                    </button>
+            <form onSubmit={registerHandler}>
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                  />
+                  <div className="absolute top-2 right-2">
+                    <FaUserAlt className="text-gray-500" />
                   </div>
                 </div>
-              </form>
-              <hr />
-              <div className="mt-3 space-y-3">
-                <button
-                  onClick={() => loginWithRedirect()}
-                  type="button"
-                  className="relative inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-gray-700 transition-all duration-200 bg-white border-2 border-gray-200 rounded-md hover:bg-gray-100 focus:bg-gray-100 hover:text-black focus:text-black focus:outline-none"
-                >
-                  <div className="absolute inset-y-0 left-0 p-4">
-                    <FcGoogle />
-                  </div>
-                  Sign up with Google
-                </button>
-
               </div>
-              <p className="mt-5 text-sm text-gray-600">
-                This site is protected by reCAPTCHA and the Google{" "}
-                <Link
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="email"
+                    className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                  />
+                  <div className="absolute top-2 right-2">
+                    <MdAlternateEmail
+                      className={`text-gray-500 ${users.find((user) => user.email === email)
+                        ? "text-red-500"
+                        : ""
+                        }`}
+                    />
+                  </div>
+                </div>
+                {users.find((user) => user.email === email) && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Email already registered.
+                  </p>
+                )}
+              </div>
 
-                  title=""
-                  className="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700"
+              <div className="mb-4">
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <div className="absolute top-2 right-2">
+            {showPassword ? (
+              <MdVisibilityOff
+                className="text-gray-500 cursor-pointer"
+                onClick={toggleShowPassword}
+              />
+            ) : (
+              <MdVisibility
+                className="text-gray-500 cursor-pointer"
+                onClick={toggleShowPassword}
+              />
+            )}
+          </div>
+        </div>
+        {password && (
+          <div className="text-sm mt-1">
+            <span
+              className={`mr-1 font-semibold ${
+                passwordStrength === "strong"
+                  ? "text-green-500"
+                  : passwordStrength === "medium"
+                  ? "text-yellow-500"
+                  : "text-red-500"
+              }`}
+            >
+              Password strength: {passwordStrength}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="password"
+            className="w-full border rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+          <div className="absolute top-2 right-2">
+            <RiLockPasswordFill className="text-gray-500" />
+          </div>
+        </div>
+        {confirmPassword && !isPasswordMatch && (
+          <p className="text-red-500 text-xs mt-1">Passwords do not match.</p>
+        )}
+      </div>
+              
+              <div className="mb-6 flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                />
+                <span className="text-sm">
+                  I agree to the{" "}
+                  <a href="/" className="text-blue-600 underline">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a href="/" className="text-blue-600 underline">
+                    Privacy Policy
+                  </a>
+                  .
+                </span>
+              </div>
+              <div className="mb-6">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none"
                 >
-                  Privacy Policy
-                </Link>{" "}
-                &amp;
-                <Link
+                  Register
+                </button>
+              </div>
 
-                  title=""
-                  className="text-blue-600 transition-all duration-200 hover:underline hover:text-blue-700"
-                >
-                  Terms of Service
-                </Link>
-              </p>
-            </div>
+            </form>
           </div>
         </div>
       </section>
-
     </>
   );
 };
 
 export default Register;
+
+
