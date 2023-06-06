@@ -422,8 +422,8 @@ const AdminDashboard = () => {
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/orderlist" className="flex items-center justify-between">
               <div>
-                <h3 className="mb-2 text-lg font-bold text-gray-800">Order Status</h3>
-                <p className="text-gray-600">Order Status </p>
+                <h3 className="mb-2 text-lg font-bold text-gray-800">Contact data</h3>
+                <p className="text-gray-600">Contact Data Status</p>
               </div>
               <div className="flex items-center justify-center w-12 h-12 bg-cyan-500 text-white rounded-full">
                 <AiFillMessage className="text-xl" />

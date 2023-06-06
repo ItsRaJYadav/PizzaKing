@@ -6,6 +6,7 @@ import { Link, Outlet,useNavigate } from 'react-router-dom';
 import { FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaPizzaSlice, FaThList } from 'react-icons/fa';
 import { BsDatabaseAdd } from 'react-icons/bs';
+import { AiFillMessage } from 'react-icons/ai';
 import pic from '../assets/profile.jpg'
 import { logoutUser } from "../action/userAction";
 
@@ -14,7 +15,7 @@ const AdminSidebar = () => {
 
   const dispatch = useDispatch();
   const history = useNavigate();
-  const [activeLink, setActiveLink] = useState('users');
+  const [activeLink, setActiveLink] = useState('');
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
@@ -100,6 +101,17 @@ const AdminSidebar = () => {
                 >
                   <FaThList className="mr-2" />
                   <span>OrderList</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/allcontact"
+                  onClick={() => handleLinkClick('contact')}
+                  className={`flex items-center justify-center py-3 px-6 rounded-lg text-gray-700 hover:bg-gray-300 ${activeLink === 'contact' ? 'bg-gray-300 text-gray-800 font-semibold' : ''
+                    }`}
+                >
+                  <AiFillMessage className="mr-2" />
+                  <span>Contact Data</span>
                 </Link>
               </li>
               <li>

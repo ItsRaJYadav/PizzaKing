@@ -7,7 +7,7 @@ router.use(
   })
 )
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
-router.post("/placeorderrt", async (req, res)=>{
+router.post("/placeorder", async (req, res)=>{
   try{
       const session = await stripe.checkout.sessions.create({
           payment_method_types:["card"],

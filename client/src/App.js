@@ -22,6 +22,7 @@ const LazyStayTunned = lazy(() => import('./screen/Pages/StayTunned'));
 const LazyAdminScreen = lazy(() => import('./Admin/AdminScreen'));
 const AddNewPizza = lazy(() => import('../src/Admin/AddnewPizza'));
 const AdminSettings = lazy(() => import('../src/Admin/AdminSetting'));
+const  ContactData= lazy(() => import('../src/Admin/ContactData'));
 const orderDetails = lazy(() => import('../src/Admin/OrderDetails'));
 const OrderList = lazy(() => import('../src/Admin/OrderList'));
 const Pizzaslist = lazy(() => import('../src/Admin/PizzaList'));
@@ -98,6 +99,7 @@ function App() {
           <Route path="editpizza/:pizzaId" element={<EditPizza />} />
           <Route path="pizzalist" element={<Pizzaslist />} />
           <Route path="addnewpizza" element={<AddNewPizza />} />
+          <Route path="allcontact" element={<ContactData />} />
           <Route path="orderlist" element={<OrderList />} />
           <Route path="orderlist/:orderId" element={<orderDetails />} />
           <Route path="settings" element={<AdminSettings />} />

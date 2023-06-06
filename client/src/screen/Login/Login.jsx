@@ -107,7 +107,7 @@ const Login = () => {
                                 type='email' value={email} onChange={(e) => setEmail(e.target.value)}
                                 className="w-full py-3 px-4 text-sm text-gray-900 placeholder-gray-400 border border-gray-200 focus:border-purple-500 focus:outline-purple rounded-lg"
 
-                                placeholder="pat@saturn.dev"
+                                placeholder="contact@pizzaking.com"
                             />
                         </div>
                         <div className="mb-7">
@@ -118,12 +118,12 @@ const Login = () => {
                                 >
                                     Password
                                 </label>
-                                <Link to='/abc'
+                                <button onClick={loginWithRedirect}
                                     className="inline-block text-xs font-semibold text-orange-900 hover:text-gray-900"
 
                                 >
                                     Forget password?
-                                </Link>
+                                </button>
                             </div>
                             <div className="relative">
                                 <input

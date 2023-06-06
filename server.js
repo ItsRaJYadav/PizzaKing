@@ -7,6 +7,7 @@ const connectDB = require("./config/config");
 require("colors");
 const morgan = require("morgan");
 const Order = require("./models/orderModel");
+const ContactForm = require("./models/contact");
 // Config dotenv
 dotenv.config();
 
@@ -34,37 +35,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 // Routes
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 app.use("/api/users", require("./routes/UserRoutes"));
-// app.use("/api/orders", require("./routes/orderRoutes"));
 
-// app.post("/api/orders/placeorder", async (req, res)=>{
-//   try{
-//       const session = await stripe.checkout.sessions.create({
-//           payment_method_types:["card"],
-//           mode:"payment",
-//           line_items: req.body.items.map(item => {
-//               return{
-//                   price_data:{
-//                       currency:"inr",
-//                       product_data:{
-//                           name: item.name
-//                       },
-//                       unit_amount: (item.price)*100,
-
-//                   },
-//                   quantity: item.quantity
-//               }
-//           }),
-//           // success_url: 'http://localhost:3000/success',
-//           success_url : process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
-//           cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000/success',
-//       })
-
-//       res.json({url: session.url})
-
-//   }catch(e){
-//    res.status(500).json({error:e.message})
-//   }
-// })
 
 app.post("/api/orders/placeorder", async (req, res) => {
   try {
@@ -145,6 +116,71 @@ app.post("/api/orders/deliverorder", async (req, res) => {
   }
 });
 
+
+
+app.post('/contact', (req, res) => {
+  const { name, email, message, subject, mobile } = req.body;
+
+  ContactForm.create({
+    name: name,
+    email: email,
+    message: message,
+    mobileNumber: mobile,
+    subject: subject
+  })
+    .then(result => {
+      res.json("Form submitted successfully");
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+
+
+app.get('/admin/contacts', (req, res) => {
+  ContactForm.find()
+    .then(contacts => {
+      res.json(contacts);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'An error occurred while fetching the contacts' });
+    });
+});
+
+
+
+app.patch('/admin/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+  const { issueResolved } = req.body;
+
+  try {
+    const updatedContact = await ContactForm.findByIdAndUpdate(
+      id,
+      { issueResolved },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ error: 'Contact not found' });
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    console.error('An error occurred while updating the contact:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
@@ -159,7 +195,7 @@ if (process.env.NODE_ENV === "production") {
 
 
 // Port
-const port = process.env.PORT ;
+const port = process.env.PORT;
 
 // Start the server
 app.listen(port, () => {

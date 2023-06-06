@@ -78,7 +78,9 @@ const CartScreen = () => {
           id: item.id,
           quantity: item.quantity,
           price: item.price / item.quantity,
-          name: item.name
+          name: item.name,
+          user: currentUser,
+          email:currentUser.email,
         }))
       })
     })
@@ -258,7 +260,7 @@ const CartScreen = () => {
                     ) : (
                       <button
                         className="mt-6 w-full rounded-md py-2 font-medium text-white bg-blue-500 hover:bg-blue-600"
-                        onClick={handleJoin}
+                        
                       >
                         Pay Now
                       </button>
