@@ -68,6 +68,21 @@ app.post("/api/orders/placeorder", async (req, res) => {
       },
     });
 
+    if (session.payment_status === "paid") {
+      const order = new Order({
+        name: req.body.name,
+        email: req.body.email,
+        userid: req.body.userid,
+        orderItems: req.body.items,
+        shippingAddress: req.body.address,
+        orderAmount: req.body.amount,
+        isDelivered: false,
+        transactionId: session.payment_intent,
+      });
+
+      await order.save();
+    }
+
     res.json({ url: session.url });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -116,25 +131,35 @@ app.post("/api/orders/deliverorder", async (req, res) => {
   }
 });
 
+app.post('/passwordreset', (req, res) => {
+  res.status(200).json({ message: 'ok to login' });
+});
 
 
 app.post('/contact', (req, res) => {
-  const { name, email, message, subject, mobile } = req.body;
+  const { name, email, message, subject, mobile, orderid } = req.body;
 
-  ContactForm.create({
+  const contactForm = {
     name: name,
     email: email,
     message: message,
     mobileNumber: mobile,
-    subject: subject
-  })
+    subject: subject,
+    orderid: orderid
+  };
+
+  ContactForm.create(contactForm)
     .then(result => {
       res.json("Form submitted successfully");
     })
     .catch(err => {
-      res.json(err);
+  
+      console.error(err);
+      res.status(400).json({ error: err.message });
     });
 });
+
+
 
 
 
@@ -192,6 +217,8 @@ if (process.env.NODE_ENV === "production") {
     res.send("Hello From Node Server via nodemon");
   });
 }
+
+
 
 
 // Port

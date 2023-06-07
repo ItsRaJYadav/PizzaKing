@@ -1,42 +1,52 @@
 import React, { useState } from 'react';
 import { FiUser, FiMail, FiMessageCircle, FiPhone } from 'react-icons/fi';
+import { HiIdentification } from 'react-icons/hi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector} from "react-redux";
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from '@auth0/auth0-react';
+
+const API_URL = 'http://localhost:8080/contact';
 
 const ContactForm = () => {
   const { isAuthenticated } = useAuth0();
 
   const userState = useSelector((state) => state.loginUserReducer);
-  const { currentUser} = userState;
+  const { currentUser } = userState;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [orderid, setOrderid] = useState('');
   const [message, setMessage] = useState('');
   const [mobile, setMobile] = useState('');
   const [subject, setSubject] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isAuthenticated && !currentUser) {
-      toast.warn("Please login");
+      toast.warn('Please login');
       return;
     }
 
-    axios
-      .post('http://localhost:8080/contact', { name, email, message, mobile, subject })
-      .then(response => {
-        toast.success('Form submitted successfully  We will get back you soon');
-        console.log(response);
-        resetForm();
-      })
-      .catch(error => {
-        toast.error('An error occurred while submitting the form');
-        console.log(error);
+    try {
+      const response = await axios.post(API_URL, {
+        name,
+        email,
+        message,
+        mobile,
+        subject,
+        orderid,
       });
+
+      toast.success('Form submitted successfully. We will get back to you soon');
+      console.log(response);
+      resetForm();
+    } catch (error) {
+      toast.error('An error occurred while submitting the form');
+      console.log(error);
+    }
   };
 
   const resetForm = () => {
@@ -45,7 +55,11 @@ const ContactForm = () => {
     setMessage('');
     setMobile('');
     setSubject('');
+    setOrderid('');
   };
+
+ 
+
 
 
   return (
@@ -75,7 +89,7 @@ const ContactForm = () => {
           <div className="relative">
             <FiMail className="absolute left-3 top-4 text-gray-400" />
             <input
-            required
+              required
               className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
@@ -92,7 +106,7 @@ const ContactForm = () => {
           <div className="relative">
             <FiPhone className="absolute left-3 top-4 text-gray-400" />
             <input
-            required
+              required
               className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="mobile"
               type="tel"
@@ -102,6 +116,29 @@ const ContactForm = () => {
             />
           </div>
         </div>
+
+
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="mobile">
+            Order Id
+          </label>
+          <div className="relative">
+            <HiIdentification className="absolute left-3 top-4 text-gray-400" />
+            <input
+              required
+              className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="orderid"
+              type="text"
+              placeholder="Enter your Order Id number"
+              value={orderid}
+              onChange={(e) => setOrderid(e.target.value)}
+            />
+          </div>
+        </div>
+
+
+
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
             Subject
@@ -124,7 +161,7 @@ const ContactForm = () => {
               <option value="Wrong">Wrong Food items Received</option>
               <option value="Food">Food items Not fresh</option>
               <option value="Not">Not Received my orders </option>
-              
+
             </select>
           </div>
         </div>
@@ -135,7 +172,7 @@ const ContactForm = () => {
           <div className="relative">
             <FiMessageCircle className="absolute left-3 top-4 text-gray-400" />
             <textarea
-            required
+              required
               className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="message"
               placeholder="Enter your message"
@@ -154,7 +191,7 @@ const ContactForm = () => {
           </button>
         </div>
       </form>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import './Login.css'
 import { useDispatch } from "react-redux";
@@ -118,12 +117,12 @@ const Login = () => {
                                 >
                                     Password
                                 </label>
-                                <button onClick={loginWithRedirect}
+                                <Link to='/forgot_password'
                                     className="inline-block text-xs font-semibold text-orange-900 hover:text-gray-900"
 
                                 >
                                     Forget password?
-                                </button>
+                                </Link>
                             </div>
                             <div className="relative">
                                 <input

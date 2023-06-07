@@ -76,7 +76,7 @@ const Pizzaslist = () => {
                         className={`py-1 px-3 rounded-full text-xs ${
                           FoodItems.category === "vegetarian"
                             ? "bg-vegetarian"
-                            : FoodItems.category === "FoodItems"
+                            : FoodItems.category === "mix"
                               ? "bg-meat"
                               : FoodItems.category === "burger"
                                 ? "bg-seafood"
@@ -85,9 +85,9 @@ const Pizzaslist = () => {
                                   :
                                   FoodItems.category === "fries"
                                   ? "bg-fries":
-                                  FoodItems.category === "mix"
-                                  ? "bg-mix":
                                   FoodItems.category === "thali"
+                                  ? "bg-mix":
+                                  FoodItems.category === "pizza"
                                   ? "bg-thali"
                                   : ""
                           }`}

@@ -29,6 +29,10 @@ const contactFormSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  orderid:{
+    type: String,
+    required: true,
+  }
 });
 
 const ContactForm = mongoose.model('ContactForm', contactFormSchema);

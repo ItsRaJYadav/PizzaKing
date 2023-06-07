@@ -259,6 +259,7 @@ const CartScreen = () => {
                       </div>
                     ) : (
                       <button
+                      onClick={handleJoin}
                         className="mt-6 w-full rounded-md py-2 font-medium text-white bg-blue-500 hover:bg-blue-600"
                         
                       >

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useRef } from "react";
+import React, { Suspense, lazy,createContext,useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from './components/Header/Header';
 import Chatbot from './Chat/ChatBot';
@@ -23,7 +23,7 @@ const LazyAdminScreen = lazy(() => import('./Admin/AdminScreen'));
 const AddNewPizza = lazy(() => import('../src/Admin/AddnewPizza'));
 const AdminSettings = lazy(() => import('../src/Admin/AdminSetting'));
 const  ContactData= lazy(() => import('../src/Admin/ContactData'));
-const orderDetails = lazy(() => import('../src/Admin/OrderDetails'));
+// const orderDetails = lazy(() => import('../src/Admin/OrderDetails'));
 const OrderList = lazy(() => import('../src/Admin/OrderList'));
 const Pizzaslist = lazy(() => import('../src/Admin/PizzaList'));
 const Userlist = lazy(() => import('../src/Admin/User'));
@@ -32,16 +32,23 @@ const AdminPage = lazy(() => import('../src/Admin/AdminPage'));
 const LazyServices = lazy(() => import('./components/Service/Services'));
 const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
 const LazyUser = lazy(() => import('./components/Users/User'));
+const LazyUserForgotPassword = lazy(() => import('./components/Users/ForgotPassword'));
+// const OTPInput = lazy(() => import('./components/Users/OTPInput'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 const CheckoutSuccess= lazy(() => import('../src/components/Checkout/CheckoutSuccess'));
 
+export const RecoveryContext = createContext();
 
 
 
 function App() {
+
+  
+
+
   return (
     <> 
     <BrowserRouter>
@@ -75,9 +82,11 @@ function App() {
             <Route path="userinfo" element={<LazyUserinfo />} exact />
             <Route path="address" element={<LazyUserSettings />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
+            
            
 
           </Route>
+          <Route path="/forgot_password" element={<LazyUserForgotPassword />} exact />
 
 
           {/* Company routes: */}

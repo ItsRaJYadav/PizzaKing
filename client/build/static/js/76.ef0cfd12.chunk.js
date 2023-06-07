@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunktemplate=self.webpackChunktemplate||[]).push([[76],{3076:function(e,t,n){n.r(t);n(2791);var r=n(184);t.default=function(){return(0,r.jsx)("div",{children:"OrderDetails"})}}}]);
-//# sourceMappingURL=76.ef0cfd12.chunk.js.map
