@@ -1,12 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deliverOrder, getAllOrders } from "../action/orderAction";
+import { deliverOrder, getAllOrders, cancelOrder } from "../action/orderAction";
 import Loader from "../Alerts/Loader";
 import Error from "../Alerts/Error";
 import Swal from "sweetalert2";
 import { Link, Outlet } from "react-router-dom";
+import { AiOutlineCloseCircle } from 'react-icons/ai';
+
 
 const OrderList = () => {
+  const [activeLink, setActiveLink] = useState('');
+
   const allOrdersState = useSelector((state) => state.allUserOrdersReducer);
   const { loading, orders, error } = allOrdersState;
   const dispatch = useDispatch();
@@ -27,6 +31,22 @@ const OrderList = () => {
       if (result.isConfirmed) {
         dispatch(deliverOrder(orderId));
         Swal.fire("Delivered!", "The order has been delivered.", "success");
+      }
+    });
+  };
+
+  const handleCancelOrder = (orderId) => {
+    Swal.fire({
+      title: "Cancel Order",
+      text: "Are you sure you want to cancel this order?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(cancelOrder(orderId));
+        Swal.fire("Cancelled!", "The order has been cancelled.", "success");
       }
     });
   };
@@ -60,22 +80,39 @@ const OrderList = () => {
                   <td className="py-4 px-6">Rs {order.orderAmount}/-</td>
                   <td className="py-4 px-6">{order.createdAt.substring(0, 10)}</td>
                   <td className="py-4 px-6">
-                    {order.isDelivered ? (
-                      <h6 className="text-green-500">Delivered</h6>
+                    {order.isCanceled ? (
+                      <h6 className="text-red-500">Cancelled</h6>
                     ) : (
-                      <button
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleOrderDeliver(order._id)}
-                      >
-                        Deliver
-                      </button>
+                      <>
+                        {!order.isDelivered ? (
+                          <button
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => handleOrderDeliver(order._id)}
+                          >
+                            Deliver
+                          </button>
+                        ) : (
+                          <h6 className="text-green-500">Delivered</h6>
+                        )}
+                        {!order.isDelivered && (
+                          <button
+                            className={`flex items-center justify-center py-3 px-6 rounded-lg text-gray-700 hover:bg-gray-300 ${activeLink === 'cancelorder' ? 'bg-gray-300 text-gray-800 font-semibold' : ''
+                              }`}
+                            disabled={order.isCanceled}
+                            onClick={() => handleCancelOrder(order._id)}
+                          >
+                            <AiOutlineCloseCircle className="mr-2" />
+                            <span>Cancel Order</span>
+                          </button>
+                        )}
+                      </>
                     )}
                   </td>
                   <td className="py-4 px-6">
                     <ol className="list-decimal list-inside">
                       {order.orderItems.map((item, index) => (
                         <li key={item._id} className="mb-2 flex items-center">
-                          <span className="font-bold">{index + 1}.</span> {/* Serial number */}
+                          <span className="font-bold">{index + 1}.</span>
                           <span className="ml-2 font-bold">{item.name}</span> -
                           <span className={`ml-2 mr-1 bg-${item.quantity > 2 ? 'green' : 'yellow'}-200 px-2 rounded`}>
                             {item.quantity}
@@ -84,8 +121,6 @@ const OrderList = () => {
                       ))}
                     </ol>
                   </td>
-
-
                 </tr>
               ))}
           </tbody>
@@ -99,5 +134,3 @@ const OrderList = () => {
 };
 
 export default OrderList;
-
-

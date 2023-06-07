@@ -33,9 +33,9 @@ const LazyServices = lazy(() => import('./components/Service/Services'));
 const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
 const LazyUser = lazy(() => import('./components/Users/User'));
 const LazyUserForgotPassword = lazy(() => import('./components/Users/ForgotPassword'));
-// const OTPInput = lazy(() => import('./components/Users/OTPInput'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
+const OrderDetails = lazy(() => import('./components/Users/OrderDetails'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 const CheckoutSuccess= lazy(() => import('../src/components/Checkout/CheckoutSuccess'));
@@ -82,7 +82,7 @@ function App() {
             <Route path="userinfo" element={<LazyUserinfo />} exact />
             <Route path="address" element={<LazyUserSettings />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
-            
+            <Route path=":orderId" component={OrderDetails} />
            
 
           </Route>

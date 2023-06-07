@@ -26,7 +26,7 @@ export const getUserOrders = () => async (dispatch, getState) => {
   });
   try {
     const response = await axios.post("/api/orders/getuserorder", {
-      userid: currentUser.email,
+      email: currentUser.email,
     });
     // console.log(response);
     dispatch({ type: "USER_ORDER_SUCCESS", payload: response.data });
@@ -62,3 +62,21 @@ export const deliverOrder = (orderid) => async (dispatch, getState) => {
     dispatch({ type: "GET_ALL_ORDER_FAIL", payload: error });
   }
 };
+
+
+export const cancelOrder = (orderid) => async (dispatch, getState) => {
+  // const currentUser = getState().loginUserReducer.currentUser;
+  dispatch({
+    type: "GET_ALL_ORDER_REQUEST",
+  });
+  try {
+    await axios.post("/api/orders/canceOrder", { orderid });
+    // alert("Deliverd Success");
+    const orders = await axios.get("/api/orders/alluserorder");
+    dispatch({ type: "GET_ALL_ORDER_SUCCESS", payload: orders.data });
+    window.location.href = "/admin/orderlist";
+  } catch (error) {
+    dispatch({ type: "GET_ALL_ORDER_FAIL", payload: error });
+  }
+};
+

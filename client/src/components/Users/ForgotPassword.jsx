@@ -43,11 +43,11 @@ const ForgotPassword = () => {
           .then((res) => {
             console.log(res.data);
             if (res.data.statusText === "success") {
-              toast.success(`An OTP is sent to your ${email} for resetting your password`);
+              toast.success(`An OTP is sent to your email ${email}`);
     
               setTimeout(() => {
                 ShowResetform(false);
-              }, 3000); // Delay 3 seconds
+              }, 1500); // Delay 1.5 seconds
             } else {
               alert(res.data.message);
             }

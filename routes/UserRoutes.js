@@ -4,12 +4,18 @@ const User = require("../models/userModel");
 const Otp = require("../models/UserOTP");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
+const bcrypt = require("bcrypt");
 
-router.post("/register", (req, res) => {
+
+router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
-  const newUser = new User({ name, email, password });
   try {
-    newUser.save();
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+
     res.status(200).json({
       success: true,
       message: "Register success",
@@ -24,15 +30,24 @@ router.post("/register", (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email });
+
     if (user) {
-      const currentUser = {
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        _id: user._id,
-      };
-      res.status(200).send(currentUser);
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+      if (isPasswordMatch) {
+        const currentUser = {
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          _id: user._id,
+        };
+        res.status(200).send(currentUser);
+      } else {
+        res.status(400).json({
+          message: "Login Failed",
+        });
+      }
     } else {
       res.status(400).json({
         message: "Login Failed",
@@ -44,6 +59,7 @@ router.post("/login", async (req, res) => {
     });
   }
 });
+
 
 
 
@@ -78,49 +94,18 @@ router.post("/deleteuser", async (req, res) => {
 const transporter = nodemailer.createTransport(
   smtpTransport({
     service: "gmail",
-    host: "smtp.gmail.com",
-    port: 465,
+    host: process.env.SMPT_HOST,
+    port: process.env.SMPT_PORT,
     secure: true,
     auth: {
-      user: "raj.yaduvanshi205@gmail.com",
-      pass: "cegymsijskcummlv", 
+      user: process.env.SMPT_MAIL,
+      pass: process.env.SMPT_PASSWORD, 
     },
   })
 );
 
 
-//forgot password
-// router.post("/forgotpassword", async (req, res) => {
-//   const { email } = req.body;
-//   const response = {};
 
-//   try {
-//     const user = await User.findOne({ email });
-
-//     if (user) {
-//       const otpCode = Math.floor(100000 + Math.random() * 900000);
-//       const OTPData = new Otp({
-//         email,
-//         code: otpCode,
-//         expiredIn: new Date().getTime() + 300 * 1000,
-//       });
-
-//       await OTPData.save();
-
-//       response.statusText = "success";
-//       response.message = "OTP sent to your email";
-//     } else {
-//       response.statusText = "error";
-//       response.message = "Invalid email address";
-//     }
-
-//     res.status(200).json(response);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Something went wrong",
-//     });
-//   }
-// });
 router.post("/forgotpassword", async (req, res) => {
   const { email } = req.body;
   const response = {};
@@ -214,7 +199,10 @@ router.post('/changepassword', async (req, res) => {
           response.statusText = 'error';
           response.message = 'Token expired';
         } else {
-          userData.password = password;
+          const saltRounds = 10;
+          const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+          userData.password = hashedPassword;
           await userData.save();
 
           response.statusText = 'success';
@@ -233,11 +221,6 @@ router.post('/changepassword', async (req, res) => {
     });
   }
 });
-
-
-
-
-
 
 
 module.exports = router;

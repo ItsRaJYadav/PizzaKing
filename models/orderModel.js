@@ -21,16 +21,20 @@ const orderSchema = mongoose.Schema(
       type: String,
       //   required: true,
     },
-    isDeliverd: {
+    isDelivered: {
       type: Boolean,
       default: false,
     },
-    transectionId: {
+    transactionId: {
       type: String,
-      //   required: true,
+      
     },
+    isCanceled: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("order", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);
