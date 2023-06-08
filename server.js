@@ -24,7 +24,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app' : 'http://localhost:3000'
+    origin: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com' : 'http://localhost:3000'
   })
 );
 

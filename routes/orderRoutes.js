@@ -81,8 +81,8 @@ router.post("/placeorder", async (req, res) => {
           quantity: item.quantity,
         };
       }),
-      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.router/success' : 'http://localhost:3000/success',
-      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.router/cancel' : 'http://localhost:3000/cancel',
+      success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/success' : 'http://localhost:3000/success',
+      cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/cancel' : 'http://localhost:3000/cancel',
       shipping_address_collection: {
         allowed_countries: ['IN'],
       },
@@ -96,7 +96,7 @@ router.post("/placeorder", async (req, res) => {
     });
 
     // Create the order after successful payment
-    if (session.payment_status === "paid") { // Update the condition to "paid"
+    if (session.payment_status === "paid") { 
       const order = new Order({
         name: req.body.name,
         email: req.body.email,
