@@ -12,14 +12,26 @@ const pizzaSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    image: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     description: {
       type: String,
       required: true,
     },
+    seller: {
+      type: String,
+      required: true,
+    },
+    additionalDescriptions: [
+      {
+        type: String,
+        required: false,
+      },
+    ],
   },
   { timestamps: true }
 );

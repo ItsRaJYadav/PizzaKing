@@ -36,7 +36,7 @@ const Home = () => {
                     <Error>Error while fetching pizzas {error}</Error>
                 ) : (
                     <div className="py-8">
-                        <h3 className="text-2xl font-medium mt-4 text-center"> Food Items Listed in Our Website</h3>
+                        {/* <h3 className="text-2xl font-medium mt-4 text-center"> Food Items Listed in Our Website</h3> */}
                         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {filteredPizzas.slice((page - 1) * pageSize, page * pageSize).map((pizza) => (
                                 <div key={pizza.name} className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">

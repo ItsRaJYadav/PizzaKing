@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
 import { motion } from "framer-motion";
 import { ImCross } from 'react-icons/im';
-import { Typography, Button, Slider } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { ArrowBack, FavoriteBorder, Favorite } from "@mui/icons-material";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { FaStar, FaRupeeSign } from "react-icons/fa";
 import { MdOutlineFastfood } from "react-icons/md";
-import { IoIosArrowDropright, IoFastFoodOutline } from "react-icons/io";
+import { IoIosArrowDropright } from "react-icons/io";
 import AddToCartAlert from '../../Alerts/ProductAddAlert'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -66,10 +66,10 @@ const Pizza = ({ pizza }) => {
     return ratingOptions[randomIndex];
   };
 
-  // ...
 
 
   const randomRating = getRandomRating();
+  const isSingleImage = pizza.image.length === 1;
 
 
 
@@ -84,12 +84,13 @@ const Pizza = ({ pizza }) => {
           whileHover={{ scale: 1.1 }}
         >
           <img
-            src={pizza.image}
-            alt="Product"
+            src={pizza.image.length > 0 ? pizza.image[0] : ''}
+            alt="DishImage1"
             className="w-full h-64 object-cover mx-auto"
             onClick={() => setShowModal(true)}
             style={{ cursor: "pointer" }}
           />
+
 
           <div className="absolute bottom-0 right-0 mr-2 mb-2 bg-yellow-500 text-black px-2 py-1 rounded-md text-sm font-bold">
             <FontAwesomeIcon icon={faRupeeSign} /> {" "} {pizza.prices[0][varient] * quantity}
@@ -194,14 +195,12 @@ const Pizza = ({ pizza }) => {
               <div className="flex flex-wrap">
                 <div className="w-full md:w-2/5 mb-6 md:mb-0">
                   <Carousel showThumbs={false} showStatus={false} infiniteLoop>
-                    <div>
-                      <img src={pizza.image} alt="Pizza" />
-                    </div>
-                    <div>
-                      <img src={pizza.image} alt="Pizza" />
-                    </div>
+                    {pizza.image.map((imageUrl, index) => (
+                      <img key={index} src={imageUrl} alt={`DishImage ${index}`} />
+                    ))}
                   </Carousel>
                 </div>
+
                 <div className="w-full md:w-3/5 md:pl-6">
                   <div className="mb-4">
                     <label htmlFor="size" className="block text-gray-700 font-bold">
@@ -243,6 +242,13 @@ const Pizza = ({ pizza }) => {
                         />
                       ))}
                     </div>
+                    <div className="font-bold ml-3">  Seller:</div>
+                    {pizza.seller ? (
+                      <p className={`text-green-500`}>{pizza.seller}</p>
+                    ) : (
+                      <p className={`text-blue-500`}> PizzaKing.Info</p>
+                    )}
+
                   </div>
                   <div className="flex items-center mt-4">
                     <h6 className="mr-2">Price:</h6>

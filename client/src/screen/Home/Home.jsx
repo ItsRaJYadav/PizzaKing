@@ -7,6 +7,7 @@ import Playstore from "./Playstore";
 import WelcomePopUp from './PopUp'
 import { useSelector } from "react-redux";
 import AdminHome from "./AdminHome";
+import Testimonial from "./HomeProduct";
 
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
           <>
             <WelcomePopUp />
             <Hero />
+            <Testimonial />
             <Achievement />
             <Playstore />
             <FAQ />

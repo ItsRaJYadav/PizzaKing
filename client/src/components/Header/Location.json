@@ -1,0 +1,36 @@
+[
+    {
+      "state": "Haryana",
+      "cities": [
+        "Faridabad",
+        "Gurugram",
+        "Chandigrah"
+      ]
+    },
+    {
+      "state": "Bihar",
+      "cities": [
+        "Patna",
+        "Darbhanga",
+        "Gaya"
+      ]
+    },
+    {
+      "state": "U.P.",
+      "cities": [
+        "Noida",
+        "Varanasi",
+        "Kanpur"
+      ]
+    },
+    {
+      "state": "New Delhi",
+      "cities": [
+        "Delhi",
+        "Delhi NCR"
+        
+      ]
+    }
+    
+  ]
+  

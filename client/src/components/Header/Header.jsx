@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaUserCircle } from "react-icons/fa";
 import { BsFillCartFill } from "react-icons/bs";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
 import { Hidden } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
+import { filterPizza } from "../../action/pizzaAction";
+import locationData from "./Location.json";
+
 
 const Header = () => {
   const { isAuthenticated } = useAuth0();
@@ -14,19 +17,77 @@ const Header = () => {
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [cities, setCities] = useState([]);
+
+
+
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    const filteredResults = filterPizza.filter((item) => {
+
+      return item.name.toLowerCase().includes(query.toLowerCase());
+    });
+
+    setSearchResults(filteredResults);
+  };
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+
+  useEffect(() => {
+    // Retrieve stored values from localStorage on component mount
+    const storedState = localStorage.getItem("selectedState");
+    const storedCity = localStorage.getItem("selectedCity");
+
+    if (storedState) {
+      setSelectedState(storedState);
+      const selectedStateObj = locationData.find((loc) => loc.state === storedState);
+      const stateCities = selectedStateObj ? selectedStateObj.cities : [];
+      setCities(stateCities);
+    }
+
+    if (storedCity) {
+      setSelectedCity(storedCity);
+    }
+  }, []);
+
+  const handleStateChange = (e) => {
+    const state = e.target.value;
+    setSelectedState(state);
+    localStorage.setItem("selectedState", state); // Store selected state in localStorage
+
+    const selectedStateObj = locationData.find((loc) => loc.state === state);
+    const stateCities = selectedStateObj ? selectedStateObj.cities : [];
+    setCities(stateCities);
+    setSelectedCity("");
+    localStorage.removeItem("selectedCity"); // Remove stored city from localStorage
+  };
+
+  const handleCityChange = (e) => {
+    const city = e.target.value;
+    setSelectedCity(city);
+    localStorage.setItem("selectedCity", city); // Store selected city in localStorage
+  };
+
   return (
     <>
       <div className="flex flex-wrap place-items-center  overflow-hidden">
-        <section className="relative mx-auto">
+        <section className="relative min-h-10vh ">
           {/* navbar */}
           <nav className="flex justify-between bg-gray-900 text-white w-screen">
             <div className="px-5 xl:px-12 py-6 flex w-full items-center">
-              <Link to="/" className="text-3xl font-bold font-heading">
+              <Link to="/" className="text-3xl font-bold font-heading mb-5">
                 {/* <img class="h-9" src="logo.png" alt="logo"> */}
                 PizzaKing
               </Link>
@@ -36,32 +97,88 @@ const Header = () => {
                 {
                   currentUser && currentUser.isAdmin ? null : (
                     <>
-                    <li>
-                      <NavLink to="/menu" className="hover:text-gray-200">
-                        Menu
-                      </NavLink>
-                    </li>
-                     <Link to="/company" className="hover:text-gray-200" >
-                     Company
-                   </Link>
-                   <li>
-                      <Link to="/contact" className="hover:text-gray-200" >
-                        Contact Us
+                      <li>
+                        <NavLink to="/menu" className="hover:text-gray-200">
+                          Menu
+                        </NavLink>
+                      </li>
+                      <Link to="/company" className="hover:text-gray-200" >
+                        Company
                       </Link>
-                    </li>
-                   </>
+                      <li>
+                        <Link to="/contact" className="hover:text-gray-200" >
+                          Contact Us
+                        </Link>
+                      </li>
+
+                      {/* Location Fields */}
+                      <div className="flex items-center ml-5">
+                        <select
+                          value={selectedState}
+                          onChange={handleStateChange}
+                          className="bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2"
+                        >
+                          <option value="">Select State</option>
+                          {locationData.map((loc) => (
+                            <option key={loc.state} value={loc.state}>
+                              {loc.state}
+                            </option>
+                          ))}
+                        </select>
+                        {selectedState && (
+                          <div className="ml-3">
+                            <select
+                              value={selectedCity}
+                              onChange={handleCityChange}
+                              className="bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2"
+                            >
+                              <option value="">Select City</option>
+                              {cities.map((city) => (
+                                <option key={city} value={city}>
+                                  {city}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+                      </div>
+
+                       {/* searchbox */}
+                      <div className="relative ml-5">
+                        <input
+                          type="text"
+                          placeholder="Search for Cuisine and Dish..."
+                          value={searchQuery}
+                          onChange={handleSearch}
+                          className="bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2 w-64"
+                        />
+                        <div className="absolute right-3 top-2 mt-1.5">
+                          <FaSearch className="text-gray-500 " />
+                        </div>
+                        {searchResults.length > 0 && (
+                          <ul className="absolute left-0 right-0 bg-white shadow-lg rounded-lg mt-2">
+                            {searchResults.map((result) => (
+                              <li key={result.id} className="px-4 py-2">
+                                {/* Display the search results */}
+                                {result.title}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+
+                    </>
                   )
                 }
 
-
                 <li>
                   {currentUser && currentUser.isAdmin && (
-                    <Link
-                      to="/admin"
+                    <a
+                      href="/admin"
                       className="text-white font-bold px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 ml-3"
                     >
                       Admin Pannel
-                    </Link>
+                    </a>
                   )}
                 </li>
               </ul>
