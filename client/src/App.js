@@ -13,6 +13,7 @@ const LazyHome = lazy(() => import('../src/screen/Home/Home'));
 const LazyAdminHome = lazy(() => import('../src/screen/Home/AdminHome.jsx'));
 const LazyCartScreen = lazy(() => import('./screen/Cart/CartScreen'));
 const LazyRegister = lazy(() => import('./screen/Register/Register'));
+const LazyRegisterSuccess = lazy(() => import('./screen/Register/RegisterSuccess'));
 const LazyLogin = lazy(() => import('./screen/Login/Login'));
 const LazyOrderScreen = lazy(() => import('./screen/Order/orderScreen'));
 const LazyErr = lazy(() => import('./screen/Pages/Error.js'));
@@ -73,6 +74,7 @@ function App() {
           <Route path="/success" element={<CheckoutSuccess />} exact />
           <Route path="/cancel" element={<CheckoutCancel />} exact />
 
+          <Route path="/verify-email/:token" element={<LazyRegisterSuccess />} exact />
 
 
 

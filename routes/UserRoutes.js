@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
@@ -5,20 +6,70 @@ const Otp = require("../models/UserOTP");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+
+// Nodemailer configuration
+const transporter = nodemailer.createTransport(
+  smtpTransport({
+    service: "gmail",
+    host: process.env.SMPT_HOST,
+    port: process.env.SMPT_PORT,
+    secure: true,
+    auth: {
+      user: process.env.SMPT_MAIL,
+      pass: process.env.SMPT_PASSWORD, 
+    },
+  })
+);
 
 
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   try {
+    // Generate a unique verification token
+    const verificationToken = crypto.randomBytes(20).toString("hex");
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      verificationToken,
+    });
     await newUser.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Register success",
+    const mailOptions = {
+      from: process.env.EMAIL_SENDER, // Retrieve the email sender from .env file
+      to: email,
+      subject: "Email Verification",
+      html: `
+        <div style="background-color: #f7f7f7; padding: 20px; font-family: Arial, sans-serif;">
+          <div style="background-color: #fff; padding: 20px; border-radius: 4px;">
+            <img src="https://www.kindpng.com/picc/m/117-1176237_pizza-king-logo-pizza-king-png-transparent-png.png" alt="Company Logo" style="display: block; margin: 0 auto; width: 150px;">
+            <h2 style="color: #333; margin-top: 30px; text-align: center;">Email Verification</h2>
+            <p style="color: #333; text-align: center;">Dear ${name},</p>
+            <p style="color: #333; text-align: center;">Thank you for registering with our platform. Please verify your email by clicking the link below:</p>
+            <div style="text-align: center; margin-top: 30px;">
+              <a href="${process.env.BASE_URL}/verify-email/${verificationToken}" style="background-color: #4caf50; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Verify Email</a>
+            </div>
+          </div>
+          <p style="color: #666; text-align: center; margin-top: 30px;">If you did not register an account, please ignore this email.</p>
+          <p style="color: #666; text-align: center;">Best regards,</p>
+          <p style="color: #666; text-align: center;">The PizzaKing Team</p>
+        </div>
+      `
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error: ", error);
+        res.status(500).json({ message: "Failed to send verification email" });
+      } else {
+        console.log("Email sent successfully!");
+        res.status(200).json({ success: true, message: "Register success" });
+      }
     });
   } catch (error) {
     res.status(400).json({
@@ -27,38 +78,71 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
+router.get("/verify-email/:token", async (req, res) => {
+  const token = req.params.token;
+
+  try {
+    const user = await User.findOne({ verificationToken: token });
+
+    if (user) {
+      user.isVerified = true;
+      user.verificationToken = undefined;
+      await user.save();
+      res.status(200).json({ success: true, message: "Email verified successfully" });
+    } else {
+      res.status(404).json({ success: false, message: "Invalid verification token" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+
+
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
 
-    if (user) {
-      const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-      if (isPasswordMatch) {
-        const currentUser = {
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          _id: user._id,
-        };
-        res.status(200).send(currentUser);
-      } else {
-        res.status(400).json({
-          message: "Login Failed",
-        });
-      }
-    } else {
-      res.status(400).json({
-        message: "Login Failed",
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
       });
     }
+
+    if (!user.isVerified) {
+      return res.status(400).json({
+        message: "User is not verified",
+      });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(400).json({
+        message: "Incorrect password",
+      });
+    }
+
+    const currentUser = {
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      _id: user._id,
+    };
+
+    res.status(200).send(currentUser);
   } catch (error) {
-    res.status(404).json({
-      message: "Something Went wrong",
+    res.status(500).json({
+      message: "Something went wrong",
     });
   }
 });
+
+
+
 
 
 
@@ -89,20 +173,7 @@ router.post("/deleteuser", async (req, res) => {
 });
 
 
-//nodemailer configuration
-// Nodemailer configuration
-const transporter = nodemailer.createTransport(
-  smtpTransport({
-    service: "gmail",
-    host: process.env.SMPT_HOST,
-    port: process.env.SMPT_PORT,
-    secure: true,
-    auth: {
-      user: process.env.SMPT_MAIL,
-      pass: process.env.SMPT_PASSWORD, 
-    },
-  })
-);
+
 
 
 

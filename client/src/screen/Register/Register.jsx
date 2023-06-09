@@ -37,6 +37,8 @@ const Register = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isPasswordMatch, setIsPasswordMatch] = useState(false);
+  const [Loading, setLoading] = useState(false);
+
 
   const toggleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
@@ -46,32 +48,35 @@ const Register = () => {
     setIsChecked(event.target.checked);
   };
 
-  
+
 
   const history = useNavigate();
 
-  const showAlert = (message) => {
-    alert(message);
-  };
+
 
   const registerHandler = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
+
     if (!isChecked) {
-      toast.warn('Please agree to the terms of service.');
-    }
-    else if (password!==confirmPassword) {
+      toast.warn("Please agree to the terms of service.");
+    } else if (password !== confirmPassword) {
       toast.warn("Password does not match");
-    }
-    else if (users.find((user) => user.email === email)) {
-      toast.warn("Email already exists. Please use a different email.");
     } else {
       const user = { name, email, password, confirmPassword };
 
-      try {
-        dispatch(registerUser(user));
-      } catch (error) {
-        console.log(error);
-        toast.error("An error occurred. Please try again.");
+      // Check if the email already exists and is verified
+      const existingUser = users.find((user) => user.email === email);
+      if (existingUser && existingUser.isVerified) {
+        toast.warn("Email already exists. Please use a different email.");
+      } else {
+        try {
+          setLoading(true)
+          dispatch(registerUser(user));
+        } catch (error) {
+          console.log(error);
+          setLoading(true)
+          toast.error("An error occurred. Please try again.");
+        }
       }
     }
   };
@@ -86,7 +91,7 @@ const Register = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-      toast.success('Registration Success you will be redirected to login page');
+      toast.success('Registration Success please verify your email');
       setTimeout(() => {
         history("/login");
       }, 3000); // Redirect to login page after 3 seconds
@@ -262,10 +267,10 @@ const Register = () => {
                   <div className="text-sm mt-1">
                     <span
                       className={`mr-1 font-semibold ${passwordStrength === "strong"
-                          ? "text-green-500"
-                          : passwordStrength === "medium"
-                            ? "text-yellow-500"
-                            : "text-red-500"
+                        ? "text-green-500"
+                        : passwordStrength === "medium"
+                          ? "text-yellow-500"
+                          : "text-red-500"
                         }`}
                     >
                       Password strength: {passwordStrength}
@@ -310,15 +315,22 @@ const Register = () => {
                   .
                 </span>
               </div>
-              <div className="mb-6">
+              
+
+              {Loading ? (
+                <div className="flex items-center mb-6">
+                  <FiLoader className="animate-spin text-2xl mr-2" />
+                  Registering...
+                </div>
+              ) : (
                 <button
-                  
                   type="submit"
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none"
                 >
                   Register
                 </button>
-              </div>
+              )}
+
 
             </form>
           </div>
