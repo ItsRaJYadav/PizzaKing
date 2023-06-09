@@ -40,6 +40,7 @@ const OrderDetails = lazy(() => import('./components/Users/OrderDetails'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 const CheckoutSuccess= lazy(() => import('../src/components/Checkout/CheckoutSuccess'));
+const SellerDetailsPage= lazy(() => import('./Sellers'));
 
 export const RecoveryContext = createContext();
 
@@ -73,10 +74,11 @@ function App() {
           <Route path="/why_choose_us" element={<WhyChooseUs />} exact />
           <Route path="/success" element={<CheckoutSuccess />} exact />
           <Route path="/cancel" element={<CheckoutCancel />} exact />
+         <Route path="/verify-email/:token" element={<LazyRegisterSuccess />} exact />
 
-          <Route path="/verify-email/:token" element={<LazyRegisterSuccess />} exact />
 
-
+           {/* seller Routes */}
+           <Route path="/seller" element={<SellerDetailsPage />} exact />
 
           {/* user routes: */}
           <Route path='/user/' element={<LazyUser />} >

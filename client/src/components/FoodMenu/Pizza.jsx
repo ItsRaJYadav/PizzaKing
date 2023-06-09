@@ -16,12 +16,18 @@ import { IoIosArrowDropright } from "react-icons/io";
 import AddToCartAlert from '../../Alerts/ProductAddAlert'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
+// import FavoriteIcon from '@material-ui/icons/Favorite';
+
+
 const Pizza = ({ pizza }) => {
   const [varient, setVarient] = useState("small");
   const [quantity, setQuantity] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
   const addToCartHandler = () => {
     dispatch(addToCart(pizza, quantity, varient));
     toast.success("Added to cart")
@@ -42,7 +48,6 @@ const Pizza = ({ pizza }) => {
     </option>
   ));
 
-  const price = pizza.prices[0][varient] * quantity;
 
   // auto dismissal
   useEffect(() => {
@@ -55,22 +60,29 @@ const Pizza = ({ pizza }) => {
     return () => clearTimeout(timeout);
   }, [showAlert])
 
-  // const toggleFavorite = () => {
-  //   // Update the favorite status of the product
-  //   product.isFavorite = !product.isFavorite;
-  //   // TODO: Add logic to handle saving the favorite status
-  // };
+
   const getRandomRating = () => {
     const ratingOptions = [3, 3.5, 4, 4.5];
     const randomIndex = Math.floor(Math.random() * ratingOptions.length);
     return ratingOptions[randomIndex];
   };
-
-
-
   const randomRating = getRandomRating();
-  const isSingleImage = pizza.image.length === 1;
 
+
+  //add to wishlist
+  useEffect(() => {
+    const favoriteStatus = localStorage.getItem('favoriteStatus');
+    setIsFavorite(favoriteStatus === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favoriteStatus', isFavorite.toString());
+  }, [isFavorite]);
+  // Toggle the favorite status
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    toast.info(`Favorite status: ${isFavorite ? 'Off' : 'On'}`);
+  };
 
 
   return (
@@ -188,8 +200,8 @@ const Pizza = ({ pizza }) => {
                 <Typography variant="h5" component="h1" className="text-center">
                   {pizza.name}
                 </Typography>
-                <Button variant="outlined" startIcon={<FavoriteBorder />} className="mr-4">
-                  Favorite
+                <Button variant="outlined" startIcon={isFavorite ? <Favorite /> : <FavoriteBorder />} className="mr-4" onClick={toggleFavorite}>
+                  {isFavorite ? 'Favorite' : 'Not Favorite'}
                 </Button>
               </div>
               <div className="flex flex-wrap">
@@ -243,21 +255,55 @@ const Pizza = ({ pizza }) => {
                       ))}
                     </div>
                     <div className="font-bold ml-3">  Seller:</div>
-                    {pizza.seller ? (
-                      <p className={`text-green-500`}>{pizza.seller}</p>
-                    ) : (
-                      <p className={`text-blue-500`}> PizzaKing.Info</p>
-                    )}
+                    <Link to='/seller'>
+
+                      {pizza.seller ? (
+                        <p className={`text-green-500`}>{pizza.seller}</p>
+                      ) : (
+                        <p className={`text-blue-500`}> PizzaKing.Info</p>
+                      )}
+
+                    </Link>
 
                   </div>
-                  <div className="flex items-center mt-4">
+                  <div className="flex items-center mt-4 mb-2 ">
                     <h6 className="mr-2">Price:</h6>
                     <div className="flex items-center">
                       <FaRupeeSign className="text-lg" />
-                      <span className="text-lg ml-1">
+                      <span className="text-lg ml-1 mr-4">
                         {pizza.prices[0][varient] * quantity}
                       </span>
                     </div>
+                    <div>
+                      {((pizza.foodtype === 'veg') || (pizza.foodtype === 'Veg')) && (
+                        <span style={{ color: 'green' }}>
+                          Food Type: Veg <span style={{ marginLeft: '5px' }}>🥦</span>
+                        </span>
+                      )}
+
+                      {((pizza.foodtype === 'non-veg') || (pizza.foodtype === 'nonveg') || (pizza.foodtype === 'Non-Veg') || (pizza.foodtype === 'Non Veg')) && (
+                        <span style={{ color: 'red' }}>
+                          Food Type: Non-Veg <span style={{ marginLeft: '5px' }}>🍗</span>
+                        </span>
+                      )}
+
+                      {pizza.foodtype && pizza.foodtype.toLowerCase() === 'drink' && (
+                        <span style={{ color: 'blue' }}>
+                          Food Type: Drink <span style={{ marginLeft: '5px' }}>🥤</span>
+                        </span>
+                      )}
+
+                      {!(pizza.foodtype === 'veg' || pizza.foodtype === 'Veg' || pizza.foodtype === 'non-veg' || pizza.foodtype === 'nonveg' || pizza.foodtype === 'Non-Veg' || pizza.foodtype === 'Non Veg' || (pizza.foodtype && pizza.foodtype.toLowerCase() === 'drink')) && (
+                        <span>
+                          Food Type: Other
+                        </span>
+                      )}
+                    </div>
+
+
+
+
+
                   </div>
                   <Button
                     onClick={addToCartHandler}
