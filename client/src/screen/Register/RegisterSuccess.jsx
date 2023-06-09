@@ -11,11 +11,12 @@ import axios from "axios"
 const EmailVerify = () => {
   const [validUrl, setValidUrl] = useState(true);
 	const param = useParams();
-
+  
 	useEffect(() => {
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users' : 'http://localhost:8080/api/users';
 		const verifyEmailUrl = async () => {
 			try {
-				const url = `http://localhost:8080/api/users/verify-email/${param.token}`;
+				const url = `${apiUrl}/verify-email/${param.token}`;
 				const { data } = await axios.get(url);
 				console.log(data);
 				setValidUrl(true);
