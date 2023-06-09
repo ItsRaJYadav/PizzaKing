@@ -318,10 +318,10 @@ const Register = () => {
               
 
               {Loading ? (
-                <div className="flex items-center mb-6">
-                  <FiLoader className="animate-spin text-2xl mr-2" />
-                  Registering...
-                </div>
+                <div className="flex items-center justify-center mb-6">
+                <FiLoader className="animate-spin text-2xl mr-2" />
+                Registering...
+              </div>
               ) : (
                 <button
                   type="submit"

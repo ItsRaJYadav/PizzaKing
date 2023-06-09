@@ -3,11 +3,14 @@ import zxcvbn from 'zxcvbn';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import {FiLoader} from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 
 const PasswordResetForm = (props) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setLoading] = useState(false);
+
   const [otp, setOtp] = useState('');
   const Navigate = useNavigate();
   const handlePasswordChange = (e) => {
@@ -22,57 +25,60 @@ const PasswordResetForm = (props) => {
     setOtp(e.target.value);
   };
 
-  
+
   const handleFormSubmit = async (e) => {
     const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app/api/users/changepassword' : 'http://localhost:8080/api/users/changepassword';
     e.preventDefault();
-  
+
     if (!otp) {
       toast.error('OTP is required');
       return;
     }
-  
+
     if (!password) {
       toast.error('Password is required');
       return;
     }
-  
+
     if (!confirmPassword) {
       toast.error('Confirm Password is required');
       return;
     }
-  
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
-  
+    setLoading(true);
     const formData = {
       email: props.email,
       otpCode: otp,
       password: password,
     };
-  
+
     try {
       const response = await axios.post(apiUrl, formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (response.data.statusText === 'success') {
+        setLoading(false);
         toast.success('Password updated successfully');
         setTimeout(() => {
           Navigate('/login');
         }, 1500);
       } else {
+        setLoading(false);
         toast.error('Error updating password');
       }
     } catch (error) {
+      setLoading(false);
       toast.error('Error updating password');
     }
   };
-  
+
 
   const passwordStrength = zxcvbn(password).score;
 
@@ -160,12 +166,21 @@ const PasswordResetForm = (props) => {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Reset Password
-        </button>
+        {isLoading ? (
+          <div className="flex items-center justify-center mb-6">
+            <FiLoader className="animate-spin text-2xl mr-2" />
+            Updating Password...
+          </div>
+
+        ) : (
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Reset Password
+          </button>
+        )}
+
       </form>
       <ToastContainer />
     </div>
