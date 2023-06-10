@@ -17,27 +17,12 @@ const Header = () => {
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  
 
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [cities, setCities] = useState([]);
 
-
-
-
-  const handleSearch = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-
-    const filteredResults = filterPizza.filter((item) => {
-
-      return item.name.toLowerCase().includes(query.toLowerCase());
-    });
-
-    setSearchResults(filteredResults);
-  };
 
 
   const toggleMenu = () => {
@@ -144,28 +129,7 @@ const Header = () => {
                       </div>
 
                        {/* searchbox */}
-                      <div className="relative ml-5">
-                        <input
-                          type="text"
-                          placeholder="Search for Cuisine and Dish..."
-                          value={searchQuery}
-                          onChange={handleSearch}
-                          className="bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2 w-64"
-                        />
-                        <div className="absolute right-3 top-2 mt-1.5">
-                          <FaSearch className="text-gray-500 " />
-                        </div>
-                        {searchResults.length > 0 && (
-                          <ul className="absolute left-0 right-0 bg-white shadow-lg rounded-lg mt-2">
-                            {searchResults.map((result) => (
-                              <li key={result.id} className="px-4 py-2">
-                                {/* Display the search results */}
-                                {result.title}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
+                       
 
                     </>
                   )

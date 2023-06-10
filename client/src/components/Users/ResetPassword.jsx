@@ -27,7 +27,7 @@ const PasswordResetForm = (props) => {
 
 
   const handleFormSubmit = async (e) => {
-    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app/api/users/changepassword' : 'http://localhost:8080/api/users/changepassword';
+    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users/changepassword' : 'http://localhost:8080/api/users/changepassword';
     e.preventDefault();
 
     if (!otp) {

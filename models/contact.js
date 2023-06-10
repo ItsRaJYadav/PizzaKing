@@ -29,10 +29,15 @@ const contactFormSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  orderid:{
+  orderid: {
+    type: String,
+    required: false,
+  },
+  complaintId: {
     type: String,
     required: true,
-  }
+    unique: true,
+  },
 });
 
 const ContactForm = mongoose.model('ContactForm', contactFormSchema);

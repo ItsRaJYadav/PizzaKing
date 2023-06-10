@@ -5,11 +5,11 @@ import { FiLoader } from 'react-icons/fi';
 
 const ContactItem = ({ contact, handleIssueResolved }) => {
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/admin/contacts' : 'http://localhost:8080/admin/contacts';
   const resolveIssue = () => {
     setIsUpdating(true);
     axios
-      .patch(`http://localhost:8080/admin/contacts/${contact._id}`, {
+      .patch(`${apiUrl}/${contact._id}`, {
         issueResolved: true,
       })
       .then((response) => {
@@ -28,6 +28,7 @@ const ContactItem = ({ contact, handleIssueResolved }) => {
       <div className="space-y-2">
         <p className="font-semibold"><strong>Name</strong>: {contact.name}</p>
         <p><strong>Email</strong>: {contact.email}</p>
+        <p><strong>QueryID</strong>: {contact.complaintId}</p>
         
         <p><strong>Mobile Number</strong>: {contact.mobileNumber}</p>
         <p><strong>Subject</strong>: {contact.subject}</p>

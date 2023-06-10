@@ -35,16 +35,18 @@ app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 app.use("/api/users", require("./routes/UserRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 
-app.post('/contact', (req, res) => {
-  const { name, email, message, subject, mobile, orderid } = req.body;
 
+
+app.post('/contact', (req, res) => {
+  const { name, email, message, subject, mobile, orderid ,complaintId} = req.body;
   const contactForm = {
     name: name,
     email: email,
     message: message,
     mobileNumber: mobile,
     subject: subject,
-    orderid: orderid
+    orderid: orderid,
+    complaintId: complaintId, // Add the generated complaint ID
   };
 
   ContactForm.create(contactForm)
@@ -52,12 +54,10 @@ app.post('/contact', (req, res) => {
       res.json("Form submitted successfully");
     })
     .catch(err => {
-  
       console.error(err);
       res.status(400).json({ error: err.message });
     });
 });
-
 
 
 

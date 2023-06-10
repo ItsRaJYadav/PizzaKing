@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Helmet } from "react-helmet";
 
-import { Link, Outlet,useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { FiUsers, FiSettings, FiLogOut } from 'react-icons/fi';
 import { FaPizzaSlice, FaThList } from 'react-icons/fa';
 import { BsDatabaseAdd } from 'react-icons/bs';

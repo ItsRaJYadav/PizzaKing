@@ -33,7 +33,7 @@ const ForgotPassword = () => {
 
     const handleSubmit = (e) => {
         SetLoading(true);
-        const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.app/api/users/forgotpassword' : 'http://localhost:8080/api/users/forgotpassword'
+        const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users/forgotpassword' : 'http://localhost:8080/api/users/forgotpassword'
         e.preventDefault();
 
         axios

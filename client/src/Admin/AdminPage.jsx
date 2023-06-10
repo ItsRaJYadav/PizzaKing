@@ -166,11 +166,11 @@ const AdminDashboard = () => {
     if (ordersChartRef.current && orders.length) {
       const ctx = ordersChartRef.current.getContext('2d');
   
-      //it Calculate the count of orders for each day
+      // Calculate the count of orders for each day
       const ordersByDay = {};
       orders.forEach((order) => {
         const date = new Date(order.createdAt);
-        const day = date.toDateString();
+        const day = date.toLocaleDateString(); // Use toLocaleDateString to get the day in the format 'MM/DD/YYYY'
   
         if (ordersByDay[day]) {
           ordersByDay[day] += 1;
@@ -221,6 +221,7 @@ const AdminDashboard = () => {
       });
     }
   }, [orders]);
+  
   
   
 
@@ -420,7 +421,7 @@ const AdminDashboard = () => {
           </div>
 
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
-            <Link to="/admin/orderlist" className="flex items-center justify-between">
+            <Link to="/admin/allcontact" className="flex items-center justify-between">
               <div>
                 <h3 className="mb-2 text-lg font-bold text-gray-800">Contact data</h3>
                 <p className="text-gray-600">Contact Data Status</p>
