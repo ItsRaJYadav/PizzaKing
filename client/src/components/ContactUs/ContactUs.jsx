@@ -10,7 +10,7 @@ import ThankYouPage from './Thanks';
 import { v4 as uuidv4 } from 'uuid';
 
 
-const API_URL = 'http://localhost:8080/contact';
+const API_URL = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/contact' : 'http://localhost:8080/contact';
 
 const ContactForm = () => {
   const { isAuthenticated } = useAuth0();
