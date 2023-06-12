@@ -33,6 +33,9 @@ const Login = () => {
 
   const loginHandler = async (event) => {
     event.preventDefault(); // Prevent form submission
+    if(!isChecked){
+      return toast.warn("please agree to checkbox");
+    }
     setLoading(true);
     const user = { email, password };
     const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users/login' : 'http://localhost:8080/api/users/login';
@@ -155,18 +158,20 @@ const Login = () => {
                 We'll never share your credential details with anyone else.
               </small>
             </div>
-            <div className="flex mb-6 items-center">
+            <div className="flex items-center justify-center mb-2">
               <input
                 type="checkbox"
                 defaultValue=""
                 id=""
+                className="mb-2"
                 checked={isChecked}
                 onChange={handleCheckboxChange}
               />
-              <label className="ml-2 text-xs text-gray-800" htmlFor="">
+              <label className="ml-2 text-xs text-gray-800 mb-3" htmlFor="">
                 Agree to T&C
               </label>
             </div>
+
             {isLoading ? (
               <div className="flex items-center justify-center mb-6">
                 <FiLoader className="animate-spin text-2xl mr-2" />
@@ -175,11 +180,11 @@ const Login = () => {
 
             ) : (
               <button
-              className="relative group block w-full mb-6 py-3 px-5 text-center text-sm font-semibold text-orange-50 bg-orange-900 rounded-full overflow-hidden"
-              type="submit"
-            >
-              Login
-            </button>
+                className="relative group block w-full mb-6 py-3 px-5 text-center text-sm font-semibold text-orange-50 bg-orange-900 rounded-full overflow-hidden"
+                type="submit"
+              >
+                Login
+              </button>
             )}
             <span className="text-xs font-semibold text-gray-900">
               <span>Don’t have an account?</span>

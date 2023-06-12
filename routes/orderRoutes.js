@@ -1,79 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const Order = require('../models/orderModel')
+const Order = require('../models/NewOrder')
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 
 
 
-// router.post("/placeorder", async (req, res) => {
-//   try {
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ["card"],
-//       mode: "payment",
-//       line_items: req.body.items.map((item) => {
-//         return {
-//           price_data: {
-//             currency: "inr",
-//             product_data: {
-//               name: item.name,
-//             },
-//             unit_amount: item.price * 100,
-//           },
-//           quantity: item.quantity,
-//         };
-//       }),
-//       success_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.router/success' : 'http://localhost:3000/success',
-//       cancel_url: process.env.NODE_ENV === 'production' ? 'https://pizzaking.cyclic.router/cancel' : 'http://localhost:3000/cancel',
-//       shipping_address_collection: {
-//         allowed_countries: ['IN'], // Set the allowed countries for shipping address
-//       },
-//       shipping_address: {
-//         line1: req.body.address, // Replace 'address' with the actual field name for address
-//       },
-//       metadata: {
-//         customer_name: req.body.name, // Replace 'name' with the actual field name for customer name
-//         customer_phone: req.body.phone, // Replace 'phone' with the actual field name for customer phone
-//       },
-//     });
-
-//     if (session.payment_status === "paid") {
-//       const order = new Order({
-//         name: req.body.name,
-//         email: req.body.email,
-//         userid: req.body.userid,
-//         orderItems: req.body.items,
-//         shippingAddress: req.body.address,
-//         orderAmount: req.body.amount,
-//         isDelivered: false,
-//         transactionId: session.payment_intent,
-//       });
-
-//       await order.save();
-//     }
-
-//     res.json({ url: session.url });
-//   } catch (e) {
-//     res.status(500).json({ error: e.message });
-//   }
-// });
 
 router.post("/placeorder", async (req, res) => {
   try {
-    // Check if items are present in the request body
-    if (!req.body.items || req.body.items.length === 0) {
-      throw new Error("No items provided for the order.");
-    }
+    const customer = await stripe.customers.create({
+      metadata: {
+        userId: req.body.userId,
+        cart: JSON.stringify(req.body.items),
+      },
+    });
+    
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      customer:customer.id,
       line_items: req.body.items.map((item) => {
         return {
           price_data: {
             currency: "inr",
             product_data: {
+              images: [item.image[0]],
               name: item.name,
             },
             unit_amount: item.price * 100,
@@ -86,31 +40,20 @@ router.post("/placeorder", async (req, res) => {
       shipping_address_collection: {
         allowed_countries: ['IN'],
       },
+      phone_number_collection: {
+        enabled: true,
+      },
       shipping_address: {
         line1: req.body.address,
       },
+
       metadata: {
         customer_name: req.body.name,
         customer_phone: req.body.phone,
       },
     });
 
-    // Create the order after successful payment
-    if (session.payment_status === "paid") { 
-      const order = new Order({
-        name: req.body.name,
-        email: req.body.email,
-        userid: req.body.id,
-        orderItems: req.body.items,
-        shippingAddress: req.body.address,
-        orderAmount: req.body.amount_total,
-        isDelivered: false,
-        transactionId: session.payment_intent,
-      });
-
-      await order.save();
-    }
-
+    
     res.json({ url: session.url });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -177,10 +120,78 @@ router.post("/canceOrder", async (req, res) => {
   }
 });
 
+const createOrder = async (customer, data) => {
+  const Items = JSON.parse(customer.metadata.cart);
+
+  const products = Items.map((item) => {
+    return {
+      product: item.name,
+      quantity: item.quantity,
+    };
+  });
+
+  const newOrder = new Order({
+    
+    
+    shipping: data.shipping_details,
+    payment_status: data.payment_status,
+  });
+
+  try {
+    const savedOrder = await newOrder.save();
+    console.log("Processed Order:", savedOrder);
+  } catch (err) {
+    console.log(err);
+  }
+};
+// server.js
+//
+// Use this sample code to handle webhook events in your integration.
 
 
 
+// This is your Stripe CLI webhook secret for testing your endpoint locally.
+let endpointSecret;
+// const endpointSecret = "whsec_deb0b881095c40a1a0e2ddd9fd035af111499a2c0b101534465fbf3edfe2ed13";
 
+router.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let data;
+  let eventType;
+
+  if (endpointSecret) {
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      console.log("webhook verified")
+    } catch (err) {
+      console.log(`webhook error found : ${err.message}`)
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+    data=event.data.object;
+    eventType=event.type;
+  }
+  else {
+    data = req.body.data.object;
+    eventType = req.body.type;
+  }
+  if (eventType === "checkout.session.completed") {
+    stripe.customers
+      .retrieve(data.customer)
+      .then( (customer) => {
+          
+        createOrder(customer, data)
+        
+      })
+      .catch((err) => console.log(err.message));
+  }
+
+
+
+  // Return a 200 res to acknowledge receipt of the event
+  res.send().end();
+});
 
 
 module.exports = router;

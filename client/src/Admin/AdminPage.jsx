@@ -1,11 +1,10 @@
-import { useEffect, useRef,useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSettings, FiUsers } from 'react-icons/fi';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FiUsers } from 'react-icons/fi';
+import { FaRubleSign, FaShoppingCart } from 'react-icons/fa';
 import { HiCurrencyRupee } from 'react-icons/hi';
 import { SiProducthunt } from 'react-icons/si';
 import { AiFillMessage } from 'react-icons/ai';
-
 import { MdOutlineDeliveryDining } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllPizzas } from '../action/pizzaAction';
@@ -16,7 +15,6 @@ import Chart from 'chart.js/auto';
 
 
 const AdminDashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const chartInstanceRef = useRef(null);
   const usersChartRef = useRef(null);
@@ -35,20 +33,34 @@ const AdminDashboard = () => {
 
   const userState = useSelector((state) => state.getAllUsersReducer);
   const { users } = userState;
-  
 
-  
+  const [latestOrders, setLatestOrders] = useState([]);
+  const [NewUsers, setNewUsers] = useState([]);
 
   useEffect(() => {
-   
+
     dispatch(getAllPizzas());
     dispatch(getAllUsers());
     dispatch(getAllOrders());
   }, [dispatch]);
 
-  
+
   useEffect(() => {
-    
+    if (orders && orders.length > 0) {
+      const latestOrders = orders.slice(-7); // Get the latest 7 orders
+      setLatestOrders(latestOrders);
+    }
+  }, [orders]);
+
+  useEffect(() => {
+    if (users && users.length > 0) {
+      const NewUsers = users.slice(-5); // Get the latest 5 users
+      setNewUsers(NewUsers);
+    }
+  }, [orders]);
+
+  useEffect(() => {
+
     if (usersChartRef.current) {
       const ctx = usersChartRef.current.getContext('2d');
       const labels = users.map((user) => `${new Date(user.createdAt).getDate()} ${new Date(user.createdAt).toLocaleString('default', { month: 'long' })}`);
@@ -102,7 +114,7 @@ const AdminDashboard = () => {
   }, [users]);
 
 
-  
+
   useEffect(() => {
     if (productsChartRef.current && pizzas.length) {
       const ctx = productsChartRef.current.getContext('2d');
@@ -130,7 +142,7 @@ const AdminDashboard = () => {
             {
               label: 'Products',
               data: categoryCount,
-              backgroundColor: colors.slice(0, uniqueCategories.length), 
+              backgroundColor: colors.slice(0, uniqueCategories.length),
               borderColor: 'rgba(108, 117, 125, 1)',
               borderWidth: 1,
             },
@@ -161,27 +173,27 @@ const AdminDashboard = () => {
       });
     }
   }, [pizzas]);
-  
+
   useEffect(() => {
     if (ordersChartRef.current && orders.length) {
       const ctx = ordersChartRef.current.getContext('2d');
-  
+
       // Calculate the count of orders for each day
       const ordersByDay = {};
       orders.forEach((order) => {
         const date = new Date(order.createdAt);
         const day = date.toLocaleDateString(); // Use toLocaleDateString to get the day in the format 'MM/DD/YYYY'
-  
+
         if (ordersByDay[day]) {
           ordersByDay[day] += 1;
         } else {
           ordersByDay[day] = 1;
         }
       });
-  
+
       const labels = Object.keys(ordersByDay);
       const data = Object.values(ordersByDay);
-  
+
       new Chart(ctx, {
         type: 'line',
         data: {
@@ -214,32 +226,37 @@ const AdminDashboard = () => {
                 text: 'Orders',
               },
               suggestedMin: 0,
-              suggestedMax: Math.max(...data) + 1, 
+              suggestedMax: Math.max(...data) + 1,
             },
           },
         },
       });
     }
   }, [orders]);
-  
-  
-  
+
+
+
 
   useEffect(() => {
     if (revenueChartRef.current && orders.length) {
       const ctx = revenueChartRef.current.getContext('2d');
   
-      // Extract the revenue amounts from the orders
+      // Extract the revenue amounts and corresponding months from the orders
       const revenueData = orders.map((order) => order.orderAmount);
+      const months = orders.map((order) => {
+        const orderDate = new Date(order.createdAt);
+        const month = orderDate.toLocaleString('default', { month: 'short' });
+        return month;
+      });
   
       new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], 
+          labels: months,
           datasets: [
             {
               label: 'Revenue',
-              data: revenueData, 
+              data: revenueData,
               backgroundColor: 'rgba(40, 167, 69, 0.5)',
               borderColor: 'rgba(40, 167, 69, 1)',
               borderWidth: 1,
@@ -264,7 +281,7 @@ const AdminDashboard = () => {
                 text: 'Revenue',
               },
               suggestedMin: 0,
-              suggestedMax: Math.max(...revenueData) + 1, 
+              suggestedMax: Math.max(...revenueData) + 1,
             },
           },
         },
@@ -272,6 +289,7 @@ const AdminDashboard = () => {
     }
   }, [orders]);
   
+
 
   useEffect(() => {
     if (orderStatusChartRef.current && orders.length) {
@@ -309,11 +327,11 @@ const AdminDashboard = () => {
     const chartCanvas = chartRef.current.getContext('2d');
 
     const data = {
-      labels: ['Messages', 'Issues Resolved','Pending'],
+      labels: ['Messages', 'Issues Resolved', 'Pending'],
       datasets: [{
         label: 'Number of Messages',
-        data: [150, 75,28],
-        backgroundColor: ['#36A2EB', '#FFCE56','#FF3131'],
+        data: [150, 75, 28],
+        backgroundColor: ['#36A2EB', '#FFCE56', '#FF3131'],
       }]
     };
 
@@ -341,13 +359,16 @@ const AdminDashboard = () => {
     return totalValue.toFixed(2);
   };
 
-  
+
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      
+    <div className="flex flex-col h-auto bg-gray-100">
+
       <div className="flex-1 p-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+
+
+          {/*User chart status */}
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/users" className="flex items-center justify-between">
               <div>
@@ -376,6 +397,9 @@ const AdminDashboard = () => {
               <canvas ref={productsChartRef}></canvas>
             </div>
           </div>
+
+
+          {/* All Order chart status */}
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/orderlist" className="flex items-center justify-between">
               <div>
@@ -390,6 +414,9 @@ const AdminDashboard = () => {
               <canvas ref={ordersChartRef}></canvas>
             </div>
           </div>
+
+
+          {/* Revenue chart status */}
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/orderlist" className="flex items-center justify-between">
               <div>
@@ -405,6 +432,8 @@ const AdminDashboard = () => {
             </div>
           </div>
 
+
+          {/* Order Status chart status */}
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/orderlist" className="flex items-center justify-between">
               <div>
@@ -416,10 +445,12 @@ const AdminDashboard = () => {
               </div>
             </Link>
             <div className="chart-container">
-            <canvas ref={orderStatusChartRef} width="200" height="200"></canvas>
+              <canvas ref={orderStatusChartRef} width="200" height="200"></canvas>
             </div>
           </div>
 
+
+          {/* Contact chart status */}
           <div className="p-6 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/allcontact" className="flex items-center justify-between">
               <div>
@@ -431,9 +462,85 @@ const AdminDashboard = () => {
               </div>
             </Link>
             <div className="chart-container">
-            <canvas ref={chartRef}></canvas>
+              <canvas ref={chartRef}></canvas>
             </div>
           </div>
+
+
+          {/* Latest Transactions */}
+          <div className="p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
+            <Link to="/admin/alltransactions" className="flex items-center justify-between">
+              <div>
+                <h3 className="mb-2 text-lg font-bold text-gray-800 flex center">Latest Transactions</h3>
+              </div>
+              <div className="flex items-center justify-center w-10 h-10 bg-cyan-500 text-white rounded-full">
+                <FaRubleSign className="text-xl" />
+              </div>
+            </Link>
+            <div className="chart-container">
+              <div>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white shadow-md rounded">
+                    <thead>
+                      <tr className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                        <th className="py-3 px-2 text-left">Customer</th>
+                        <th className="py-3 px-2 text-left">Amount</th>
+                        <th className="py-3 px-2 text-left">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {latestOrders.map((order, index) => (
+                        <tr key={order._id} className={`border-b border-gray-200 hover:bg-${index % 2 === 0 ? 'gray-100' : 'white'}`}>
+                          <td className="py-3 px-2">{order.name}</td>
+                          <td className="py-3 px-2 font-bold text-green-500">Rs {order.orderAmount}/-</td>
+                          <td className="py-3 px-2">{order.createdAt.substring(0, 10)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          {/* Latest Transactions */}
+          <div className="p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
+            <Link to="/admin/alltransactions" className="flex items-center justify-between">
+              <div>
+                <h3 className="mb-2 text-lg font-bold text-gray-800 flex center">Latest Transactions</h3>
+              </div>
+              <div className="flex items-center justify-center w-10 h-10 bg-cyan-500 text-white rounded-full">
+                <FaRubleSign className="text-xl" />
+              </div>
+            </Link>
+            <div className="chart-container">
+              <div>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white shadow-md rounded">
+                    <thead>
+                      <tr className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                        <th className="py-3 px-2 text-left">Customer</th>
+                        <th className="py-3 px-2 text-left">Email</th>
+                        <th className="py-3 px-2 text-left">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {NewUsers.map((users, index) => (
+                        <tr key={users._id} className={`border-b border-gray-200 hover:bg-${index % 2 === 0 ? 'gray-100' : 'white'}`}>
+                          <td className="py-3 px-2">{users.name}</td>
+                          <td className="py-3 px-2 font-bold text-blue-400">{users.email}</td>
+                          <td className="py-3 px-2">{users.createdAt.substring(0, 10)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

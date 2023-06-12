@@ -56,30 +56,38 @@ const Register = () => {
 
   const registerHandler = (event) => {
     event.preventDefault();
-
+  
     if (!isChecked) {
       toast.warn("Please agree to the terms of service.");
+    } else if (password.length < 6) {
+      toast.warn("Password must be at least 6 characters");
     } else if (password !== confirmPassword) {
       toast.warn("Password does not match");
+    } else if (name.trim() === "") {
+      toast.warn("Name is required");
+    
+    } else if (name.trim().length < 3) {
+      toast.warn("Name must be at least 3 characters");
     } else {
       const user = { name, email, password, confirmPassword };
-
+  
       // Check if the email already exists and is verified
       const existingUser = users.find((user) => user.email === email);
       if (existingUser && existingUser.isVerified) {
         toast.warn("Email already exists. Please use a different email.");
       } else {
         try {
-          setLoading(true)
+          setLoading(true);
           dispatch(registerUser(user));
         } catch (error) {
           console.log(error);
-          setLoading(true)
+          setLoading(true);
           toast.error("An error occurred. Please try again.");
         }
       }
     }
   };
+  
 
   useEffect(() => {
     dispatch(getAllUsers());

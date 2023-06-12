@@ -28,9 +28,10 @@ const OrderSuccess = () => {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white rounded-lg p-8 shadow-md text-center">
-        <div className="text-6xl text-green-500">
-          <FaCheckCircle />
-        </div>
+      <div className="text-6xl text-green-500 flex items-center justify-center">
+  <FaCheckCircle />
+</div>
+
         <h2 className="text-3xl font-bold my-4">Order Placed Successfully!</h2>
         <p className="text-gray-600">
           Thank you for your order. We appreciate your business.

@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
@@ -7,6 +6,7 @@ const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const emailValidator = require('email-validator');
 
 // Nodemailer configuration
 const transporter = nodemailer.createTransport(
@@ -26,6 +26,10 @@ const transporter = nodemailer.createTransport(
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   try {
+    if (!emailValidator.validate(email)) {
+      return res.status(400).json({ message: "Invalid email address" });
+    }
+
     // Generate a unique verification token
     const verificationToken = crypto.randomBytes(20).toString("hex");
 

@@ -52,7 +52,7 @@ const UserOrder = () => {
 
               <div>
                 <h4 className="font-semibold">Address:</h4>
-                <p className="mb-2">Street: {order.shippingAddress.street}</p>
+                {/* <p className="mb-2">Street: {order.shippingAddress.street}</p> */}
                 <p className="mb-2">City: {order.shippingAddress.city}</p>
                 <p className="mb-2">PinCode: {order.shippingAddress.pinCode}</p>
                 <p>Country: {order.shippingAddress.country}</p>

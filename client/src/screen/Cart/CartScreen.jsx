@@ -37,12 +37,12 @@ const CartScreen = () => {
   const handleDeleteFromCart = (item) => {
     setShowDeleteAlert(true);
     dispatch(deleteFromCart(item));
-    toast.error('Item deleted from cart successfully.');
+    toast.error('Item deleted from cart');
   };
 
   const handleAddToWishlist = (item) => {
     // dispatch(addToWishlist(item));
-    toast.success('Food Item added to Wishlist Successfully.');
+    toast.success('Food Item added to Wishlist');
   };
 
   // Calculate the expected delivery time (30 minutes from now)
@@ -75,18 +75,23 @@ const CartScreen = () => {
       mode: 'cors',
       body: JSON.stringify({
         items: cartItems.map((item) => ({
-          id: item.id,
           quantity: item.quantity,
           price: item.price / item.quantity,
           name: item.name,
-          user: currentUser,
-          email:currentUser.email,
-        }))
+          image: item.image
+          
+        })),
+        user: currentUser.name,
+        userId: currentUser._id,
+        subTotal:subTotal,
+        email: currentUser.email
+        
       })
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.ok) return res.json();
-        return res.json().then((json) => Promise.reject(json));
+        const json = await res.json();
+        return await Promise.reject(json);
       })
       .then(({ url }) => {
         window.location = url;
