@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaUserCircle } from "react-icons/fa";
 import { BsFillCartFill } from "react-icons/bs";
-import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Hidden } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
-import { filterPizza } from "../../action/pizzaAction";
-import locationData from "./Location.json";
+
 
 
 const Header = () => {
@@ -17,11 +16,9 @@ const Header = () => {
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
 
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [cities, setCities] = useState([]);
+
+  
 
 
 
@@ -30,48 +27,16 @@ const Header = () => {
   };
 
 
-  useEffect(() => {
-    // Retrieve stored values from localStorage on component mount
-    const storedState = localStorage.getItem("selectedState");
-    const storedCity = localStorage.getItem("selectedCity");
-
-    if (storedState) {
-      setSelectedState(storedState);
-      const selectedStateObj = locationData.find((loc) => loc.state === storedState);
-      const stateCities = selectedStateObj ? selectedStateObj.cities : [];
-      setCities(stateCities);
-    }
-
-    if (storedCity) {
-      setSelectedCity(storedCity);
-    }
-  }, []);
-
-  const handleStateChange = (e) => {
-    const state = e.target.value;
-    setSelectedState(state);
-    localStorage.setItem("selectedState", state); // Store selected state in localStorage
-
-    const selectedStateObj = locationData.find((loc) => loc.state === state);
-    const stateCities = selectedStateObj ? selectedStateObj.cities : [];
-    setCities(stateCities);
-    setSelectedCity("");
-    localStorage.removeItem("selectedCity"); // Remove stored city from localStorage
-  };
-
-  const handleCityChange = (e) => {
-    const city = e.target.value;
-    setSelectedCity(city);
-    localStorage.setItem("selectedCity", city); // Store selected city in localStorage
-  };
+  
+  
 
   return (
     <>
-      <div className="flex flex-wrap place-items-center  overflow-hidden">
-        <section className="relative min-h-10vh ">
+      <div className="flex flex-wrap place-items-center overflow-hidden">
+        <section className="relative">
           {/* navbar */}
-          <nav className="flex justify-between bg-gray-900 text-white w-screen">
-            <div className="px-5 xl:px-12 py-6 flex w-full items-center">
+          <nav className="flex justify-between bg-gray-900 text-white w-screen py-2">
+            <div className="px-2 xl:px-8 flex w-full items-center">
               <Link to="/" className="text-3xl font-bold font-heading mb-5">
                 {/* <img class="h-9" src="logo.png" alt="logo"> */}
                 PizzaKing
@@ -96,40 +61,11 @@ const Header = () => {
                         </Link>
                       </li>
 
-                      {/* Location Fields */}
-                      <div className="flex items-center ml-5">
-                        <select
-                          value={selectedState}
-                          onChange={handleStateChange}
-                          className="bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2"
-                        >
-                          <option value="">Select State</option>
-                          {locationData.map((loc) => (
-                            <option key={loc.state} value={loc.state}>
-                              {loc.state}
-                            </option>
-                          ))}
-                        </select>
-                        {selectedState && (
-                          <div className="ml-3">
-                            <select
-                              value={selectedCity}
-                              onChange={handleCityChange}
-                              className="bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full px-4 py-2"
-                            >
-                              <option value="">Select City</option>
-                              {cities.map((city) => (
-                                <option key={city} value={city}>
-                                  {city}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
-                      </div>
+                      
+                     
 
-                       {/* searchbox */}
-                       
+                      {/* searchbox */}
+
 
                     </>
                   )
@@ -187,7 +123,7 @@ const Header = () => {
                                 </Link>
                               </li>
 
-                              <li className="ml-2 lg:ml-4 relative inline-block">
+                              <li className="ml-2  lg:ml-4 relative inline-block">
                                 <Link className="" to="cart">
                                   <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                                     {cartState.cartItems.length}
@@ -223,28 +159,15 @@ const Header = () => {
               </div>
             </div>
             {/* Responsive navbar */}
-            <Link className="xl:hidden flex mr-6 items-center" to="/cart">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:text-gray-200"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <span className="flex absolute -mt-5 ml-4">
-                <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+            <li className="ml-3 mt-9  mb-8 mr-6 lg:ml-4 relative inline-block">
+              <Link className="xl:hidden flex  items-center" to="cart">
+                <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                   {cartState.cartItems.length}
-                </span>
-              </span>
-            </Link>
+                </div>
+                <BsFillCartFill size={30} />
+              </Link>
+            </li>
+
             <Hidden mdUp>
               <button
                 type="button"

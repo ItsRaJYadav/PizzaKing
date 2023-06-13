@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiUsers } from 'react-icons/fi';
-import { FaRubleSign, FaShoppingCart } from 'react-icons/fa';
+import { FaRubleSign, FaShoppingCart, FaUser } from 'react-icons/fa';
 import { HiCurrencyRupee } from 'react-icons/hi';
 import { SiProducthunt } from 'react-icons/si';
 import { AiFillMessage } from 'react-icons/ai';
@@ -505,14 +505,14 @@ const AdminDashboard = () => {
 
 
 
-          {/* Latest Transactions */}
+          {/* Latest customer */}
           <div className="p-4 bg-white border rounded-md shadow-md hover:shadow-lg transition-shadow duration-500 ease-in-out">
             <Link to="/admin/alltransactions" className="flex items-center justify-between">
               <div>
-                <h3 className="mb-2 text-lg font-bold text-gray-800 flex center">Latest Transactions</h3>
+                <h3 className="mb-2 text-lg font-bold text-gray-800 flex center">New Customer</h3>
               </div>
               <div className="flex items-center justify-center w-10 h-10 bg-cyan-500 text-white rounded-full">
-                <FaRubleSign className="text-xl" />
+                <FaUser className="text-xl" />
               </div>
             </Link>
             <div className="chart-container">

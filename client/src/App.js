@@ -32,6 +32,7 @@ const EditPizza = lazy(() => import('../src/Admin/EditPizza'));
 const AdminPage = lazy(() => import('../src/Admin/AdminPage'));
 const LazyServices = lazy(() => import('./components/Service/Services'));
 const LazyUserSettings = lazy(() => import('./components/Users/UserSetting'));
+const LazyUserAddress = lazy(() => import('./components/Users/UserAddress'));
 const LazyUser = lazy(() => import('./components/Users/User'));
 const LazyUserForgotPassword = lazy(() => import('./components/Users/ForgotPassword'));
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
@@ -84,7 +85,8 @@ function App() {
           <Route path='/user/' element={<LazyUser />} >
             <Route index element={<LazyUserinfo />} />
             <Route path="userinfo" element={<LazyUserinfo />} exact />
-            <Route path="address" element={<LazyUserSettings />} exact />
+            <Route path="settings" element={<LazyUserSettings />} exact />
+            <Route path="address" element={<LazyUserAddress />} exact />
             <Route path="orders" element={<LazyUserOrder />} exact />
             <Route path=":orderId" component={OrderDetails} />
            

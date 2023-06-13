@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import pic from '../../assets/default-user-image.jpg'
 import { useAuth0 } from "@auth0/auth0-react";
 
 function UserTable() {
   const { user, isAuthenticated } = useAuth0();
 
-  const dispatch = useDispatch();
+ 
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
 

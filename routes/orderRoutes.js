@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Order = require('../models/NewOrder')
+const Order = require('../models/orderModel')
+const NewOrder = require('../models/NewOrder')
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
@@ -9,6 +10,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 
 router.post("/placeorder", async (req, res) => {
+  
   try {
     const customer = await stripe.customers.create({
       metadata: {
@@ -130,11 +132,9 @@ const createOrder = async (customer, data) => {
     };
   });
 
-  const newOrder = new Order({
-    
-    
-    shipping: data.shipping_details,
-    payment_status: data.payment_status,
+  const newOrder = new newOrder({
+    name:req.body.name,
+    email:req.body.email,
   });
 
   try {
@@ -144,13 +144,7 @@ const createOrder = async (customer, data) => {
     console.log(err);
   }
 };
-// server.js
-//
-// Use this sample code to handle webhook events in your integration.
 
-
-
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
 let endpointSecret;
 // const endpointSecret = "whsec_deb0b881095c40a1a0e2ddd9fd035af111499a2c0b101534465fbf3edfe2ed13";
 

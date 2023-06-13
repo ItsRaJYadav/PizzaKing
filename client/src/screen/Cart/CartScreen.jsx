@@ -78,7 +78,7 @@ const CartScreen = () => {
           quantity: item.quantity,
           price: item.price / item.quantity,
           name: item.name,
-          image: item.image
+          image: item.image[0]
           
         })),
         user: currentUser.name,
