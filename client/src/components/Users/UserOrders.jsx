@@ -3,6 +3,7 @@ import { FaCheckCircle, FaTimesCircle, FaCircleNotch } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserOrders } from '../../action/orderAction';
 
+
 const OrderDetailsPage = () => {
   const orderState = useSelector((state) => state.getUserOrdersReducer);
   const { loading, error, orders } = orderState;
@@ -54,9 +55,20 @@ const OrderDetailsPage = () => {
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     return formattedDate;
   };
-
+  if (orders.length === 0) {
+    return (
+      <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-6">Order Details</h1>
+          <div className="text-red-500 text-xl mb-4">You don't have any orders.</div>
+          
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+      
       <div className="max-w-4xl w-full mx-auto bg-white rounded-md shadow-md p-6">
         <h1 className="text-3xl font-bold mb-6">Order Details</h1>
         {loading ? (

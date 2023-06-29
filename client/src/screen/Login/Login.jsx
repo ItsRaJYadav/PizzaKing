@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import './Login.css'
@@ -33,24 +32,26 @@ const Login = () => {
 
   const loginHandler = async (event) => {
     event.preventDefault(); // Prevent form submission
-    if(!isChecked){
-      return toast.warn("please agree to checkbox");
+    if (!isChecked) {
+      return toast.warn("Please agree to the checkbox");
     }
     setLoading(true);
     const user = { email, password };
-    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users/login' : 'http://localhost:8080/api/users/login';
+    const apiUrl =
+      process.env.NODE_ENV === "production"
+        ? "https://pizzaking.onrender.com/api/users/login"
+        : "http://localhost:8080/api/users/login";
     try {
-      const response = await axios.post(
-        apiUrl,
-        user
-      );
-
+      const response = await axios.post(apiUrl, user);
+  
       if (response.status === 200) {
         setLoading(false);
         localStorage.setItem("currentUser", JSON.stringify(response.data));
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        toast.success(`Welcome Back ${currentUser.name}`, {
+          position: "bottom-right",
+        });
         window.location.href = "/";
-        toast.success("Login successful!");
-        // Proceed with any necessary actions after successful login
       } else {
         toast.error("Login not successful!");
       }
@@ -58,7 +59,10 @@ const Login = () => {
       if (error.response) {
         setLoading(false);
         if (error.response.status === 400) {
-          toast.error(error.response.data.message);
+          const { message } = error.response.data;
+          toast.error(message);
+        } else if (error.response.status === 429) {
+          toast.error("Too many login attempts, please try again after 1 min.");
         } else {
           toast.error("An error occurred during login");
         }
@@ -67,6 +71,7 @@ const Login = () => {
       }
     }
   };
+  
 
 
   // Show hide password dialog

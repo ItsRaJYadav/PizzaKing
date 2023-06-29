@@ -21,7 +21,7 @@ const User = () => {
     const { currentUser } = userState;
     const dispatch = useDispatch();
 
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 

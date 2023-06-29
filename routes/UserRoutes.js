@@ -7,6 +7,15 @@ const smtpTransport = require("nodemailer-smtp-transport");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const emailValidator = require('email-validator');
+const rateLimit = require("express-rate-limit");
+const ip = require('ip');
+
+const loginLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs
+  message: "Too many login attempts, please try again later.",
+});
+
 
 // Nodemailer configuration
 const transporter = nodemailer.createTransport(
@@ -104,8 +113,9 @@ router.get("/verify-email/:token", async (req, res) => {
 
 
 
+router.post("/login", loginLimiter, async (req, res) => {
+  const ipAddress = ip.address();
 
-router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -118,7 +128,14 @@ router.post("/login", async (req, res) => {
 
     if (!user.isVerified) {
       return res.status(400).json({
-        message: "User is not verified",
+        message: "Please verify your email first and try again",
+        rateLimitMessage: "Too many login attempts, please try again later.",
+      });
+    }
+
+    if (req.rateLimit.exceeded) {
+      return res.status(429).json({
+        message: "Too many login attempts, please try again later.",
       });
     }
 
@@ -136,6 +153,79 @@ router.post("/login", async (req, res) => {
       isAdmin: user.isAdmin,
       _id: user._id,
     };
+  
+    // Send email notification
+    const mailOptions = {
+      from: process.env.SMPT_MAIL,
+      to: user.email,
+      subject: "Login Notification",
+      html: `
+        <html>
+          <head>
+            <style>
+              /* Add CSS styles here for the email content */
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+              }
+              .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f9f9f9;
+              }
+              .logo {
+                display: flex;
+                align-items: center;
+                justify-content: center; /* Center the logo horizontally */
+                margin-bottom: 20px;
+              }
+              .logo img {
+                width: 80px;
+                height: 80px;
+              }
+              h3, h4, h5 {
+                margin-top: 0;
+              }
+              ul {
+                padding-left: 20px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="logo">
+                <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple115/v4/92/a3/b0/92a3b0f6-9d4f-3bd9-0a63-747cd6ca228c/AppIcon-1x_U007emarketing-85-220-6.png/512x512bb.jpg" alt="Company Logo">
+              </div>
+              <h3>Hello, ${user.name}</h3>
+              <h4>Someone signed in to your account.</h4>
+              <h5>Additional login details:</h5>
+              <ul>
+                <li><strong>When:</strong> ${new Date().toLocaleString()}</li>
+                <li><strong>IP Address:</strong> ${ipAddress}</li>
+                <li><strong>Location:</strong> ${user.location}</li>
+                <!-- Add more relevant data here -->
+              </ul>
+              <h4>If this was you, you can disregard this message. Otherwise, please <a href="https://pizzaking.onrender.com/contact">let us know</a>.</h4>
+
+              <hr/>
+              <h4>Otherwise, please change your login <a href="https://pizzaking.onrender.com/forgot_password">credentials</a> of your account.</h4>
+              <h2>Thank you, Pizzaking Team</h2>
+            </div>
+          </body>
+        </html>
+      `,
+    };
+    
+    
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+      } else {
+        console.log("Email sent:", info.response);
+      }
+    });
 
     res.status(200).send(currentUser);
   } catch (error) {
@@ -144,9 +234,6 @@ router.post("/login", async (req, res) => {
     });
   }
 });
-
-
-
 
 
 
