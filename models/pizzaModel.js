@@ -24,7 +24,7 @@ const pizzaSchema = mongoose.Schema(
     },
     seller: {
       type: String,
-      required: true,
+      required: false,
     },
     additionalDescriptions: [
       {

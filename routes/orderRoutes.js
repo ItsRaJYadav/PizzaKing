@@ -12,10 +12,13 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 router.post("/placeorder", async (req, res) => {
   
   try {
+    const itemsString = JSON.stringify(req.body.items);
+    const truncatedItemsString = itemsString.substring(0, 500);
+
     const customer = await stripe.customers.create({
       metadata: {
         userId: req.body.userId,
-        cart: JSON.stringify(req.body.items),
+        cart: truncatedItemsString,
       },
     });
     
@@ -29,7 +32,7 @@ router.post("/placeorder", async (req, res) => {
           price_data: {
             currency: "inr",
             product_data: {
-              images: [item.image[0]],
+              images: [item.image],
               name: item.name,
             },
             unit_amount: item.price * 100,
@@ -52,6 +55,7 @@ router.post("/placeorder", async (req, res) => {
       metadata: {
         customer_name: req.body.name,
         customer_phone: req.body.phone,
+
       },
     });
 

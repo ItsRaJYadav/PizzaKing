@@ -1,41 +1,50 @@
 import React, { useState } from "react";
+import './Nav.css'
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaUserCircle } from "react-icons/fa";
-import { BsFillCartFill } from "react-icons/bs";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { BsBox2HeartFill, BsFillCartFill } from "react-icons/bs";
+import { FaBars, FaTimes, FaHome } from "react-icons/fa";
 import { Hidden } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
+import { FiX } from "react-icons/fi";
+import { GrOrganization, GrCheckboxSelected, GrUserNew } from "react-icons/gr";
+import { MdContactPhone, MdFastfood, MdSell } from "react-icons/md";
+import { BiDish } from "react-icons/bi";
+import { AiOutlineLogin } from "react-icons/ai";
 
 
 
 const Header = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
   const cartState = useSelector((state) => state.cartReducer);
   const userState = useSelector((state) => state.loginUserReducer);
   const { currentUser } = userState;
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-
-  
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
 
 
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
 
-  
-  
 
   return (
     <>
       <div className="flex flex-wrap place-items-center overflow-hidden">
         <section className="relative">
           {/* navbar */}
-          <nav className="flex justify-between bg-gray-900 text-white w-screen py-2">
+          <nav className="flex justify-between bg-gray-900 text-white w-screen py-1 md:py-2">
             <div className="px-2 xl:px-8 flex w-full items-center">
               <Link to="/" className="text-3xl font-bold font-heading mb-5">
                 {/* <img class="h-9" src="logo.png" alt="logo"> */}
@@ -61,8 +70,8 @@ const Header = () => {
                         </Link>
                       </li>
 
-                      
-                     
+
+
 
                       {/* searchbox */}
 
@@ -123,26 +132,12 @@ const Header = () => {
                                 </Link>
                               </li>
 
-                              <li className="ml-2  lg:ml-4 relative inline-block">
-                                <Link className="" to="cart">
+                              <li className="ml-2 lg:ml-4 relative inline-block ">
+                                <Link to="cart">
                                   <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                                     {cartState.cartItems.length}
                                   </div>
-                                  <svg
-                                    className="h-9 lg:h-10 p-2 text-gray-500"
-                                    aria-hidden="true"
-                                    focusable="false"
-                                    data-prefix="far"
-                                    data-icon="shopping-cart"
-                                    role="img"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 576 512"
-                                  >
-                                    <path
-                                      fill="currentColor"
-                                      d="M551.991 64H144.28l-8.726-44.608C133.35 8.128 123.478 0 112 0H12C5.373 0 0 5.373 0 12v24c0 6.627 5.373 12 12 12h80.24l69.594 355.701C150.796 415.201 144 430.802 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-18.136-7.556-34.496-19.676-46.142l1.035-4.757c3.254-14.96-8.142-29.101-23.452-29.101H203.76l-9.39-48h312.405c11.29 0 21.054-7.869 23.452-18.902l45.216-208C578.695 78.139 567.299 64 551.991 64zM208 472c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm256 0c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm23.438-200H184.98l-31.31-160h368.548l-34.78 160z"
-                                    />
-                                  </svg>
+                                  <BsFillCartFill size={30} />
                                 </Link>
                               </li>
                             </ul>
@@ -159,14 +154,31 @@ const Header = () => {
               </div>
             </div>
             {/* Responsive navbar */}
-            <li className="ml-3 mt-9  mb-8 mr-6 lg:ml-4 relative inline-block">
-              <Link className="xl:hidden flex  items-center" to="cart">
-                <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
-                  {cartState.cartItems.length}
-                </div>
-                <BsFillCartFill size={30} />
-              </Link>
-            </li>
+            <Hidden mdUp>
+              {!currentUser && !isAuthenticated ?
+                <li className="ml-2 lg:ml-4 relative inline-block mt-4 mr-3">
+                  <Link to="/login">
+                    <AiOutlineLogin size={30} />
+                  </Link>
+                </li>
+                :
+                (
+                  <li className="ml-2 lg:ml-4 relative inline-block mt-4 mr-3">
+                    <Link to="/user">
+                      <FaUserCircle size={30} />
+                    </Link>
+                  </li>
+                )
+
+              }
+              <li className="ml-3 mt-8 mb-8 mr-6 lg:ml-4 relative inline-block flex items-center">
+                <Link to='/cart'>
+                  <div className="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm">
+                    {cartState.cartItems.length}
+                  </div>
+                  <BsFillCartFill size={30} /></Link>
+              </li>
+            </Hidden>
 
             <Hidden mdUp>
               <button
@@ -177,42 +189,118 @@ const Header = () => {
                 onClick={toggleMenu}
                 alt='humburger menu toggle'
               >
-                {isMenuOpen ? (
+                {isMobileMenuOpen ? (
                   <FaTimes className="block h-6 w-6" />
                 ) : (
                   <FaBars className="block h-6 w-6" />
                 )}
               </button>
             </Hidden>
-            {/* <a className="navbar-burger self-center mr-12 xl:hidden" >
-              <CgMenuRound size={30} />
-            </a> */}
+
           </nav>
-          {isMenuOpen && (
-            <div className="sm:hidden " id="mobile-menu">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                <Link
-                  to="/menu"
-                  className="text-gray-700 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={toggleMenu}
-                >
-                  Menu
-                </Link>
-                <Link
-                  to="/about"
-                  className="text-gray-700 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={toggleMenu}
-                >
-                  About
-                </Link>
-                <div className="ml-2 lg:ml-4 relative inline-block">
-                  <Link className="" to="/user" onClick={toggleMenu}>
-                    <FaUserCircle size={30} />
-                  </Link>
-                </div>
-              </div>
-            </div>
+          {isMobileMenuOpen && (
+            <div className={`fixed top-0 left-0 w-full h-full bg-black z-40 backdrop-filter backdrop-blur-lg bg-opacity-70`} />
+
           )}
+
+          <div
+            className={`fixed top-0 right-0 h-full w-64 bg-gray-800 transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+              } z-50`}
+          >
+            <button
+              className="text-white absolute top-4 right-4 focus:outline-none"
+              onClick={toggleMobileMenu}
+            >
+              <FiX size={35} />
+            </button>
+            {/* off canvas */}
+            <ul className="flex flex-col items-start space-y-4  p-4 text-white">
+
+              <MdFastfood className="text-4xl text-blue-600 flex justify-center items-center ml-16 mb-1" />
+
+
+              <li className="flex items-center mt-3">
+                <FaHome size={18} className="mr-5 text-white" />
+                <Link to="/" className=" text-white" onClick={closeMobileMenu}>Home</Link>
+              </li>
+              <li className="flex items-center">
+                <BiDish size={18} className="mr-5" />
+                <Link to="/menu" onClick={closeMobileMenu}>All Menu</Link>
+              </li>
+              <li className="flex items-center">
+                <MdSell size={18} className="mr-5" />
+                <Link to="/seller" onClick={closeMobileMenu}>Become a Seller</Link>
+              </li>
+
+              <li className="flex items-center">
+                <GrCheckboxSelected size={18} className="mr-5 bg-white" />
+                <Link to="/company/why" onClick={closeMobileMenu}>Why Choose Us</Link>
+              </li>
+              <li className="flex items-center">
+                <GrOrganization size={18} className="mr-5 bg-white" />
+                <Link to="/company" onClick={closeMobileMenu}>Organization </Link>
+              </li>
+              <li className="flex items-center ">
+                <MdContactPhone size={18} className="mr-5" />
+                <Link to="/contact" onClick={closeMobileMenu} >Contact</Link>
+              </li>
+              {currentUser || isAuthenticated ? (
+                <>
+                  <li className="flex items-center">
+                    <FaUserCircle size={25} className="mr-2" />
+
+                    <Link
+                      to="/user"
+                      className="pl-3 pr-4 text-gray-100 rounded cursor-pointer " onClick={closeMobileMenu}
+                    >
+                      {isAuthenticated ? (
+                        <>{user && user.name}</>
+                      ) : (
+                        <>{currentUser && currentUser.name}</>
+                      )}
+                    </Link>
+
+                  </li>
+                  <li className="flex items-center">
+                    <BsBox2HeartFill size={18} className="mr-2" />
+
+                    <Link
+                      to="/user/order"
+                      className=" pl-3 pr-4 text-gray-100 rounded cursor-pointer " onClick={closeMobileMenu}
+
+                    >
+                      My Orders
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="flex items-center">
+                    <AiOutlineLogin size={18} className="mr-2 bg-white" />
+
+                    <Link
+                      to="/login"
+                      className=" pl-3 pr-4 text-gray-100 rounded cursor-pointer " onClick={closeMobileMenu}
+
+                    >
+                      Login
+                    </Link>
+                  </li>
+                  <li className="flex items-center">
+                    <GrUserNew size={18} className="mr-2 bg-white" />
+
+                    <Link
+                      to="/register"
+                      className=" pl-3 pr-4 text-gray-100 rounded cursor-pointer " onClick={closeMobileMenu}
+
+                    >
+                      Sign Up
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
         </section>
       </div>
     </>

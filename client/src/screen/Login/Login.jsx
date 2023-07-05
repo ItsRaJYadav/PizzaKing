@@ -16,7 +16,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setLoading] = useState(false);
-
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
@@ -49,9 +48,19 @@ const Login = () => {
         localStorage.setItem("currentUser", JSON.stringify(response.data));
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         toast.success(`Welcome Back ${currentUser.name}`, {
-          position: "bottom-right",
+          position: 'top-right',
+          toastId: 'welcome-toast',
+          className: 'welcome-toast',
+          bodyClassName: 'welcome-toast-body',
+          progressClassName: 'welcome-toast-progress',
+          closeButton: false,
+          autoClose: 3000,
+          hideProgressBar: true,
         });
+       
+       setTimeout(() => {
         window.location.href = "/";
+       }, 1500);
       } else {
         toast.error("Login not successful!");
       }
@@ -173,15 +182,15 @@ const Login = () => {
                 onChange={handleCheckboxChange}
               />
               <label className="ml-2 text-xs text-gray-800 mb-3" htmlFor="">
-                Agree to T&C
+                <button>agree to T&C </button>
               </label>
             </div>
 
             {isLoading ? (
-              <div className="flex items-center justify-center mb-6">
-                <FiLoader className="animate-spin text-2xl mr-2" />
-                Sending Req...
-              </div>
+               <div className="flex items-center justify-center mb-6">
+               <FiLoader className="animate-spin text-4xl mr-2 text-blue-500" />
+               <span className="text-lg font-semibold text-blue-500">Sending Req...</span>
+             </div>
 
             ) : (
               <button
@@ -203,7 +212,19 @@ const Login = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
     </div>
   );
 };

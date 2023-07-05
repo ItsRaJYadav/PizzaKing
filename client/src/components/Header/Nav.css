@@ -9,3 +9,14 @@
     color: goldenrod;
   }
   
+  @media (max-width: 767px) {
+    .bg-gray-900 {
+      /* Reduce the height of the header */
+      height: 70px;
+    }
+    .bg-gray-900 a {
+      /* Adjust the padding of the header links */
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  }

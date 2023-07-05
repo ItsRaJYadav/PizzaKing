@@ -4,7 +4,7 @@ import { FiMenu, FiPackage } from 'react-icons/fi';
 import { AiFillHome } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
 import { FaAddressBook } from 'react-icons/fa';
-import { BsSearch, BsChatDotsFill } from 'react-icons/bs';
+import { BsSearch, BsChatDotsFill, BsHouseAddFill } from 'react-icons/bs';
 import { Link, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../action/userAction';
@@ -33,7 +33,6 @@ const User = () => {
 
     const handleLogout = () => {
         dispatch(logoutUser());
-        toggleTab(4);
     };
 
     const handleSearch = () => {
@@ -129,18 +128,29 @@ const User = () => {
 
 
                             <li className="rounded-sm">
-                                <Link to='settings' className={`flex items-center p-2 space-x-3 rounded-md ${activeTab === 4 ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
+                                <Link to='/user/newaddress' className={`flex items-center p-2 space-x-3 rounded-md ${activeTab === 4 ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
                                     onClick={() => toggleTab(4)}>
+                                    <svg className="w-5 h-5 fill-current dark:text-gray-400">
+                                        <BsHouseAddFill />
+                                    </svg>
+                                    <span>Add Address</span>
+                                </Link>
+                            </li>
+
+
+                            <li className="rounded-sm">
+                                <Link to='settings' className={`flex items-center p-2 space-x-3 rounded-md ${activeTab === 5 ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
+                                    onClick={() => toggleTab(5)}>
                                     <svg className="w-5 h-5 fill-current dark:text-gray-400">
                                         <BsChatDotsFill />
                                     </svg>
-                                    <span>Settings</span>
+                                    <span>Messages</span>
                                 </Link>
                             </li>
                             <li className="rounded-sm">
-                                <Link className={`flex items-center p-2 space-x-3 rounded-md ${activeTab === 5 ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
+                                <Link className={`flex items-center p-2 space-x-3 rounded-md ${activeTab === 6 ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
                                     onClick={() => {
-                                        toggleTab(5);
+                                        toggleTab(6);
                                         handleLogout();
                                     }}>
                                     <svg className="w-5 h-5 fill-current dark:text-gray-400">

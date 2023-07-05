@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const rateLimit = require('express-rate-limit')
+const uploadImage = require("./Cloudinary");
 
 const path = require("path");
 const cors = require("cors");
@@ -36,6 +37,7 @@ app.use(
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 app.use("/api/users", require("./routes/UserRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
+// app.use("/api/cloudinary", require("./Cloudinary"));
 
 
 
@@ -73,6 +75,19 @@ app.get('/admin/contacts', (req, res) => {
       res.status(500).json({ error: 'An error occurred while fetching the contacts' });
     });
 });
+
+app.get('/api/user/contacts', (req, res) => {
+  const { email } = req.query;
+
+  ContactForm.find({ email })  // Assuming the contact model has an 'email' field
+    .then(contacts => {
+      res.json(contacts);
+    })
+    .catch(error => {
+      res.status(500).json({ error: 'An error occurred while fetching the contacts' });
+    });
+});
+
 
 
 

@@ -30,7 +30,7 @@ const AdminSidebar = () => {
   }, [currentUser, history]);
 
   if (!currentUser || !currentUser.isAdmin) {
-    return null;
+    return <><h1>chutiya samjhe ho ka laude</h1></>;
   }
 
 

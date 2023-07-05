@@ -19,7 +19,7 @@ const ContactForm = () => {
   const { currentUser } = userState;
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email] = useState(currentUser?.email || '');
   const [orderid, setOrderid] = useState('');
   const [message, setMessage] = useState('');
   const [mobile, setMobile] = useState('');
@@ -38,9 +38,9 @@ const ContactForm = () => {
     try {
       const complaintId = uuidv4(); // Generate UUID
       const response = await axios.post(API_URL, {
-        
+
         name,
-        email,
+        email: currentUser.email,
         message,
         mobile,
         subject,
@@ -50,10 +50,10 @@ const ContactForm = () => {
 
       toast.success('Form submitted successfully. We will get back to you soon');
       setTimeout(() => {
-        setSubmit({ name, email, orderid,complaintId });
+        setSubmit({ name, email, orderid, complaintId });
       }, 1000);
       console.log(response);
-      setComplaintId(complaintId); 
+      setComplaintId(complaintId);
       resetForm();
     } catch (error) {
       toast.error('An error occurred while submitting the form');
@@ -63,7 +63,6 @@ const ContactForm = () => {
 
   const resetForm = () => {
     setName('');
-    setEmail('');
     setMessage('');
     setMobile('');
     setSubject('');
@@ -78,7 +77,7 @@ const ContactForm = () => {
         email={submit.email}
         orderid={submit.orderid}
         complaintId={complaintId} // Pass the complaintId prop
-        
+
       />
     );
   }
@@ -117,7 +116,8 @@ const ContactForm = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                readOnly // Set the input field as read-only
+
               />
             </div>
           </div>
@@ -145,7 +145,7 @@ const ContactForm = () => {
             <div className="relative">
               <HiIdentification className="absolute left-3 top-4 text-gray-400" />
               <input
-               
+
                 className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="orderid"
                 type="text"

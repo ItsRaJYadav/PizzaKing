@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import AddressList from './FetchAddress';
+import { useSelector } from "react-redux";
 
 function ShippingAddressPage() {
+  const userState = useSelector((state) => state.loginUserReducer);
+  const {  currentUser } = userState;
   const [shippingAddress, setShippingAddress] = useState({
     street: '',
     city: '',
@@ -8,6 +13,9 @@ function ShippingAddressPage() {
     zipCode: '',
     phoneNumber: ''
   });
+  const userId = currentUser._id;
+
+  const API_URL = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/users/address' : 'http://localhost:8080/api/users/address';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +27,35 @@ function ShippingAddressPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    console.log('Shipping Address:', shippingAddress);
-    // Reset the form fields
-    setShippingAddress({
-      street: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      phoneNumber: '',
-    });
+  
+    // Send the shipping address to the backend API
+    axios.post(API_URL, { ...shippingAddress, user: userId })
+      .then(() => {
+        console.log('Shipping address saved successfully');
+        // Reset the form fields
+        setShippingAddress({
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          phoneNumber: '',
+          user:currentUser,
+        });
+      })
+      .catch((error) => {
+        console.error('Error saving shipping address:', error);
+      });
   };
 
+  
+  // console.log(currentUser._id)
+
+  
   return (
+    
     <div className="container mx-auto mt-8 max-w-md">
-      <h2 className="text-2xl font-bold mb-4">Shipping Address</h2>
+
+      <h2 className="text-2xl font-bold mb-4">New Shipping Address</h2>
       <form onSubmit={handleSubmit}>
         {/* Input fields for shipping address */}
         <label htmlFor="street">Street:</label>

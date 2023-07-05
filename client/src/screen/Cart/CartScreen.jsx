@@ -6,20 +6,16 @@ import bhim from "../../assets/bhim.png";
 import LoginReminder from "../Login/LoginAlerts";
 import CartEmpty from './CartEmpty';
 import { Helmet } from "react-helmet";
-import { FaHourglassHalf } from 'react-icons/fa';
+import { FaHourglassHalf, FaSpinner } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
 import { useAuth0 } from "@auth0/auth0-react";
 import Loader from "../../Alerts/Loader";
 import { Link } from "react-router-dom";
-import { FiLoader } from "react-icons/fi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const CartScreen = () => {
-
-
-
   const { user, isAuthenticated } = useAuth0();
   const cartState = useSelector((state) => state.cartReducer);
   const cartItems = cartState.cartItems;
@@ -29,10 +25,9 @@ const CartScreen = () => {
   const subTotal = cartItems.reduce((x, item) => x + item.price, 0);
   const totalItems = cartItems.reduce((x, item) => x + item.quantity, 0);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleCloseDeleteAlert = () => {
-    setShowDeleteAlert(false);
-  };
+
 
   const handleDeleteFromCart = (item) => {
     setShowDeleteAlert(true);
@@ -48,15 +43,12 @@ const CartScreen = () => {
   // Calculate the expected delivery time (30 minutes from now)
   const [timeLeft, setTimeLeft] = useState(1800); // 1800 seconds = 30 minutes
 
-  // Update the time left every second
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimeLeft(prevTime => prevTime - 1);
     }, 300);
     return () => clearTimeout(timer);
   }, [timeLeft]);
-
-  // Calculate minutes and seconds remaining
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
@@ -64,29 +56,35 @@ const CartScreen = () => {
 
 
   const checkoutpage = () => {
+    setIsLoading(true);
+    const apiUrl =
+      process.env.NODE_ENV === "production"
+        ? "https://pizzaking.onrender.com/api/orders/placeorder"
+        : "http://localhost:8080/api/orders/placeorder";
 
-    const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrender.com/api/orders/placeorder' : 'http://localhost:8080/api/orders/placeorder';
+    const formattedCartItems = cartItems.map((item) => ({
+      quantity: item.quantity,
+      price: item.price / item.quantity,
+      name: item.name,
+      image: item.image[0]
+    }));
+
+    const requestBody = {
+      items: formattedCartItems,
+      user: currentUser.name,
+      userId: currentUser._id,
+      subTotal: subTotal,
+      email: currentUser.email
+
+    };
 
     fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
-      mode: 'cors',
-      body: JSON.stringify({
-        items: cartItems.map((item) => ({
-          quantity: item.quantity,
-          price: item.price / item.quantity,
-          name: item.name,
-          image: item.image[0]
-          
-        })),
-        user: currentUser.name,
-        userId: currentUser._id,
-        subTotal:subTotal,
-        email: currentUser.email
-        
-      })
+      mode: "cors",
+      body: JSON.stringify(requestBody)
     })
       .then(async (res) => {
         if (res.ok) return res.json();
@@ -95,18 +93,16 @@ const CartScreen = () => {
       })
       .then(({ url }) => {
         window.location = url;
+        setIsLoading(false);
       })
       .catch((e) => {
+        setIsLoading(false);
         console.log(e.error);
       });
   };
 
-  const [isLoading, setIsLoading] = useState(false);
-  const handleJoin = () => {
-    setIsLoading(true);
-    checkoutpage();
 
-  };
+
 
   return (
     <>
@@ -143,7 +139,7 @@ const CartScreen = () => {
 
 
 
-                <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
+                <div className="mx-auto max-w-6xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
                   <div className="rounded-lg md:w-2/3">
 
                     {
@@ -154,7 +150,7 @@ const CartScreen = () => {
                             <div className="flex-none w-24">
                               <div className="bg-image hover-overlay hover-zoom rounded-lg overflow-hidden">
                                 <img
-                                  src={item.image}
+                                  src={item.image[0]}
                                   alt={item.name}
                                   className="w-full h-full object-cover"
                                 />
@@ -237,12 +233,22 @@ const CartScreen = () => {
                   <div className="mt-6  rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3 ">
                     <div className="mb-2 flex justify-between">
                       <p className="text-gray-700">Subtotal</p>
-                      <p className="text-gray-700">{subTotal}</p>
+                      <p className="text-gray-700 bg-green-300 rounded-full py-1 px-3 inline-block">
+                        {subTotal}
+                      </p>
+                    </div>
+                    <div className="mb-2 flex justify-between">
+                      <p className="text-gray-700">Total Numbers of Items :</p>
+                      <p className="text-gray-700 bg-gray-200 rounded-full py-1 px-3 inline-block">
+                        {cartItems.length}
+                      </p>
                     </div>
                     <div className="flex justify-between">
                       <p className="text-gray-700">Shipping</p>
                       {totalItems >= 5 || subTotal >= 499 ? (
-                        <p className="text-gray-700">0</p>
+                        <p className="text-green-400 bg-yellow-200 rounded-full py-1 px-3 ml-5">
+                          Free
+                        </p>
                       ) : (
                         <p className="text-gray-700">50</p>
                       )}
@@ -258,15 +264,17 @@ const CartScreen = () => {
 
 
                     {isLoading ? (
-                      <div className="flex items-center mb-6">
-                        <FiLoader className="animate-spin text-2xl mr-2" />
-                        <span className="text-gray-800">Loading...</span>
+                      <div className="flex items-center justify-center ">
+                        <div className="flex items-center space-x-2 mt-5">
+                          <FaSpinner className="animate-spin text-gray-800" />
+                          <span className="text-gray-800">Processing for payment...</span>
+                        </div>
                       </div>
                     ) : (
                       <button
-                      onClick={handleJoin}
+                        onClick={checkoutpage}
                         className="mt-6 w-full rounded-md py-2 font-medium text-white bg-blue-500 hover:bg-blue-600"
-                        
+
                       >
                         Pay Now
                       </button>

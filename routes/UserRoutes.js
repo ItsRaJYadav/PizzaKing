@@ -9,6 +9,8 @@ const crypto = require("crypto");
 const emailValidator = require('email-validator');
 const rateLimit = require("express-rate-limit");
 const ip = require('ip');
+const Address = require('../models/Address');
+
 
 const loginLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 15 minutes
@@ -383,6 +385,71 @@ router.post('/changepassword', async (req, res) => {
     });
   }
 });
+
+
+
+router.post('/address', async (req, res) => {
+  try {
+    // Create a new address using the request body
+    const address = new Address(req.body);
+    await address.save();
+     // Respond with a success message
+    res.status(200).json({ message: 'Shipping address saved successfully' });
+  } catch (error) {
+    // Handle any errors
+    console.error('Error saving shipping address:', error);
+    res.status(500).json({ error: 'Failed to save shipping address' });
+  }
+});
+
+
+
+// API endpoint for fetching addresses by user ID
+router.get('/addresses/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const addresses = await Address.find({ user: userId });
+    res.json(addresses);
+  } catch (error) {
+    console.error('Error fetching addresses:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.delete('/addresses/:addressId', (req, res) => {
+  const addressId = req.params.addressId;
+  Address.findByIdAndDelete(addressId)
+    .then(() => {
+      res.sendStatus(204); // Send a successful response with status code 204 (No Content)
+    })
+    .catch((error) => {
+      console.error('Error deleting address:', error);
+      res.sendStatus(500); // Send an error response with status code 500 
+    });
+});
+
+
+// Update address
+router.put('/addresses/:addressId', (req, res) => {
+  const addressId = req.params.addressId;
+  const updatedAddress = req.body; 
+
+  // Find the user's address by ID and update it
+  Address.findByIdAndUpdate(
+    addressId,
+    updatedAddress,
+    { new: true } // Return the updated address in the response
+  )
+    .then((updatedAddress) => {
+      res.json(updatedAddress);
+    })
+    .catch((error) => {
+      console.error('Error updating address:', error);
+      res.status(500).json({ error: 'An error occurred while updating the address' });
+    });
+});
+
 
 
 module.exports = router;

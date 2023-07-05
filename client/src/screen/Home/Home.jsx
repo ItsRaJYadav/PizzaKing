@@ -8,6 +8,7 @@ import WelcomePopUp from './PopUp'
 import { useSelector } from "react-redux";
 import AdminHome from "./AdminHome";
 import Testimonial from "./HomeProduct";
+import { Helmet } from "react-helmet";
 
 
 const Home = () => {
@@ -17,6 +18,9 @@ const Home = () => {
   const { currentUser } = userState;
   return (
     <>
+     <Helmet>
+        <title>PizzaKing.in</title>
+      </Helmet>
       {
         currentUser && currentUser.isAdmin ?
         <>

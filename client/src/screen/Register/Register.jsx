@@ -18,7 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Register = () => {
   const registerState = useSelector((state) => state.registerUserReducer);
   const { error, success, loading } = registerState;
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect,isAuthenticated } = useAuth0();
 
   const userState = useSelector((state) => state.getAllUsersReducer);
   const { users } = userState;
@@ -142,6 +142,24 @@ const Register = () => {
     }
   };
 
+if(isAuthenticated && users){
+  toast.warn("You are already registered with us", {
+    position: 'top-right',
+    toastId: 'welcome-toast',
+    className: 'welcome-toast',
+    bodyClassName: 'welcome-toast-body',
+    progressClassName: 'welcome-toast-progress',
+    closeButton: false,
+    autoClose: 3000,
+    hideProgressBar: true,
+  });
+ 
+ setTimeout(() => {
+  window.location.href = "/";
+ }, 1500);
+}
+
+
   return (
     <>
       <Helmet>
@@ -151,7 +169,8 @@ const Register = () => {
       {error && !success && <Error error={error} />}
       <section className="bg-white min-h-screen">
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="bg-blue-600 lg:block col-span-1 text-white py-12 px-12 flex flex-col justify-center items-center">
+        <div className="bg-blue-600 lg:block hidden col-span-1 text-white py-12 px-12  flex-col justify-center items-center "> 
+
             <h1 className="text-5xl mb-4">Join Us</h1>
             <p className="text-2xl mb-8">Food delivered to your door &
               5000+ Happy Customer</p>

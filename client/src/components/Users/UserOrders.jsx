@@ -78,7 +78,7 @@ const OrderDetailsPage = () => {
         ) : (
           orders.map((order) => (
             <div key={order._id.$oid} className="mb-8">
-              <h2 className="text-xl font-bold">Order ID: {order._id.$oid}</h2>
+              <h2 className="text-xl font-bold">Order ID: {order._id}</h2>
               <div className="flex items-center">
                 <span className="mr-2">Status:</span>
                 {getStatusIcon(order.isDelivered, order.isCanceled)}

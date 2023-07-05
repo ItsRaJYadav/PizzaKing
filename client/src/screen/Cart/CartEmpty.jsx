@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Cart from '../../assets/cart.gif'
 
 const CartPage = () => {
 
@@ -12,7 +13,7 @@ const CartPage = () => {
               Please add items to your cart to checkout.
             </p>
             <img
-          src="https://media1.giphy.com/media/LOL2XB5O5slfFE4K3M/giphy.gif?cid=6c09b9521g2x6l29df2cvcys10wylnooaot8u5avtw8h2s61&ep=v1_stickers_related&rid=giphy.gif&ct=s"
+          src={Cart}
           alt="Order on the way"
           className="my-4 mx-auto w-64"
         />
