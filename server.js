@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const rateLimit = require('express-rate-limit')
 const uploadImage = require("./Cloudinary");
+const { authenticate, authorizeAdmin } = require('./middlewares/authMiddleware');
 
 const path = require("path");
 const cors = require("cors");
@@ -91,14 +92,22 @@ app.get('/api/user/contacts', (req, res) => {
 
 
 
+const sanitizeHtml = require('sanitize-html');
+
+// ...
+
 app.patch('/admin/contacts/:id', async (req, res) => {
   const { id } = req.params;
   const { issueResolved } = req.body;
+  let { replyMessage } = req.body;
+
+  // Sanitize replyMessage using sanitize-html library
+  replyMessage = sanitizeHtml(replyMessage);
 
   try {
     const updatedContact = await ContactForm.findByIdAndUpdate(
       id,
-      { issueResolved },
+      { issueResolved, replyMessage },
       { new: true }
     );
 
@@ -112,11 +121,6 @@ app.patch('/admin/contacts/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
-
-
 
 
 

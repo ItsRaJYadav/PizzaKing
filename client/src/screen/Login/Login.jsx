@@ -61,7 +61,8 @@ const Login = () => {
        setTimeout(() => {
         window.location.href = "/";
        }, 1500);
-      } else {
+      } 
+      else {
         toast.error("Login not successful!");
       }
     } catch (error) {

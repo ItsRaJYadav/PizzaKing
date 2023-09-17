@@ -30,7 +30,7 @@ const AdminSidebar = () => {
   }, [currentUser, history]);
 
   if (!currentUser || !currentUser.isAdmin) {
-    return <><h1>chutiya samjhe ho ka laude</h1></>;
+    return <><h1>Access denied</h1></>;
   }
 
 
@@ -51,7 +51,7 @@ const AdminSidebar = () => {
             </button>
 
           </a>
-          <img src={pic} alt="Logo" className="" />
+          <img src="https://www.pngmart.com/files/21/Admin-Profile-Vector-PNG-Image.png" alt="Logo" className="" />
           <hr />
           {/* Navigation */}
           <nav>

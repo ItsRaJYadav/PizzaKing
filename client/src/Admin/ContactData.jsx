@@ -6,12 +6,15 @@ const apiUrl = process.env.NODE_ENV === 'production' ? 'https://pizzaking.onrend
 
 const ContactItem = ({ contact, handleIssueResolved }) => {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [replyMessage, setReplyMessage] = useState('');
+
 
   const resolveIssue = () => {
     setIsUpdating(true);
     axios
       .patch(`${apiUrl}/${contact._id}`, {
         issueResolved: true,
+        replyMessage: replyMessage,
       })
       .then((response) => {
         console.log('Contact updated:', response.data);
@@ -23,6 +26,8 @@ const ContactItem = ({ contact, handleIssueResolved }) => {
         setIsUpdating(false);
       });
   };
+
+
 
   return (
     <li className="py-4">
@@ -56,18 +61,26 @@ const ContactItem = ({ contact, handleIssueResolved }) => {
           <strong>Issue Resolved</strong>: {contact.issueResolved ? 'Yes' : 'No'}
         </p>
         {!contact.issueResolved && (
-          <button
-            className="font-bold py-2 px-4 rounded bg-green-500 hover:bg-green-700 text-white"
-            onClick={resolveIssue}
-            disabled={isUpdating}
-          >
-            {isUpdating ? (
-              <span className="mr-2">
-                <FiLoader className="inline-block animate-spin" />
-              </span>
-            ) : null}
-            Resolve Issue
-          </button>
+          <div>
+            <textarea
+              className="w-full p-2 mb-2 border border-gray-300 rounded-md"
+              placeholder="Enter your reply message"
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+            />
+            <button
+              className="font-bold py-2 px-4 rounded bg-green-500 hover:bg-green-700 text-white"
+              onClick={resolveIssue}
+              disabled={isUpdating}
+            >
+              {isUpdating ? (
+                <span className="mr-2">
+                  <FiLoader className="inline-block animate-spin" />
+                </span>
+              ) : null}
+              Sumbit Response
+            </button>
+          </div>
         )}
       </div>
       

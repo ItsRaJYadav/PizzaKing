@@ -12,7 +12,8 @@ const connectDB = async () => {
     console.log(
       `Mongodb DataBase Connected! ${conn.connection.host}`.bgCyan.white
     );
-  } catch (error) {
+  } 
+  catch (error) {
     console.log(`error: ${error.message}`.bgRed.white);
   }
 };

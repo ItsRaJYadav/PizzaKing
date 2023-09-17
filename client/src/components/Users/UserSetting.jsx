@@ -32,19 +32,13 @@ function ContactList({ email }) {
               <p className="text-gray-600"><strong>Email:</strong> {contact.email}</p>
               <p className="text-gray-600"><strong>Subject:</strong> {contact.subject}</p>
               <p className="text-gray-600"><strong>Mobile:</strong> {contact.mobileNumber}</p>
-              <div className="flex items-center">
-                <span className="text-sm text-green-500 mr-1"><strong>Issue Resolved:</strong></span>
-                {contact.issueResolved ? (
-                  <span className="text-green-600">Yes</span>
-                ) : (
-                  <span className="text-red-600">No</span>
-                )}
-              </div>
+
               <div className="mt-2">
                 <strong>Message : </strong>
                 {contact.message.length > 100 ? (
-                  <span>
-                    {contact.message.slice(0, 100)}{" "}
+                  <span className="bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-md shadow-sm">
+                 
+                    {contact.message.slice(0,120)}{" "}
                     <button
                       className="text-blue-500 hover:text-blue-700"
                       onClick={() => {
@@ -58,10 +52,35 @@ function ContactList({ email }) {
                   <span>{contact.message}</span>
                 )}
               </div>
+              <div className="flex items-center mt-4">
+                <span className="text-sm text-green-500 mr-1"><strong>Issue Resolved:</strong></span>
+                {contact.issueResolved ? (
+                  <>
+                    <span className="text-green-600">Yes</span>
+
+                  </>
+                ) : (
+                  <span className="text-red-600">Processing...</span>
+                )}
+              </div>
+
+              <div className="flex items-center mt-4 ">
+                <span className="text-sm text-green-500 mr-1"><strong>Admin Reply:</strong></span>
+                {contact.issueResolved ? (
+                  <>
+                    <span className="ml-5 text-gray-600 bg-gray-100 px-4 py-2 rounded-md">{contact.replyMessage}</span>
+
+
+                  </>
+                ) : (
+                  <span className="text-red-600">wait for reply...</span>
+                )}
+              </div>
+
               <hr className="border-t border-gray-800 mb-4 mt-10" />
 
             </li>
-            
+
           ))}
         </ul>
 

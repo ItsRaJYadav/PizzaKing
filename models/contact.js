@@ -38,6 +38,10 @@ const contactFormSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  replyMessage: {
+    type: String,
+    default:'',
+  },
 });
 
 const ContactForm = mongoose.model('ContactForm', contactFormSchema);

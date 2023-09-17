@@ -128,12 +128,7 @@ router.post("/login", loginLimiter, async (req, res) => {
       });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        message: "Please verify your email first and try again",
-        rateLimitMessage: "Too many login attempts, please try again later.",
-      });
-    }
+    
 
     if (req.rateLimit.exceeded) {
       return res.status(429).json({

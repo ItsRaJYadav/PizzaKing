@@ -1,4 +1,4 @@
-import React, { Suspense, lazy,createContext,useState } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from './components/Header/Header';
 import Chatbot from './Chat/ChatBot';
@@ -38,13 +38,13 @@ const LazyUserForgotPassword = lazy(() => import('./components/Users/ForgotPassw
 const LazyUserinfo = lazy(() => import('./components/Users/UserInfo'));
 const LazyUserNewAddress = lazy(() => import('./components/Users/UserAddress'));
 const LazyUserOrder = lazy(() => import('./components/Users/UserOrders'));
+const LazyOrder = lazy(() => import('./components/Users/UserOrders'));
 const OrderDetails = lazy(() => import('./components/Users/OrderDetails'));
 const LazyOrg = lazy(() => import('./components/Service/Org'));
 const WhyChooseUs = lazy(() => import('./components/Service/Why'));
 const CheckoutSuccess= lazy(() => import('../src/components/Checkout/CheckoutSuccess'));
 const SellerDetailsPage= lazy(() => import('./Sellers'));
 
-export const RecoveryContext = createContext();
 
 
 
@@ -81,6 +81,7 @@ function App() {
 
            {/* seller Routes */}
            <Route path="/seller" element={<SellerDetailsPage />} exact />
+           <Route path="/order" element={<LazyOrder />} exact />
 
           {/* user routes: */}
           <Route path='/user/' element={<LazyUser />} >

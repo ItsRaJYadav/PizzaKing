@@ -265,7 +265,7 @@ const Header = () => {
                     <BsBox2HeartFill size={18} className="mr-2" />
 
                     <Link
-                      to="/user/order"
+                      to="/order"
                       className=" pl-3 pr-4 text-gray-100 rounded cursor-pointer " onClick={closeMobileMenu}
 
                     >
